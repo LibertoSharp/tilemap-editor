@@ -12,5 +12,22 @@ FetchContent_Declare(SFML
         SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(makean_rpg src/main.cpp)
+add_executable(makean_rpg src/main.cpp
+        src/level/Grid.cpp
+        include/level/Grid.h
+        src/level/Tile.cpp
+        include/level/Tile.h
+        src/engine/Application.cpp
+        include/engine/Application.h
+        src/level/TileInfo.cpp
+        include/level/TileInfo.h
+        src/managers/TextureManager.cpp
+        include/managers/TextureManager.h
+        include/managers/AssetLoader.h
+        include/engine/Singleton.h
+        src/graphics/PixelPerfectRenderTarget.cpp
+        include/graphics/PixelPerfectRenderTarget.h)
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
+target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
+
+
