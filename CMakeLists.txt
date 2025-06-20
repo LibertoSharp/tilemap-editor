@@ -26,7 +26,11 @@ add_executable(makean_rpg src/main.cpp
         include/managers/AssetLoader.h
         include/engine/Singleton.h
         src/graphics/PixelPerfectRenderTarget.cpp
-        include/graphics/PixelPerfectRenderTarget.h)
+        include/graphics/PixelPerfectRenderTarget.h
+        src/level/Level.cpp
+        include/level/Level.h
+        src/engine/Editor.cpp
+        include/engine/Editor.h)
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 

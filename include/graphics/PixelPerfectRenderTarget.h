@@ -16,10 +16,14 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     void zoom(float amount);
+    float getZoom() const {
+        return zoomValue;
+    }
 private:
     int pixelSize;
-     sf::RenderTexture* renderTexture = nullptr;
+    sf::RenderTexture* renderTexture = nullptr;
     sf::Vector2u windowSize;
+    float zoomValue = 1.0f;
 };
 
 
