@@ -10,7 +10,7 @@ public:
     void create(unsigned windowWidth,unsigned windowHeight, int pixelSize);
 
     void clear(sf::Color color);
-    void draw(sf::Drawable &drawable);
+    void draw(const Drawable &drawable);
     void display();
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -18,7 +18,7 @@ public:
     void zoom(float amount);
 private:
     int pixelSize;
-    sf::RenderTexture* renderTexture;
+     sf::RenderTexture* renderTexture = nullptr;
     sf::Vector2u windowSize;
 };
 

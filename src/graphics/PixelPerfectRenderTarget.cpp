@@ -1,5 +1,4 @@
 #include "graphics/PixelPerfectRenderTarget.h"
-#include <iostream>
 #include "SFML/Graphics/Sprite.hpp"
 
 PixelPerfectRenderTarget::~PixelPerfectRenderTarget() {
@@ -17,7 +16,7 @@ void PixelPerfectRenderTarget::clear(sf::Color color) {
     renderTexture->clear(color);
 }
 
-void PixelPerfectRenderTarget::draw(sf::Drawable &drawable) {
+void PixelPerfectRenderTarget::draw(const sf::Drawable &drawable) {
     renderTexture->draw(drawable);
 }
 
@@ -26,7 +25,7 @@ void PixelPerfectRenderTarget::display() {
 }
 
 void PixelPerfectRenderTarget::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    sf::Sprite sprite = sf::Sprite((*renderTexture).getTexture());
+    sf::Sprite sprite = sf::Sprite(renderTexture->getTexture());
     sprite.scale(sf::Vector2f(pixelSize,pixelSize));
     target.draw(sprite, states);
 }
