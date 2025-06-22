@@ -1,8 +1,8 @@
 #include "engine/Application.h"
-
+#include "GUI/MainGUI.h"
 #include "level/Level.h"
 
-Level level;
+
 void Application::run(unsigned width, unsigned height) {
     createManagers();
     createWindow(width,height);
@@ -10,7 +10,7 @@ void Application::run(unsigned width, unsigned height) {
     renderTarget.create(width,height,4);
     renderTarget.zoom(4);
 
-    level.createGrid(16,100,100);
+    guiLayer = createMainMenu();
 
     dtClock.start();
     while (window->isOpen()) {
@@ -23,9 +23,12 @@ void Application::run(unsigned width, unsigned height) {
 
         window->clear();
         renderTarget.clear(Color::Black);
+
         render();
         renderTarget.display();
+
         window->draw(renderTarget);
+        window->draw(guiLayer);
         window->display();
     }
 }
@@ -42,11 +45,18 @@ void Application::createManagers() {
 }
 
 void Application::render() {
-    renderTarget.draw(level);
+
+}
+
+void Application::CallGuiEvents() {
+    GuiEventContext ctx;
+    ctx.mousePos = sf::Mouse::getPosition(*window);
+    ctx.mouseDown = isButtonPressed(sf::Mouse::Button::Left);
+    guiLayer.callEvents(ctx);
 }
 
 void Application::update() {
-
+    CallGuiEvents();
 }
 
 void Application::performEvent(std::optional<Event> event) {
@@ -54,9 +64,16 @@ void Application::performEvent(std::optional<Event> event) {
     {
         window->close();
     }
-    else if (const auto* mouseEvent = event->getIf<sf::Event::MouseButtonPressed >()) {
-        int viewZoom = renderTarget.getZoom() * level.getGrid()->getTileSize();
-        level.getGrid()->setTile(mouseEvent->position.x / viewZoom,mouseEvent->position.y / viewZoom,Tile(textureManager->createTileSprite("plains",0,0)));
+    else if (const auto* mousePressedEvent = event->getIf<sf::Event::MouseButtonPressed >()) {
+        GuiEventContext ctx;
+        ctx.mousePos = mousePressedEvent->position;
+        ctx.clickDown = true;
+        guiLayer.callEvents(ctx);
+    } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
+        GuiEventContext ctx;
+        ctx.mousePos = mouseReleasedEvent->position;
+        ctx.clickUp = true;
+        guiLayer.callEvents(ctx);
     }
 
 }

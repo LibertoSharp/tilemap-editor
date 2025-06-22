@@ -14,3 +14,8 @@ sf::Sprite TextureManager::createTileSprite(const std::string& atlasName, int x,
     sf::Vector2i size = tileSize;
     return {*tx, sf::IntRect(position, size)};
 }
+
+sf::Sprite TextureManager::getSprite(const std::string &atlasName, sf::IntRect rect) const {
+    sf::Texture* tx = resources.find(atlasName)->second;
+    return {*tx, rect};
+}

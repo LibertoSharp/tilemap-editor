@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.30)
 project(makean_rpg)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -30,7 +30,14 @@ add_executable(makean_rpg src/main.cpp
         src/level/Level.cpp
         include/level/Level.h
         src/engine/Editor.cpp
-        include/engine/Editor.h)
+        include/engine/Editor.h
+        src/GUI/GuiElement.cpp
+        include/GUI/GuiElement.h
+        src/GUI/GuiLayer.cpp
+        include/GUI/GuiLayer.h
+        include/GUI/MainGUI.h
+        src/GUI/Button.cpp
+        include/GUI/Button.h)
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
