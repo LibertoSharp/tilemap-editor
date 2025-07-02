@@ -3,17 +3,17 @@
 #include <iostream>
 #include <utility>
 
-Button::Button(sf::Sprite sprite): GuiElement(std::move(sprite)) {
+Button::Button(sf::Sprite sprite): GuiElement(new Sprite(std::move(sprite))) {
 }
 
 void Button::update() {
     if (pressed.has_value() && mouseDownFlag) {
-        activeSprite = &pressed.value();
+        activeGraphic = &pressed.value();
     }
     else if (hovered.has_value() && hoveringFlag)
-        activeSprite = &hovered.value();
+        activeGraphic = &hovered.value();
     else
-        activeSprite = &defaultSprite;
+        activeGraphic = defaultGraphic;
 }
 
 void Button::clickDown() {

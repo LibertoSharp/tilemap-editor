@@ -2,7 +2,6 @@
 #include "GUI/MainGUI.h"
 #include "level/Level.h"
 
-
 void Application::run(unsigned width, unsigned height) {
     createManagers();
     createWindow(width,height);

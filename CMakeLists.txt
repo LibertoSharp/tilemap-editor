@@ -37,7 +37,9 @@ add_executable(makean_rpg src/main.cpp
         include/GUI/GuiLayer.h
         include/GUI/MainGUI.h
         src/GUI/Button.cpp
-        include/GUI/Button.h)
+        include/GUI/Button.h
+        src/GUI/Panel.cpp
+        include/GUI/Panel.h)
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 

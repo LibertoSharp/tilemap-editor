@@ -33,15 +33,17 @@ void GuiLayer::draw(RenderTarget &target, RenderStates states) const {
 }
 
 void GuiLayer::callEvents(GuiEventContext ctx) {
-    for (const auto element : elements) {
-        if (element->isHidden()) return;
+    bool first = true;
+    for (const auto element : std::vector<GuiElement*>(elements.rbegin(), elements.rend())) {
+        if (element->isHidden()) continue;
 
-        if (element->isInsideBoundingBox(ctx.mousePos)) {
+        if (element->isInsideBoundingBox(ctx.mousePos) && first) {
             if (ctx.clickDown) element->clickDown();
             if (ctx.clickUp) element->clickUp();
 
             element->mouseDownFlag = ctx.mouseDown;
             element->hoveringFlag = true;
+            first = false;
         } else {
             element->mouseDownFlag = false;
             element->hoveringFlag = false;

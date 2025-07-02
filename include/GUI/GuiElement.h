@@ -5,25 +5,28 @@ using namespace sf;
 
 class GuiElement : public Drawable, public Transformable {
  public:
-    GuiElement(sf::Sprite sprite);
+    GuiElement(Drawable* sprite);
+    GuiElement(Vector2f size);
 
     void draw(RenderTarget& target, RenderStates states) const override;
     virtual void update() = 0; //called every frame
     virtual void clickDown() = 0; //called one frame when mouse left click
     virtual void clickUp() = 0; //called one frame when mouse left click
-    Sprite* getActiveSprite() const {return activeSprite;}
+    Sprite* getActiveSprite() const {if (auto sprite = dynamic_cast<sf::Sprite*>(activeGraphic)) return sprite; return nullptr;}
     void Hide() {hideFlag = true;}
     void Show() {hideFlag = false;}
     bool isHidden() const {return hideFlag;}
+    bool Append(GuiElement& element);
 
     bool isInsideBoundingBox(Vector2i mousePos);
 
-    Sprite defaultSprite;
-    Sprite* activeSprite;
+    Drawable* defaultGraphic;
+    Drawable* activeGraphic;
     bool hoveringFlag = false;
     bool mouseDownFlag = false;
 private:
     bool hideFlag = false;
+    std::vector<GuiElement*> childrens;
 };
 
 
