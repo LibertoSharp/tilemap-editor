@@ -5,7 +5,7 @@
 #include "Panel.h"
 
 inline void FileButton(ButtonClickContext ctx) {
-    std::cout << "File Button Clicked" << std::endl;
+
 }
 
 inline GuiLayer createMainMenu() {
@@ -19,8 +19,10 @@ inline GuiLayer createMainMenu() {
     menu.AddElement(fileButton);
     fileButton->Perform = &FileButton;
 
-    Panel* panel = new Panel({100,100});
-    panel->setPosition({50,00});
+    Panel* panel = new Panel({100,300});
+    panel->setOrigin({100,0});
+    panel->SetAnchor(TopRight);
+    panel->SetRelativePosition({0,0});
     panel->GetRectangleShape()->setFillColor(Color::Blue);
     menu.AddElement(panel);
 

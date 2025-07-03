@@ -25,6 +25,10 @@ public:
         return dt;
     }
 
+    Window* const getWindow() {
+        return window;
+    }
+
 private:
     void render();
     void update();
