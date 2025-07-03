@@ -21,7 +21,7 @@ void Application::run(unsigned width, unsigned height) {
         }
 
         window->clear();
-        renderTarget.clear(Color::Black);
+        renderTarget.clear(Color::Green);
 
         render();
         renderTarget.display();
