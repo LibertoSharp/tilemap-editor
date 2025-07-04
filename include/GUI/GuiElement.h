@@ -36,6 +36,8 @@ class GuiElement : public Drawable, public Transformable {
     Vector2f GetPositionRelativeToAnchor(AnchorType anchor) const;
     void SetRelativePosition(Vector2f pos);
     Vector2f GetRelativePosition();
+    void NormalizePositionRelativeToParent(Vector2f scale);
+    Vector2f GetNormalizedScale();
 
 
     //Fields
@@ -44,10 +46,14 @@ class GuiElement : public Drawable, public Transformable {
     bool hoveringFlag = false;
     bool mouseDownFlag = false;
 
-private:
+protected:
     Drawable* parent;
+
+private:
+
     AnchorType anchor = TopLeft;
     Vector2f relativePosition = {0,0};
+    Vector2f normalizedScale = {0,0};
     bool hideFlag = false;
     std::vector<GuiElement*> children;
 };

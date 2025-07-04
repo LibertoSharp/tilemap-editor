@@ -17,9 +17,8 @@ void Application::run(unsigned width, unsigned height) {
         while (const std::optional event = window->pollEvent())
         {
             performEvent(event);
-            update();
         }
-
+        update();
         window->clear();
         renderTarget.clear(Color::Green);
 
@@ -27,7 +26,7 @@ void Application::run(unsigned width, unsigned height) {
         renderTarget.display();
 
         window->draw(renderTarget);
-        window->draw(guiLayer);
+        window->draw(*guiLayer);
         window->display();
     }
 }
@@ -51,7 +50,7 @@ void Application::CallGuiEvents() {
     GuiEventContext ctx;
     ctx.mousePos = sf::Mouse::getPosition(*window);
     ctx.mouseDown = isButtonPressed(sf::Mouse::Button::Left);
-    guiLayer.callEvents(ctx);
+    guiLayer->callEvents(ctx);
 }
 
 void Application::update() {
@@ -67,12 +66,12 @@ void Application::performEvent(std::optional<Event> event) {
         GuiEventContext ctx;
         ctx.mousePos = mousePressedEvent->position;
         ctx.clickDown = true;
-        guiLayer.callEvents(ctx);
+        guiLayer->callEvents(ctx);
     } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
         GuiEventContext ctx;
         ctx.mousePos = mouseReleasedEvent->position;
         ctx.clickUp = true;
-        guiLayer.callEvents(ctx);
+        guiLayer->callEvents(ctx);
     }
 
 }

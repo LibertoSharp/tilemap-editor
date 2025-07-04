@@ -14,6 +14,7 @@ class GuiLayer : public Drawable{
 public:
   explicit GuiLayer(int reserveAmount = 3);
   explicit GuiLayer(Window* window, int reserveAmount = 3);
+  ~GuiLayer() override {RemoveAllElements();}
   void AddElement(GuiElement* element);
   void RemoveElement(GuiElement* element);
   void RemoveAllElements();

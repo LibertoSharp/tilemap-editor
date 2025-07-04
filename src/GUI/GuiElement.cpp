@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "engine/Application.h"
 #include "GUI/GuiLayer.h"
 
 GuiElement::GuiElement(Drawable* graphic): defaultGraphic(graphic), activeGraphic(defaultGraphic)  {
@@ -87,10 +88,10 @@ void GuiElement::SetRelativePosition(Vector2f pos) {
     relativePosition = pos;
     Vector2f anchorPos;
 
-
     if (!parent) return;
-    if (auto layer = dynamic_cast<GuiLayer*>(parent)) { anchorPos = layer->GetPositionRelativeToAnchor(anchor);}
-    if (auto element = dynamic_cast<GuiElement*>(parent)) { anchorPos = element->GetPositionRelativeToAnchor(anchor);}
+    if (auto layer = dynamic_cast<GuiLayer*>(parent)) anchorPos = layer->GetPositionRelativeToAnchor(anchor);
+    else if (auto element = dynamic_cast<GuiElement*>(parent)) anchorPos = element->GetPositionRelativeToAnchor(anchor);
+    else return;
 
     setPosition(anchorPos+pos);
 }
@@ -99,6 +100,27 @@ Vector2f GuiElement::GetRelativePosition() {
     return relativePosition;
 }
 
-std::vector<GuiElement *>* GuiElement::getChildren() {
+void GuiElement::NormalizePositionRelativeToParent(Vector2f scale) {
+    Vector2f size;
+    normalizedScale = scale;
+    if (auto layer = dynamic_cast<GuiLayer*>(parent)) size = static_cast<Vector2f>(Application::getInstance()->getWindow()->getSize());
+    else if (auto element = dynamic_cast<GuiElement*>(parent)) size = element->getBoundingBox(element->activeGraphic).size;
+    else return;
+
+
+    float scalex = getScale().x, scaley = getScale().y;
+    if (scale.x != 0)
+        scalex = (size.x * scale.x)/getBoundingBox(activeGraphic).size.x;
+    if (scale.y != 0)
+        scaley = (size.y * scale.y)/getBoundingBox(activeGraphic).size.y;
+
+    setScale({scalex,scaley});
+}
+
+Vector2f GuiElement::GetNormalizedScale() {
+    return normalizedScale;
+}
+
+std::vector<GuiElement*>* GuiElement::getChildren() {
     return &children;
 }

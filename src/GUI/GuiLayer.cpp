@@ -15,6 +15,7 @@ void GuiLayer::AddElement(GuiElement* element) {
     elements.push_back(element);
     element->setParent(this);
     element->SetRelativePosition(element->GetRelativePosition());
+    element->NormalizePositionRelativeToParent(element->GetNormalizedScale());
 }
 
 void GuiLayer::RemoveElement(GuiElement* element) {
