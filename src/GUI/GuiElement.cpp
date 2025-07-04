@@ -65,6 +65,13 @@ bool GuiElement::isInsideBoundingBox(Vector2i mousePos) {
     return boundingBox.contains(Vector2<float>(mousePos));
 }
 
+void GuiElement::update() {
+    if (Update) {
+        ctx.element = this;
+        Update(ctx);
+    }
+}
+
 void GuiElement::SetAnchor(AnchorType anchor) {
     this->anchor = anchor;
 }

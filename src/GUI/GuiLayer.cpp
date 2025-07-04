@@ -55,41 +55,42 @@ void GuiLayer::draw(RenderTarget &target, RenderStates states) const {
     }
 }
 
-void callEventsInternal(GuiElement* element, GuiEventContext ctx) {
-    if (ctx.clickDown) element->clickDown();
-    if (ctx.clickUp) element->clickUp();
-
-    element->mouseDownFlag = ctx.mouseDown;
-    element->hoveringFlag = true;
-}
-
 void GuiLayer::callEvents(GuiEventContext ctx) {
     bool first = true;
     for (const auto element : std::vector<GuiElement*>(elements.rbegin(), elements.rend())) {
         for (const auto child : std::vector<GuiElement*>(element->getChildren()->rbegin(), element->getChildren()->rend())) {
             if (child->isHidden()) continue;
+            GuiElementEventContext elementCtx{};
+            elementCtx.mousePos = ctx.mousePos;
 
             if (child->isInsideBoundingBox(ctx.mousePos) && first) {
-                callEventsInternal(child, ctx);
+                elementCtx.f_hovering = true;
+                elementCtx.f_clickDown = ctx.f_clickDown;
+                elementCtx.f_mouseDown = ctx.f_mouseDown;
                 first = false;
             } else {
-                child->mouseDownFlag = false;
-                child->hoveringFlag = false;
+                elementCtx.f_hovering = false;
+                elementCtx.f_clickDown = false;
+                elementCtx.f_mouseDown = false;
             }
 
+            child->ctx = elementCtx;
             child->update();
         }
+        if (element->isHidden()) continue;
+        GuiElementEventContext elementCtx{};
+        elementCtx.mousePos = ctx.mousePos;
         if (element->isInsideBoundingBox(ctx.mousePos) && first) {
-            if (element->isHidden()) continue;
-
-
-            callEventsInternal(element, ctx);
+            elementCtx.f_hovering = true;
+            elementCtx.f_clickDown = ctx.f_clickDown;
+            elementCtx.f_mouseDown = ctx.f_mouseDown;
             first = false;
         } else {
-            element->mouseDownFlag = false;
-            element->hoveringFlag = false;
+            elementCtx.f_hovering = false;
+            elementCtx.f_clickDown = false;
+            elementCtx.f_mouseDown = false;
         }
-
+            element->ctx = elementCtx;
             element->update();
         }
     }

@@ -4,6 +4,17 @@
 #include "SFML/Graphics.hpp"
 using namespace sf;
 class GuiLayer;
+class GuiElement;
+
+struct GuiElementEventContext {
+    GuiElement* element = nullptr;
+    sf::Vector2i mousePos;
+    bool f_hovering = false;
+    bool f_clickDown = false;
+    bool f_clickUp = false;
+    bool f_mouseDown = false;
+};
+
 
 class GuiElement : public Drawable, public Transformable {
  public:
@@ -16,9 +27,8 @@ class GuiElement : public Drawable, public Transformable {
     bool isInsideBoundingBox(Vector2i mousePos);
 
     //Virtual Methdos
-    virtual void update() = 0; //called every frame
-    virtual void clickDown() = 0; //called one frame when mouse left click
-    virtual void clickUp() = 0; //called one frame when mouse left click
+    virtual void update(); //called every frame
+    void (*Update)(GuiElementEventContext ctx);
 
     //Hierarchy
     void setParent(GuiLayer* parent);
@@ -43,14 +53,12 @@ class GuiElement : public Drawable, public Transformable {
     //Fields
     Drawable* defaultGraphic;
     Drawable* activeGraphic;
-    bool hoveringFlag = false;
-    bool mouseDownFlag = false;
+    GuiElementEventContext ctx;
 
 protected:
     Drawable* parent;
 
 private:
-
     AnchorType anchor = TopLeft;
     Vector2f relativePosition = {0,0};
     Vector2f normalizedScale = {0,0};

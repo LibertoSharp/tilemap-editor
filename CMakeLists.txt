@@ -35,7 +35,7 @@ add_executable(makean_rpg src/main.cpp
         include/GUI/GuiElement.h
         src/GUI/GuiLayer.cpp
         include/GUI/GuiLayer.h
-        include/GUI/MainGUI.h
+        src/GUI/MainGUI.cpp
         src/GUI/Button.cpp
         include/GUI/Button.h
         src/GUI/Panel.cpp

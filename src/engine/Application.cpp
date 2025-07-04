@@ -1,5 +1,5 @@
 #include "engine/Application.h"
-#include "GUI/MainGUI.h"
+#include "../GUI/MainGUI.cpp"
 #include "level/Level.h"
 
 void Application::run(unsigned width, unsigned height) {
@@ -49,7 +49,7 @@ void Application::render() {
 void Application::CallGuiEvents() {
     GuiEventContext ctx;
     ctx.mousePos = sf::Mouse::getPosition(*window);
-    ctx.mouseDown = isButtonPressed(sf::Mouse::Button::Left);
+    ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
     guiLayer->callEvents(ctx);
 }
 
@@ -65,12 +65,12 @@ void Application::performEvent(std::optional<Event> event) {
     else if (const auto* mousePressedEvent = event->getIf<sf::Event::MouseButtonPressed >()) {
         GuiEventContext ctx;
         ctx.mousePos = mousePressedEvent->position;
-        ctx.clickDown = true;
+        ctx.f_clickDown = true;
         guiLayer->callEvents(ctx);
     } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
         GuiEventContext ctx;
         ctx.mousePos = mouseReleasedEvent->position;
-        ctx.clickUp = true;
+        ctx.f_clickUp = true;
         guiLayer->callEvents(ctx);
     }
 

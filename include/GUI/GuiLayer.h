@@ -5,9 +5,10 @@
 
 struct GuiEventContext {
   sf::Vector2i mousePos;
-  bool clickDown = false;
-  bool clickUp = false;
-  bool mouseDown = false;
+  bool f_hovering = false;
+  bool f_clickDown = false;
+  bool f_clickUp = false;
+  bool f_mouseDown = false;
 };
 
 class GuiLayer : public Drawable{
