@@ -47,10 +47,9 @@ void Application::render() {
 }
 
 void Application::CallGuiEvents() {
-    GuiEventContext ctx;
-    ctx.mousePos = sf::Mouse::getPosition(*window);
-    ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
-    guiLayer->callEvents(ctx);
+    guiLayer->ctx.mousePos = sf::Mouse::getPosition(*window);
+    guiLayer->ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
+    guiLayer->callEvents();
 }
 
 void Application::update() {
@@ -59,19 +58,13 @@ void Application::update() {
 
 void Application::performEvent(std::optional<Event> event) {
     if (event->is<sf::Event::Closed>())
-    {
         window->close();
-    }
     else if (const auto* mousePressedEvent = event->getIf<sf::Event::MouseButtonPressed >()) {
-        GuiEventContext ctx;
-        ctx.mousePos = mousePressedEvent->position;
-        ctx.f_clickDown = true;
-        guiLayer->callEvents(ctx);
+        if (mousePressedEvent->button == Mouse::Button::Left)
+        guiLayer->ctx.f_clickDown = true;
     } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
-        GuiEventContext ctx;
-        ctx.mousePos = mouseReleasedEvent->position;
-        ctx.f_clickUp = true;
-        guiLayer->callEvents(ctx);
+        if (mouseReleasedEvent->button == Mouse::Button::Left)
+        guiLayer->ctx.f_clickUp = true;
     }
 
 }

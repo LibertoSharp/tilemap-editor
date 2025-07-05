@@ -3,14 +3,16 @@
 #include "GuiElement.h"
 #include "SFML/Graphics/Sprite.hpp"
 
-class Button : public GuiElement{
-public:
-    Button(sf::Sprite sprite);
+namespace gui {
+    class Button : public GuiElement{
+    public:
+        Button(sf::Sprite sprite);
 
-    void update() override;
+        void update() override;
 
-    std::optional<Sprite> hovered;
-    std::optional<Sprite> pressed;
-};
+        std::optional<Sprite> hovered;
+        std::optional<Sprite> pressed;
+    };
+}
 
 #endif //BUTTON_H

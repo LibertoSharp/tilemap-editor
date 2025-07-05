@@ -42,7 +42,7 @@ private:
 
     Vector2i windowSize;
     RenderWindow* window{};
-    GuiLayer* guiLayer;
+    gui::GuiLayer* guiLayer;
     PixelPerfectRenderTarget renderTarget;
 
     Clock dtClock;

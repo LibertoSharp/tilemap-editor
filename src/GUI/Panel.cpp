@@ -2,5 +2,6 @@
 
 
 #include "engine/Application.h"
-
-Panel::Panel(Vector2f size): GuiElement(size) {}
+namespace gui {
+    Panel::Panel(Vector2f size): GuiElement(size) {}
+}

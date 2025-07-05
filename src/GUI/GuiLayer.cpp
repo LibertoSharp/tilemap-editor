@@ -1,97 +1,86 @@
 #include "GUI/GuiLayer.h"
 #include "engine/Application.h"
+namespace gui {
+    GuiLayer::GuiLayer(int reserveAmount) {
+        elements.reserve(reserveAmount);
+        this->window = Application::getInstance()->getWindow();
+    }
 
-GuiLayer::GuiLayer(int reserveAmount) {
-    elements.reserve(reserveAmount);
-    this->window = Application::getInstance()->getWindow();
-}
+    GuiLayer::GuiLayer(Window* window, int reserveAmount) {
+        elements.reserve(reserveAmount);
+        this->window = window;
+    }
 
-GuiLayer::GuiLayer(Window* window, int reserveAmount) {
-    elements.reserve(reserveAmount);
-    this->window = window;
-}
+    void GuiLayer::AddElement(GuiElement* element) {
+        elements.push_back(element);
+        element->setParent(this);
+        element->SetRelativePosition(element->GetRelativePosition());
+        element->NormalizePositionRelativeToParent(element->GetNormalizedScale());
+    }
 
-void GuiLayer::AddElement(GuiElement* element) {
-    elements.push_back(element);
-    element->setParent(this);
-    element->SetRelativePosition(element->GetRelativePosition());
-    element->NormalizePositionRelativeToParent(element->GetNormalizedScale());
-}
+    void GuiLayer::RemoveElement(GuiElement* element) {
+        for (auto it = elements.begin(); it != elements.end(); it++) {
+            if (*it == element) {
+                elements.erase(it);
+                delete element;
+            }
+        }
+    }
 
-void GuiLayer::RemoveElement(GuiElement* element) {
-    for (auto it = elements.begin(); it != elements.end(); it++) {
-        if (*it == element) {
-            elements.erase(it);
+    void GuiLayer::RemoveAllElements() {
+        for (auto element : elements) {
             delete element;
         }
+        elements.clear();
     }
-}
-
-void GuiLayer::RemoveAllElements() {
-    for (auto element : elements) {
-        delete element;
-    }
-    elements.clear();
-}
 
 
-Vector2f GuiLayer::GetPositionRelativeToAnchor(AnchorType anchor) {
-    switch (anchor) {
-        case TopLeft: return {0, 0};
-        case TopRight: return {window->getSize().x,0};
-        case TopCenter: return {window->getSize().x/2.0, 0};
-        case MiddleLeft: return {0,window->getSize().y/2.0};
-        case MiddleCenter: return {window->getSize().x/2.0, window->getSize().y/2.0};
-        case MiddleRight: return {window->getSize().x,window->getSize().y/2.0};
-        case BottomLeft: return {0,window->getSize().y};
-        case BottomCenter: return {window->getSize().x/2,window->getSize().y};
-        case BottomRight: return {window->getSize().x,window->getSize().y};
-    }
-}
-
-void GuiLayer::draw(RenderTarget &target, RenderStates states) const {
-    for (const auto element : elements) {
-        target.draw(*element, states);
-    }
-}
-
-void GuiLayer::callEvents(GuiEventContext ctx) {
-    bool first = true;
-    for (const auto element : std::vector<GuiElement*>(elements.rbegin(), elements.rend())) {
-        for (const auto child : std::vector<GuiElement*>(element->getChildren()->rbegin(), element->getChildren()->rend())) {
-            if (child->isHidden()) continue;
-            GuiElementEventContext elementCtx{};
-            elementCtx.mousePos = ctx.mousePos;
-
-            if (child->isInsideBoundingBox(ctx.mousePos) && first) {
-                elementCtx.f_hovering = true;
-                elementCtx.f_clickDown = ctx.f_clickDown;
-                elementCtx.f_mouseDown = ctx.f_mouseDown;
-                first = false;
-            } else {
-                elementCtx.f_hovering = false;
-                elementCtx.f_clickDown = false;
-                elementCtx.f_mouseDown = false;
-            }
-
-            child->ctx = elementCtx;
-            child->update();
+    Vector2f GuiLayer::GetPositionRelativeToAnchor(AnchorType anchor) {
+        float width = static_cast<float>(window->getSize().x);
+        float height = static_cast<float>(window->getSize().x);
+        switch (anchor) {
+            case TopLeft: return {0, 0};
+            case TopRight: return {width,0};
+            case TopCenter: return {width/2.0f, 0};
+            case MiddleLeft: return {0,height/2.0f};
+            case MiddleCenter: return {width/2.0f, height/2.0f};
+            case MiddleRight: return {width,height/2.0f};
+            case BottomLeft: return {0,height};
+            case BottomCenter: return {width/2.0f,height};
+            case BottomRight: return {width,height};
         }
-        if (element->isHidden()) continue;
+    }
+
+    void GuiLayer::draw(RenderTarget &target, RenderStates states) const {
+        for (const auto element : elements) {
+            target.draw(*element, states);
+        }
+    }
+
+    void callEventsInternal(GuiElement* element, GuiEventContext& ctx, bool& first) {
+        if (element->isHidden()) return;
         GuiElementEventContext elementCtx{};
         elementCtx.mousePos = ctx.mousePos;
+
         if (element->isInsideBoundingBox(ctx.mousePos) && first) {
             elementCtx.f_hovering = true;
             elementCtx.f_clickDown = ctx.f_clickDown;
             elementCtx.f_mouseDown = ctx.f_mouseDown;
             first = false;
-        } else {
-            elementCtx.f_hovering = false;
-            elementCtx.f_clickDown = false;
-            elementCtx.f_mouseDown = false;
         }
-            element->ctx = elementCtx;
-            element->update();
-        }
+
+        element->ctx = elementCtx;
+        element->update();
     }
 
+    void GuiLayer::callEvents() {
+        bool first = true;
+        for (const auto element : std::vector<GuiElement*>(elements.rbegin(), elements.rend())) {
+            for (const auto child : std::vector<GuiElement*>(element->getChildren()->rbegin(), element->getChildren()->rend())) {
+                callEventsInternal(child, ctx, first);
+            }
+            callEventsInternal(element, ctx, first);
+        }
+        ctx.Reset();
+    }
+}
