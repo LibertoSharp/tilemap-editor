@@ -42,7 +42,6 @@ namespace gui {
         void setParent(GuiLayer* parent);
         void setParent(GuiElement* parent);
         Transform getParentTransform() const;
-        void AddChildren(GuiElement* child);
         std::vector<GuiElement*>* getChildren();
         void Append(GuiElement *element);
 

@@ -41,7 +41,9 @@ add_executable(makean_rpg src/main.cpp
         src/GUI/Panel.cpp
         include/GUI/Panel.h
         include/GUI/AnchorsType.h
-        include/GUI/Common.h)
+        include/GUI/Common.h
+        src/managers/FontManager.cpp
+        include/managers/FontManager.h)
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 

@@ -2,6 +2,7 @@
 #define APPLICATION_H
 #include "graphics/PixelPerfectRenderTarget.h"
 #include "GUI/GuiLayer.h"
+#include "managers/FontManager.h"
 #include "managers/TextureManager.h"
 #include "SFML/Graphics.hpp"
 
@@ -13,12 +14,16 @@ public:
     ~Application() {
         delete textureManager;
         delete window;
+         delete fontManager;
     }
 
     void run(unsigned width = 960, unsigned height = 540);
 
     TextureManager* getTextureManager() {
         return textureManager;
+    }
+    FontManager* getFontManager() {
+        return fontManager;
     }
 
     const float getDeltaTime() const {
@@ -39,6 +44,7 @@ private:
 
     std::filesystem::path assetsPath = std::filesystem::current_path() / ".." / R"(assets)";
     TextureManager* textureManager = nullptr;
+    FontManager* fontManager = nullptr;
 
     Vector2i windowSize;
     RenderWindow* window{};

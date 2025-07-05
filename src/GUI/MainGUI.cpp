@@ -15,7 +15,6 @@ namespace gui {
             if (filePanel->isHidden()) filePanel->Show();
             else filePanel->Hide();
         }
-
     }
 
     inline void PanelHover(GuiElementEventContext ctx) {

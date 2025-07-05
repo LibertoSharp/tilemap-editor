@@ -40,6 +40,9 @@ void Application::createWindow(unsigned width, unsigned heigth) {
 void Application::createManagers() {
     textureManager = new TextureManager( assetsPath / "textures", Vector2i(16,16));
     textureManager->LoadResources();
+
+    fontManager = new FontManager(assetsPath / "fonts");
+    fontManager->LoadResources();
 }
 
 void Application::render() {
@@ -47,8 +50,10 @@ void Application::render() {
 }
 
 void Application::CallGuiEvents() {
-    guiLayer->ctx.mousePos = sf::Mouse::getPosition(*window);
     guiLayer->ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
+    if (!window->hasFocus()) guiLayer->ctx.Reset();
+    guiLayer->ctx.mousePos = sf::Mouse::getPosition(*window);
+
     guiLayer->callEvents();
 }
 

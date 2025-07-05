@@ -2,7 +2,6 @@
 #define TEXTUREMANAGER_H
 #include "AssetLoader.h"
 #include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Texture.hpp"
 
 class TextureManager : public AssetLoader<sf::Texture>{
 public:
