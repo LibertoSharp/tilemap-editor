@@ -24,7 +24,7 @@ namespace gui {
     explicit GuiLayer(int reserveAmount = 3);
     explicit GuiLayer(Window* window, int reserveAmount = 3);
     ~GuiLayer() override {RemoveAllElements();}
-    void AddElement(GuiElement* element);
+    void AddElement(GuiElement* element, bool keepWorldPos);
     void RemoveElement(GuiElement* element);
     void RemoveAllElements();
     Vector2f GetPositionRelativeToAnchor(AnchorType anchor);

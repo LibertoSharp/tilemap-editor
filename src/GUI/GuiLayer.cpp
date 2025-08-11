@@ -11,11 +11,12 @@ namespace gui {
         this->window = window;
     }
 
-    void GuiLayer::AddElement(GuiElement* element) {
+    void GuiLayer::AddElement(GuiElement* element, bool keepWorldPos) {
         elements.push_back(element);
         element->setParent(this);
-        element->SetRelativePosition(element->GetRelativePosition());
-        element->NormalizePositionRelativeToParent(element->GetNormalizedScale());
+        if (!keepWorldPos)
+            element->SetRelativePosition(element->GetRelativePosition());
+        element->NormalizeScaleRelativeToParent(element->GetNormalizedScale());
     }
 
     void GuiLayer::RemoveElement(GuiElement* element) {
@@ -62,11 +63,14 @@ namespace gui {
         GuiElementEventContext elementCtx{};
         elementCtx.mousePos = ctx.mousePos;
 
-        if (element->isInsideBoundingBox(ctx.mousePos) && first) {
-            elementCtx.f_hovering = true;
-            elementCtx.f_clickDown = ctx.f_clickDown;
-            elementCtx.f_mouseDown = ctx.f_mouseDown;
-            first = false;
+        if (element->isInsideBoundingBox(ctx.mousePos)) {
+            elementCtx.f_deep_hovering = true;
+            if (first) {
+                elementCtx.f_hovering = true;
+                elementCtx.f_clickDown = ctx.f_clickDown;
+                elementCtx.f_mouseDown = ctx.f_mouseDown;
+                first = false;
+            }
         }
 
         element->ctx = elementCtx;

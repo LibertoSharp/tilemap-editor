@@ -1,5 +1,6 @@
 #include "GUI/GuiElement.h"
 
+#include <algorithm>
 #include <iostream>
 
 #include "engine/Application.h"
@@ -38,6 +39,16 @@ namespace gui {
         if (auto element = dynamic_cast<GuiElement*>(parent)) { transform = element->getParentTransform().combine(getTransform());}
         else transform = getTransform();
         return transform;
+    }
+
+    Vector2f GuiElement::getGlobalScale() const {
+        Vector2f scale = getScale();
+        if (auto element = dynamic_cast<GuiElement*>(parent)) {
+            Vector2f parentScale = element->getGlobalScale();
+            scale = {scale.x * parentScale.x, scale.y * parentScale.y};
+        }
+        else scale = getScale();
+        return scale;
     }
 
     void GuiElement::Append(GuiElement* element) {
@@ -107,7 +118,7 @@ namespace gui {
         return relativePosition;
     }
 
-    void GuiElement::NormalizePositionRelativeToParent(Vector2f scale) {
+    void GuiElement::NormalizeScaleRelativeToParent(Vector2f scale) {
         Vector2f size;
         normalizedScale = scale;
         if (auto layer = dynamic_cast<GuiLayer*>(parent)) size = static_cast<Vector2f>(Application::getInstance()->getWindow()->getSize());
@@ -126,6 +137,15 @@ namespace gui {
 
     Vector2f GuiElement::GetNormalizedScale() {
         return normalizedScale;
+    }
+
+    void GuiElement::SetGlobalScale(Vector2f scale) {
+        Vector2f pscale = getGlobalScale();
+        Vector2f localScale = getScale();
+        pscale = {pscale.x/localScale.x,pscale.y/localScale.y};
+
+        scale = {1.0f / pscale.x * scale.x, 1.0f / pscale.y * scale.y};
+        setScale(scale);
     }
 
     std::vector<GuiElement*>* GuiElement::getChildren() {

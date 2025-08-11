@@ -11,12 +11,14 @@ namespace gui {
         GuiElement* element = nullptr;
         sf::Vector2i mousePos;
         bool f_hovering = false;
+        bool f_deep_hovering = false;
         bool f_clickDown = false;
         bool f_clickUp = false;
         bool f_mouseDown = false;
 
         void ResetFlags() {
             f_hovering = false;
+            f_deep_hovering = false;
             f_clickDown = false;
             f_clickUp = false;
             f_mouseDown = false;
@@ -42,6 +44,7 @@ namespace gui {
         void setParent(GuiLayer* parent);
         void setParent(GuiElement* parent);
         Transform getParentTransform() const;
+        Vector2f getGlobalScale() const;
         std::vector<GuiElement*>* getChildren();
         void Append(GuiElement *element);
 
@@ -53,8 +56,9 @@ namespace gui {
         Vector2f GetPositionRelativeToAnchor(AnchorType anchor) const;
         void SetRelativePosition(Vector2f pos);
         Vector2f GetRelativePosition();
-        void NormalizePositionRelativeToParent(Vector2f scale);
+        void NormalizeScaleRelativeToParent(Vector2f scale);
         Vector2f GetNormalizedScale();
+        void SetGlobalScale(Vector2f scale);
 
 
         //Fields
