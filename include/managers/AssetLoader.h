@@ -32,7 +32,7 @@ void AssetLoader<Resource>::LoadResources() {
         if (entry.is_regular_file()) {
             Resource* resource = nullptr;
             try{
-                Resource* resource = new Resource(entry.path().string());
+                resource = new Resource(entry.path().string());
                 path relativePath = relative(entry, localPath);
                 relativePath = relativePath.parent_path() / relativePath.stem();
                 resources.insert(std::make_pair( relativePath.string(),resource));
