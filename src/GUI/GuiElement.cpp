@@ -21,8 +21,8 @@ namespace gui {
         target.draw(*activeGraphic, states);
 
         for (auto child: children) {
-            if (auto c = child.lock())
-                target.draw(*c, states);
+            if (child)
+                target.draw(*child, states);
         }
     }
 
@@ -52,9 +52,9 @@ namespace gui {
         return scale;
     }
 
-    void GuiElement::append(std::shared_ptr<GuiElement> element) {
+    void GuiElement::append(GuiElement *element) {
         element->parent = this;
-        children.push_back(std::weak_ptr(element));
+        children.push_back(element);
     }
 
     FloatRect transformRect(const sf::FloatRect& rect, const sf::Transform& transform) {
@@ -82,6 +82,18 @@ namespace gui {
         if (Update) {
             ctx.element = this;
             Update(ctx);
+        }
+    }
+
+    void GuiElement::destroy() {
+        if (auto element = dynamic_cast<GuiElement*>(parent))
+        {
+            for (auto& child : element->children) {
+                if (child == this) {
+                    child = nullptr;
+                }
+            }
+            delete this;
         }
     }
 
@@ -152,7 +164,7 @@ namespace gui {
         setScale(scale);
     }
 
-    std::vector<std::weak_ptr<GuiElement>> *GuiElement::getChildren() {
+    std::vector<GuiElement *> *GuiElement::getChildren() {
         return &children;
     }
 }

@@ -9,16 +9,16 @@
 using namespace gui;
 static Dropdown* fileButton;
 static Dropdown* editButton;
-static Panel* filePanel;
+static Panel* editPanel;
 static Sprite getGuiSprite(std::string atlasid,int posx, int posy, int width, int height) {
     return Application::getInstance()->getTextureManager()->getSprite(atlasid, posx, posy, width, height);
 }
 
 namespace gui {
-    inline void FileButton(GuiElementEventContext ctx) {
+    inline void EditButton(GuiElementEventContext ctx) {
         if (ctx.f_clickDown) {
-            if (filePanel->isHidden()) filePanel->show();
-            else filePanel->hide();
+            if (editPanel->isHidden()) editPanel->show();
+            else editPanel->hide();
         }
     }
 
@@ -40,7 +40,6 @@ namespace gui {
         fileButton = new Dropdown(getGuiSprite("GUI00", 0, 0, 36,12));
         fileButton->hovered = getGuiSprite("GUI00",0,13,36,12);
         fileButton->setGlobalScale({2,2});
-        fileButton->Update = &FileButton;
         fileButton->addEntry(getGuiSprite("GUI00", 0, 26, 36,12),
             getGuiSprite("GUI00", 0, 39, 36,12));
         fileButton->addEntry(getGuiSprite("GUI00", 0, 52, 36,12),
@@ -49,22 +48,32 @@ namespace gui {
         menu->addElement(fileButton, true);
 
         //FILE PANEL
-        filePanel = new Panel({300,300});
-        filePanel->hide();
-        filePanel->setOrigin({100,0});
-        filePanel->setAnchor(TopRight);
-        filePanel->setRelativePosition({0,0});
-        filePanel->getRectangleShape()->setFillColor(Color(0,0,0,200));
-        filePanel->normalizeScaleRelativeToParent({0,1});
-        filePanel->Update = &PanelHover;
-        menu->addElement(filePanel, false);
+        editPanel = new Panel({300,300});
+        editPanel->hide();
+        editPanel->setOrigin({100,0});
+        editPanel->setAnchor(TopRight);
+        editPanel->setRelativePosition({0,0});
+        editPanel->getRectangleShape()->setFillColor(Color(0,0,0,200));
+        editPanel->normalizeScaleRelativeToParent({0,1});
+        editPanel->Update = &PanelHover;
+        menu->addElement(editPanel, false);
 
         //EDIT BUTTON
         editButton = new Dropdown(getGuiSprite("GUI00", 36, 0, 36,12));
-        editButton->hovered = getGuiSprite("GUI00", 36, 13, 36,12);
+        editButton->hovered = getGuiSprite("GUI00", 36, 13, 36,12);\
+        editButton->Update = &EditButton;
         editButton->setGlobalScale({2,2});
         editButton->setPosition({36*2,0});
         menu->addElement(editButton, true);
+
+        Button *btn = new Button(getGuiSprite("GUI00", 36, 0, 36,12));
+        btn->setPosition({100,100});
+        editButton->append(btn);
+
+        Button *btn2 = new Button(getGuiSprite("GUI00", 36, 0, 36,12));
+        btn2->setPosition({200,100});
+        btn->append(btn2);
+        btn2->Update = [](GuiElementEventContext ctx) {std::cout << "pressed" << std::endl;};
 
         return menu;
     }

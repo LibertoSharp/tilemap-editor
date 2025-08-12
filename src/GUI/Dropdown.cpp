@@ -20,7 +20,7 @@ void Dropdown::showDropdown() {
 	float y = this->getActiveSprite()->getGlobalBounds().size.y;
 	int i = 0;
 	for (std::pair<Sprite,Sprite> s: entries) {
-		std::shared_ptr<Button> btn = std::make_shared<Button>(s.first);
+		Button *btn = new Button(s.first);
 		btn->hovered = s.second;
 		btn->pressed = s.second;
 		append(btn);
@@ -36,6 +36,9 @@ void Dropdown::showDropdown() {
 }
 
 void Dropdown::hideDropdown() {
+	for (auto btn: buttons) {
+		btn->destroy();
+	}
 	buttons.clear();
 	dropped = false;
 }

@@ -20,12 +20,12 @@ namespace gui {
     }
 
     void GuiLayer::removeElement(GuiElement* element) {
-        for (auto it = elements.begin(); it != elements.end(); it++) {
-            if (*it == element) {
-                elements.erase(it);
-                delete element;
+        for (auto& e : elements) {
+            if (e == element) {
+                e = nullptr;
             }
         }
+        delete element;
     }
 
     void GuiLayer::removeAllElements() {
@@ -76,20 +76,25 @@ namespace gui {
 
         element->ctx = elementCtx;
         element->update();
+
+        auto& children = *element->getChildren();
+        for (auto it = children.rbegin(); it != children.rend(); ++it) {
+            GuiElement *child = *it;
+            if (child) {
+                callEventsInternal(child, ctx, first);
+            } else
+                children.erase(it.base()-1);
+        }
     }
 
     void GuiLayer::callEvents() {
         bool first = true;
-        for (const auto element : std::vector<GuiElement*>(elements.rbegin(), elements.rend())) {
-            auto& children = *element->getChildren();
-            for (auto it = children.rbegin(); it != children.rend(); ++it) {
-                std::shared_ptr<GuiElement> child = it->lock();
-                if (child) {
-                    callEventsInternal(child.get(), ctx, first);
-                } else
-                    children.erase(it.base()-1);
-            }
-            callEventsInternal(element, ctx, first);
+        for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
+            GuiElement *element = *it;
+            if (element) {
+                callEventsInternal(element, ctx, first);
+            } else
+                elements.erase(it.base()-1);
         }
         ctx.Reset();
     }

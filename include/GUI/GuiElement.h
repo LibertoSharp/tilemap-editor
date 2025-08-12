@@ -48,12 +48,13 @@ namespace gui {
         Transform getParentTransform() const;
         Vector2f getGlobalScale() const;
 
-        std::vector<std::weak_ptr<GuiElement>> *getChildren();
-        void append(std::shared_ptr<GuiElement> element);
+        std::vector<GuiElement *> *getChildren();
+        void append(GuiElement *element);
 
         void hide() {hideFlag = true;}
         bool isHidden() const {return hideFlag;}
         void show() {hideFlag = false;}
+        void destroy();
 
         void setAnchor(AnchorType anchor);
         Vector2f getPositionRelativeToAnchor(AnchorType anchor) const;
@@ -77,7 +78,7 @@ namespace gui {
         Vector2f relativePosition = {0,0};
         Vector2f normalizedScale = {0,0};
         bool hideFlag = false;
-        std::vector<std::weak_ptr<GuiElement>> children;
+        std::vector<GuiElement*> children;
     };
 }
 #endif //GUIELEMENT_H

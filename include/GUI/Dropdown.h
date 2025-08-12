@@ -16,7 +16,7 @@ private:
 	void hideDropdown();
 
 	std::vector<std::pair<Sprite,Sprite>> entries;
-	std::vector<std::shared_ptr<Button>> buttons;
+	std::vector<Button*> buttons;
 	bool dropped = false;
 };
 
