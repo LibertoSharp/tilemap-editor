@@ -49,19 +49,19 @@ namespace gui {
         Vector2f getGlobalScale() const;
 
         std::vector<std::weak_ptr<GuiElement>> *getChildren();
-        void Append(std::shared_ptr<GuiElement> element);
+        void append(std::shared_ptr<GuiElement> element);
 
-        void Hide() {hideFlag = true;}
+        void hide() {hideFlag = true;}
         bool isHidden() const {return hideFlag;}
-        void Show() {hideFlag = false;}
+        void show() {hideFlag = false;}
 
-        void SetAnchor(AnchorType anchor);
-        Vector2f GetPositionRelativeToAnchor(AnchorType anchor) const;
-        void SetRelativePosition(Vector2f pos);
-        Vector2f GetRelativePosition();
-        void NormalizeScaleRelativeToParent(Vector2f scale);
-        Vector2f GetNormalizedScale();
-        void SetGlobalScale(Vector2f scale);
+        void setAnchor(AnchorType anchor);
+        Vector2f getPositionRelativeToAnchor(AnchorType anchor) const;
+        void setRelativePosition(Vector2f pos);
+        Vector2f getRelativePosition();
+        void normalizeScaleRelativeToParent(Vector2f scale);
+        Vector2f getNormalizedScale();
+        void setGlobalScale(Vector2f scale);
 
 
         //Fields

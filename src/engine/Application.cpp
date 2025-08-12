@@ -39,10 +39,10 @@ void Application::createWindow(unsigned width, unsigned heigth) {
 
 void Application::createManagers() {
     textureManager = new TextureManager( assetsPath / "textures", Vector2i(16,16));
-    textureManager->LoadResources();
+    textureManager->loadResources();
 
     fontManager = new FontManager(assetsPath / "fonts");
-    fontManager->LoadResources();
+    fontManager->loadResources();
 }
 
 void Application::render() {

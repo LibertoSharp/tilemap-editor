@@ -52,7 +52,7 @@ namespace gui {
         return scale;
     }
 
-    void GuiElement::Append(std::shared_ptr<GuiElement> element) {
+    void GuiElement::append(std::shared_ptr<GuiElement> element) {
         element->parent = this;
         children.push_back(std::weak_ptr(element));
     }
@@ -85,11 +85,11 @@ namespace gui {
         }
     }
 
-    void GuiElement::SetAnchor(AnchorType anchor) {
+    void GuiElement::setAnchor(AnchorType anchor) {
         this->anchor = anchor;
     }
 
-    Vector2f GuiElement::GetPositionRelativeToAnchor(AnchorType anchor) const {
+    Vector2f GuiElement::getPositionRelativeToAnchor(AnchorType anchor) const {
         FloatRect boundingBox = getBoundingBox(activeGraphic);
         switch (anchor) {
             case TopLeft: return boundingBox.position;
@@ -102,25 +102,27 @@ namespace gui {
             case BottomCenter: return {boundingBox.position.x+boundingBox.size.x/2.0f,boundingBox.position.y+boundingBox.size.y};
             case BottomRight: return {boundingBox.position.x+boundingBox.size.x,boundingBox.position.y+boundingBox.size.y};
         }
+        std::cerr << "Couldn't get anchor" << std::endl;
+        return boundingBox.position;
     }
 
-    void GuiElement::SetRelativePosition(Vector2f pos) {
+    void GuiElement::setRelativePosition(Vector2f pos) {
         relativePosition = pos;
         Vector2f anchorPos;
 
         if (!parent) return;
-        if (auto layer = dynamic_cast<GuiLayer*>(parent)) anchorPos = layer->GetPositionRelativeToAnchor(anchor);
-        else if (auto element = dynamic_cast<GuiElement*>(parent)) anchorPos = element->GetPositionRelativeToAnchor(anchor);
+        if (auto layer = dynamic_cast<GuiLayer*>(parent)) anchorPos = layer->getPositionRelativeToAnchor(anchor);
+        else if (auto element = dynamic_cast<GuiElement*>(parent)) anchorPos = element->getPositionRelativeToAnchor(anchor);
         else return;
 
         setPosition(anchorPos+pos);
     }
 
-    Vector2f GuiElement::GetRelativePosition() {
+    Vector2f GuiElement::getRelativePosition() {
         return relativePosition;
     }
 
-    void GuiElement::NormalizeScaleRelativeToParent(Vector2f scale) {
+    void GuiElement::normalizeScaleRelativeToParent(Vector2f scale) {
         Vector2f size;
         normalizedScale = scale;
         if (auto layer = dynamic_cast<GuiLayer*>(parent)) size = static_cast<Vector2f>(Application::getInstance()->getWindow()->getSize());
@@ -137,11 +139,11 @@ namespace gui {
         setScale({scalex,scaley});
     }
 
-    Vector2f GuiElement::GetNormalizedScale() {
+    Vector2f GuiElement::getNormalizedScale() {
         return normalizedScale;
     }
 
-    void GuiElement::SetGlobalScale(Vector2f scale) {
+    void GuiElement::setGlobalScale(Vector2f scale) {
         Vector2f pscale = getGlobalScale();
         Vector2f localScale = getScale();
         pscale = {pscale.x/localScale.x,pscale.y/localScale.y};

@@ -3,7 +3,7 @@
 #include <cmath>
 const float RadToDeg = 57.2958f;
 
-inline sf::Vector2f Damp(const sf::Vector2f& source, const sf::Vector2f& target, float seconds, float dt) {
+inline sf::Vector2f damp(const sf::Vector2f& source, const sf::Vector2f& target, float seconds, float dt) {
     float smoothing = std::pow(0.01f, 1.0f / seconds);
     float lerpFactor = 1.0f - std::pow(smoothing, dt);
 

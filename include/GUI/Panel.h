@@ -6,7 +6,7 @@ namespace gui {
     public:
         Panel(Vector2f size);
 
-        RectangleShape* GetRectangleShape() {
+        RectangleShape* getRectangleShape() {
             return dynamic_cast<RectangleShape*>(activeGraphic);
         }
     };

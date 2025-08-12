@@ -15,7 +15,7 @@ protected:
 
 public:
     explicit AssetLoader(path path);
-    void LoadResources();
+    void loadResources();
 
 private:
     path localPath;
@@ -27,7 +27,7 @@ AssetLoader<Resource>::AssetLoader(path path) : localPath(std::move(path)) {
 }
 
 template<typename Resource>
-void AssetLoader<Resource>::LoadResources() {
+void AssetLoader<Resource>::loadResources() {
     for (const auto& entry : recursive_directory_iterator(localPath)) {
         if (entry.is_regular_file()) {
             Resource* resource = nullptr;

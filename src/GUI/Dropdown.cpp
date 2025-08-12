@@ -23,10 +23,10 @@ void Dropdown::showDropdown() {
 		std::shared_ptr<Button> btn = std::make_shared<Button>(s.first);
 		btn->hovered = s.second;
 		btn->pressed = s.second;
-		Append(btn);
-		btn->NormalizeScaleRelativeToParent({1,1});
-		btn->SetAnchor(gui::TopLeft);
-		btn->SetRelativePosition({0,y});
+		append(btn);
+		btn->normalizeScaleRelativeToParent({1,1});
+		btn->setAnchor(gui::TopLeft);
+		btn->setRelativePosition({0,y});
 		btn->Update = [this,i](gui::GuiElementEventContext ctx) {if (ctx.f_clickDown) {if (this->ValueChanged) this->ValueChanged(i); this->hideDropdown();}};
 		y += btn->getActiveSprite()->getGlobalBounds().size.y;
 		buttons.push_back(btn);

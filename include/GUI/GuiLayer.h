@@ -23,11 +23,11 @@ namespace gui {
   public:
     explicit GuiLayer(int reserveAmount = 3);
     explicit GuiLayer(Window* window, int reserveAmount = 3);
-    ~GuiLayer() override {RemoveAllElements();}
-    void AddElement(GuiElement* element, bool keepWorldPos);
-    void RemoveElement(GuiElement* element);
-    void RemoveAllElements();
-    Vector2f GetPositionRelativeToAnchor(AnchorType anchor);
+    ~GuiLayer() override {removeAllElements();}
+    void addElement(GuiElement* element, bool keepWorldPos);
+    void removeElement(GuiElement* element);
+    void removeAllElements();
+    Vector2f getPositionRelativeToAnchor(AnchorType anchor);
 
     void draw(RenderTarget& target, RenderStates states) const override;
 

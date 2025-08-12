@@ -11,15 +11,15 @@ namespace gui {
         this->window = window;
     }
 
-    void GuiLayer::AddElement(GuiElement* element, bool keepWorldPos) {
+    void GuiLayer::addElement(GuiElement* element, bool keepWorldPos) {
         elements.push_back(element);
         element->setParent(this);
         if (!keepWorldPos)
-            element->SetRelativePosition(element->GetRelativePosition());
-        element->NormalizeScaleRelativeToParent(element->GetNormalizedScale());
+            element->setRelativePosition(element->getRelativePosition());
+        element->normalizeScaleRelativeToParent(element->getNormalizedScale());
     }
 
-    void GuiLayer::RemoveElement(GuiElement* element) {
+    void GuiLayer::removeElement(GuiElement* element) {
         for (auto it = elements.begin(); it != elements.end(); it++) {
             if (*it == element) {
                 elements.erase(it);
@@ -28,7 +28,7 @@ namespace gui {
         }
     }
 
-    void GuiLayer::RemoveAllElements() {
+    void GuiLayer::removeAllElements() {
         for (auto element : elements) {
             delete element;
         }
@@ -36,7 +36,7 @@ namespace gui {
     }
 
 
-    Vector2f GuiLayer::GetPositionRelativeToAnchor(AnchorType anchor) {
+    Vector2f GuiLayer::getPositionRelativeToAnchor(AnchorType anchor) {
         float width = static_cast<float>(window->getSize().x);
         float height = static_cast<float>(window->getSize().x);
         switch (anchor) {
