@@ -34,6 +34,10 @@ namespace gui {
         return parent;
     }
 
+    std::vector<GuiElement *> GuiElement::getChildrens() const {
+        return children;
+    }
+
     Transform GuiElement::getParentTransform() const {
         Transform transform;
         if (auto element = dynamic_cast<GuiElement*>(parent)) { transform = element->getParentTransform().combine(getTransform());}
@@ -69,7 +73,7 @@ namespace gui {
         else if (auto graphics = dynamic_cast<Shape*>(activeGraphic)) return graphics->getGlobalBounds();
         else if (auto graphics = dynamic_cast<Text*>(activeGraphic)) return graphics->getGlobalBounds();
 
-        std::cerr << "Couldn't get bounding box" << std::endl;
+        //std::cerr << "Couldn't get bounding box" << std::endl;
         return {};
     }
 

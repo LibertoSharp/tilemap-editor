@@ -47,7 +47,9 @@ add_executable(makean_rpg src/main.cpp
         src/GUI/Dropdown.cpp
         include/GUI/Dropdown.h
         src/GUI/TextElement.cpp
-        include/GUI/TextElement.h)
+        include/GUI/TextElement.h
+        src/GUI/Tilegrid.cpp
+        src/GUI/Tilegrid.h)
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 

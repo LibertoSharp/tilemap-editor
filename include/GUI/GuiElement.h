@@ -45,6 +45,7 @@ namespace gui {
         //Hierarchy
         void setParent(GuiLayer* parent);
         const Drawable *getParent() const;
+        std::vector<GuiElement*> getChildrens() const;
         Transform getParentTransform() const;
         Vector2f getGlobalScale() const;
 

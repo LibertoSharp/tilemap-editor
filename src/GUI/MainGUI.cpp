@@ -1,5 +1,6 @@
 #include "GUI/Dropdown.h"
 #include "GUI/TextElement.h"
+#include "GUI/Tilegrid.h"
 #ifndef MAINMENU_H
 #define MAINMENU_H
 #include "../../include/GUI/Button.h"
@@ -71,6 +72,10 @@ namespace gui {
         t->setPosition({100,100});
         t->setFillColor(Color(255,0,0,200));
         menu->addElement(t, true);
+
+        Tilegrid* tilegrid = new Tilegrid(Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\plains"), {16,16});
+        editPanel->append(tilegrid);
+        tilegrid->setGlobalScale({2,2});
 
         return menu;
     }
