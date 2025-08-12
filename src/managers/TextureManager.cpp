@@ -19,3 +19,8 @@ sf::Sprite TextureManager::getSprite(const std::string &atlasName, sf::IntRect r
     sf::Texture* tx = resources.find(atlasName)->second;
     return {*tx, rect};
 }
+
+sf::Sprite TextureManager::getSprite(const std::string &atlasName, int posx, int posy, int width, int height) const {
+    sf::Texture* tx = resources.find(atlasName)->second;
+    return {*tx, {{posx,posy},{width,height}}};
+}

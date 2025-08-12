@@ -1,5 +1,7 @@
 #ifndef GUIELEMENT_H
 #define GUIELEMENT_H
+#include <functional>
+
 #include "AnchorsType.h"
 #include "SFML/Graphics.hpp"
 namespace gui {
@@ -38,15 +40,16 @@ namespace gui {
 
         //Virtual Methdos
         virtual void update(); //called every frame
-        void (*Update)(GuiElementEventContext ctx);
+       std::function<void(GuiElementEventContext)> Update = nullptr;
 
         //Hierarchy
         void setParent(GuiLayer* parent);
-        void setParent(GuiElement* parent);
+        const Drawable *getParent() const;
         Transform getParentTransform() const;
         Vector2f getGlobalScale() const;
-        std::vector<GuiElement*>* getChildren();
-        void Append(GuiElement *element);
+
+        std::vector<std::weak_ptr<GuiElement>> *getChildren();
+        void Append(std::shared_ptr<GuiElement> element);
 
         void Hide() {hideFlag = true;}
         bool isHidden() const {return hideFlag;}
@@ -67,14 +70,14 @@ namespace gui {
         GuiElementEventContext ctx;
 
     protected:
-        Drawable* parent;
+        Drawable* parent = nullptr;
 
     private:
         AnchorType anchor = TopLeft;
         Vector2f relativePosition = {0,0};
         Vector2f normalizedScale = {0,0};
         bool hideFlag = false;
-        std::vector<GuiElement*> children;
+        std::vector<std::weak_ptr<GuiElement>> children;
     };
 }
 #endif //GUIELEMENT_H

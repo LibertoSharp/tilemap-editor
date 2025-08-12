@@ -69,6 +69,7 @@ namespace gui {
                 elementCtx.f_hovering = true;
                 elementCtx.f_clickDown = ctx.f_clickDown;
                 elementCtx.f_mouseDown = ctx.f_mouseDown;
+                elementCtx.f_clickUp = ctx.f_clickUp;
                 first = false;
             }
         }
@@ -80,8 +81,13 @@ namespace gui {
     void GuiLayer::callEvents() {
         bool first = true;
         for (const auto element : std::vector<GuiElement*>(elements.rbegin(), elements.rend())) {
-            for (const auto child : std::vector<GuiElement*>(element->getChildren()->rbegin(), element->getChildren()->rend())) {
-                callEventsInternal(child, ctx, first);
+            auto& children = *element->getChildren();
+            for (auto it = children.rbegin(); it != children.rend(); ++it) {
+                std::shared_ptr<GuiElement> child = it->lock();
+                if (child) {
+                    callEventsInternal(child.get(), ctx, first);
+                } else
+                    children.erase(it.base()-1);
             }
             callEventsInternal(element, ctx, first);
         }

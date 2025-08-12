@@ -7,6 +7,7 @@ namespace gui {
     class Button : public GuiElement{
     public:
         Button(sf::Sprite sprite);
+        ~Button() = default;
 
         void update() override;
 

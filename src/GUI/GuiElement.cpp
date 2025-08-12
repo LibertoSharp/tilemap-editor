@@ -21,7 +21,8 @@ namespace gui {
         target.draw(*activeGraphic, states);
 
         for (auto child: children) {
-            target.draw(*child, states);
+            if (auto c = child.lock())
+                target.draw(*c, states);
         }
     }
 
@@ -29,9 +30,8 @@ namespace gui {
         this->parent = parent;
     }
 
-    void GuiElement::setParent(GuiElement *parent) {
-        this->parent = parent;
-        parent->Append(this);
+    const Drawable *GuiElement::getParent() const{
+        return parent;
     }
 
     Transform GuiElement::getParentTransform() const {
@@ -43,6 +43,7 @@ namespace gui {
 
     Vector2f GuiElement::getGlobalScale() const {
         Vector2f scale = getScale();
+        if (parent == nullptr) return scale;
         if (auto element = dynamic_cast<GuiElement*>(parent)) {
             Vector2f parentScale = element->getGlobalScale();
             scale = {scale.x * parentScale.x, scale.y * parentScale.y};
@@ -51,8 +52,9 @@ namespace gui {
         return scale;
     }
 
-    void GuiElement::Append(GuiElement* element) {
-        children.push_back(element);
+    void GuiElement::Append(std::shared_ptr<GuiElement> element) {
+        element->parent = this;
+        children.push_back(std::weak_ptr(element));
     }
 
     FloatRect transformRect(const sf::FloatRect& rect, const sf::Transform& transform) {
@@ -148,7 +150,7 @@ namespace gui {
         setScale(scale);
     }
 
-    std::vector<GuiElement*>* GuiElement::getChildren() {
+    std::vector<std::weak_ptr<GuiElement>> *GuiElement::getChildren() {
         return &children;
     }
 }

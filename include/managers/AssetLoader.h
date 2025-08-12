@@ -36,7 +36,6 @@ void AssetLoader<Resource>::LoadResources() {
                 path relativePath = relative(entry, localPath);
                 relativePath = relativePath.parent_path() / relativePath.stem();
                 resources.insert(std::make_pair( relativePath.string(),resource));
-                std::cout << relativePath.string() << std::endl;
             } catch (sf::Exception& e) {
                 if (resource) delete resource;
             }

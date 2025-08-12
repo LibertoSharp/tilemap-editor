@@ -10,6 +10,7 @@ public:
     const sf::Texture* getAtlasTexture(const std::string& atlasName) const;
     sf::Sprite createTileSprite(const std::string& atlasName, int x, int y) const;
     sf::Sprite getSprite(const std::string& atlasName, sf::IntRect rect) const;
+    sf::Sprite getSprite(const std::string& atlasName, int posx, int posy, int width, int height) const;
 
 private:
     sf::Vector2i tileSize;
