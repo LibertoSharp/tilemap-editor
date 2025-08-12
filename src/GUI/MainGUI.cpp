@@ -1,4 +1,5 @@
 #include "GUI/Dropdown.h"
+#include "GUI/TextElement.h"
 #ifndef MAINMENU_H
 #define MAINMENU_H
 #include "../../include/GUI/Button.h"
@@ -23,7 +24,7 @@ namespace gui {
     }
 
     inline void FileValueChanged(int index) {
-    std::cout << index << std::endl;
+        std::cout << index << std::endl;
     }
 
     inline void PanelHover(GuiElementEventContext ctx) {
@@ -66,14 +67,10 @@ namespace gui {
         editButton->setPosition({36*2,0});
         menu->addElement(editButton, true);
 
-        Button *btn = new Button(getGuiSprite("GUI00", 36, 0, 36,12));
-        btn->setPosition({100,100});
-        editButton->append(btn);
-
-        Button *btn2 = new Button(getGuiSprite("GUI00", 36, 0, 36,12));
-        btn2->setPosition({200,100});
-        btn->append(btn2);
-        btn2->Update = [](GuiElementEventContext ctx) {std::cout << "pressed" << std::endl;};
+        TextElement* t = new TextElement(Application::getInstance()->getFontManager()->getFont("PixelOperator8"), "Hiii");
+        t->setPosition({100,100});
+        t->setFillColor(Color(255,0,0,200));
+        menu->addElement(t, true);
 
         return menu;
     }

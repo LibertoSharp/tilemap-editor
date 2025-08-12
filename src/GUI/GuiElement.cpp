@@ -67,6 +67,7 @@ namespace gui {
     FloatRect GuiElement::getBoundingBox(const Drawable* graphic) const {
         if (auto graphics = dynamic_cast<Sprite*>(activeGraphic)) return graphics->getGlobalBounds();
         else if (auto graphics = dynamic_cast<Shape*>(activeGraphic)) return graphics->getGlobalBounds();
+        else if (auto graphics = dynamic_cast<Text*>(activeGraphic)) return graphics->getGlobalBounds();
 
         std::cerr << "Couldn't get bounding box" << std::endl;
         return {};
