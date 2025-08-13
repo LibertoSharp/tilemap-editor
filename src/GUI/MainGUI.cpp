@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "GUI/Dropdown.h"
 #include "GUI/TextElement.h"
 #include "GUI/Tilegrid.h"
@@ -6,7 +8,7 @@
 #include "../../include/GUI/Button.h"
 #include "../../include/GUI/GuiLayer.h"
 #include "../../include/GUI/Panel.h"
-#include "../../include/GUI/Common.h"
+#include "../../include/Common.h"
 #include  "engine/Application.h"
 using namespace gui;
 static Dropdown* fileButton;

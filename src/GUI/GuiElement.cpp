@@ -19,6 +19,7 @@ namespace gui {
         if (isHidden()) return;
 
         states.transform *= getTransform();
+        states.shader = shader;
         target.draw(*activeGraphic, states);
 
         for (auto child: children) {
@@ -187,6 +188,10 @@ namespace gui {
 
     void GuiElement::setBoundingBoxOffset(Vector2f offset) {
         boundingBoxOffset = offset;
+    }
+
+    void GuiElement::setShader(const Shader *shader) {
+        this->shader = shader;
     }
 
     std::vector<GuiElement *> *GuiElement::getChildren() {

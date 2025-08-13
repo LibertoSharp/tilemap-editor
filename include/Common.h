@@ -1,6 +1,9 @@
 #ifndef COMMON_H
 #define COMMON_H
 #include <cmath>
+#include <SFML//System/Vector2.hpp>
+using namespace  std::filesystem;
+using namespace std;
 const float RadToDeg = 57.2958f;
 
 inline sf::Vector2f damp(const sf::Vector2f& source, const sf::Vector2f& target, float seconds, float dt) {
@@ -19,5 +22,11 @@ inline string vec2tostring(const sf::Vector2<T>& source) {
     stringstream ss;
     ss << "X: " << source.x << " Y: " << source.y;
     return ss.str();
+}
+
+inline path RelativePath(path fullPath, path localPath) {
+    path relativePath = relative(fullPath, localPath);
+    relativePath = relativePath.parent_path() / relativePath.stem();
+    return relativePath;
 }
 #endif //COMMON_H

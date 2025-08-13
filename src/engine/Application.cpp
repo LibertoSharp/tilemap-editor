@@ -46,6 +46,7 @@ void Application::createManagers() {
     fontManager->loadResources();
 
     shaderManager = new AssetLoader<Shader>(assetsPath / "shaders");
+    shaderManager->loadResources();
 }
 
 void Application::render() {

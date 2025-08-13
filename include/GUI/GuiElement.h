@@ -70,7 +70,7 @@ namespace gui {
         void setGlobalScale(Vector2f scale);
         void setBoundingBoxScale(Vector2f scale);
         void setBoundingBoxOffset(Vector2f offset);
-
+        void setShader(const Shader* shader);
 
         //Fields
         Drawable* defaultGraphic;
@@ -79,7 +79,7 @@ namespace gui {
 
     protected:
         Drawable* parent = nullptr;
-
+        const Shader *shader = nullptr;
     private:
         AnchorType anchor = TopLeft;
         Vector2f relativePosition = {0,0};
