@@ -14,7 +14,7 @@ namespace gui {
 				this->append(tileButton);
 				tileButton->setRelativePosition({static_cast<float>(x*tileSize.x),static_cast<float>(y*tileSize.y)});
 				tileButton->Update = [this](GuiElementEventContext ctx){this->ButtonUpdate(ctx);};
-				tileButton->setShader(Application::getInstance()->getShaderManager()->getResource("tileButton"));
+				tileButton->setShader(Application::getInstance()->getShaderManager()->getShader("tileButton"));
 				tileButtons.push_back(tileButton);
 			}
 		}

@@ -15,11 +15,19 @@ namespace gui {
         children.reserve(3);
     }
 
+    GuiElement::~GuiElement() {
+        if (shader != nullptr)
+            delete shader;
+    }
+
     void GuiElement::draw(RenderTarget &target, RenderStates states) const {
         if (isHidden()) return;
 
         states.transform *= getTransform();
-        states.shader = shader;
+        if (shader != nullptr) {
+            shader->setUniform("uTime", Application::getInstance()->getTime());
+            states.shader = shader;
+        }
         target.draw(*activeGraphic, states);
 
         for (auto child: children) {
@@ -190,7 +198,7 @@ namespace gui {
         boundingBoxOffset = offset;
     }
 
-    void GuiElement::setShader(const Shader *shader) {
+    void GuiElement::setShader(Shader *shader) {
         this->shader = shader;
     }
 

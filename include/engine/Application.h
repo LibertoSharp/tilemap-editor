@@ -2,6 +2,7 @@
 #define APPLICATION_H
 #include "graphics/PixelPerfectRenderTarget.h"
 #include "GUI/GuiLayer.h"
+#include "managers/ShaderManager.h"
 #include "managers/TextureManager.h"
 #include "SFML/Graphics.hpp"
 
@@ -25,7 +26,7 @@ public:
     AssetLoader<Font>* getFontManager() {
         return fontManager;
     }
-    AssetLoader<Shader>* getShaderManager() {
+    ShaderManager *getShaderManager() {
         return shaderManager;
     }
 
@@ -52,7 +53,7 @@ private:
     std::filesystem::path assetsPath = std::filesystem::current_path() / ".." / R"(assets)";
     TextureManager* textureManager = nullptr;
     AssetLoader<sf::Font>* fontManager = nullptr;
-    AssetLoader<sf::Shader>* shaderManager = nullptr;
+    ShaderManager *shaderManager = nullptr;
 
     Vector2i windowSize;
     RenderWindow* window{};

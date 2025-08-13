@@ -38,6 +38,7 @@ namespace gui {
     public:
         GuiElement(Drawable* sprite);
         GuiElement(Vector2f size);
+        virtual ~GuiElement();
 
         void draw(RenderTarget& target, RenderStates states) const override;
         Sprite* getActiveSprite() const {if (auto sprite = dynamic_cast<sf::Sprite*>(activeGraphic)) return sprite; return nullptr;}
@@ -72,7 +73,7 @@ namespace gui {
         void setGlobalScale(Vector2f scale);
         void setBoundingBoxScale(Vector2f scale);
         void setBoundingBoxOffset(Vector2f offset);
-        void setShader(const Shader* shader);
+        void setShader(Shader *shader);
 
         //Fields
         Drawable* defaultGraphic;
@@ -81,7 +82,7 @@ namespace gui {
 
     protected:
         Drawable* parent = nullptr;
-        const Shader *shader = nullptr;
+        Shader *shader = nullptr;
     private:
         AnchorType anchor = TopLeft;
         Vector2f relativePosition = {0,0};
