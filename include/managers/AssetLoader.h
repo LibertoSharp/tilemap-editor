@@ -17,6 +17,12 @@ protected:
 
 public:
     explicit AssetLoader(path path);
+    ~AssetLoader() {
+        for (auto it = resources.begin(); it != resources.end(); it++) {
+            delete it->second;
+        }
+    }
+
     const Resource* const getResource(const std::string& id);
     void loadResources();
 
