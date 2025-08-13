@@ -14,6 +14,7 @@ void Application::run(unsigned width, unsigned height) {
     dtClock.start();
     while (window->isOpen()) {
         dt = dtClock.restart().asSeconds();
+        t += dt;
         while (const std::optional event = window->pollEvent())
         {
             performEvent(event);
@@ -52,7 +53,11 @@ void Application::render() {
 void Application::CallGuiEvents() {
     guiLayer->ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
     if (!window->hasFocus()) guiLayer->ctx.Reset();
-    guiLayer->ctx.mousePos = sf::Mouse::getPosition(*window);
+    Vector2i mousePos = sf::Mouse::getPosition(*window);
+    Vector2u windowSize = window->getSize();
+
+    guiLayer->ctx.mousePos = mousePos;
+    guiLayer->ctx.is_inside_window = windowSize.x > mousePos.x && windowSize.y > mousePos.y;
 
     guiLayer->callEvents();
 }

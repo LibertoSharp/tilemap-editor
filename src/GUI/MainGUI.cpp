@@ -30,7 +30,7 @@ namespace gui {
 
     inline void PanelHover(GuiElementEventContext ctx) {
         Panel* panel = dynamic_cast<Panel*>(ctx.element);
-        if (ctx.f_deep_hovering)
+        if (ctx.f_deep_hovering && ctx.is_inside_window)
             panel->setRelativePosition(damp(panel->getRelativePosition(), Vector2f(-200,0),1.0f,Application::getInstance()->getDeltaTime()));
         else panel->setRelativePosition(damp(panel->getRelativePosition(), Vector2f(0,0),1.0f,Application::getInstance()->getDeltaTime()));
     }
@@ -58,23 +58,37 @@ namespace gui {
         editPanel->getRectangleShape()->setFillColor(Color(0,0,0,200));
         editPanel->normalizeScaleRelativeToParent({0,1});
         editPanel->Update = &PanelHover;
+        editPanel->setBoundingBoxScale({1.5f,1.0f});
+        editPanel->setBoundingBoxOffset({-50.0f,0.0f});
         menu->addElement(editPanel, false);
 
         //EDIT BUTTON
         editButton = new Dropdown(getGuiSprite("GUI00", 36, 0, 36,12));
-        editButton->hovered = getGuiSprite("GUI00", 36, 13, 36,12);\
+        editButton->hovered = getGuiSprite("GUI00", 36, 13, 36,12);
         editButton->Update = &EditButton;
         editButton->setGlobalScale({2,2});
         editButton->setPosition({36*2,0});
         menu->addElement(editButton, true);
 
         TextElement* t = new TextElement(Application::getInstance()->getFontManager()->getFont("PixelOperator8"), "Hiii");
-        t->setPosition({100,100});
+        t->setAnchor(AnchorType::BottomLeft);
+        t->setOrigin({0,35});
+        t->setRelativePosition({0,0});
         t->setFillColor(Color(255,0,0,200));
-        menu->addElement(t, true);
+        t->Update = [](GuiElementEventContext ctx) {
+            TextElement* t = dynamic_cast<TextElement*>(ctx.element);
+            t->setString(vec2tostring(ctx.mousePos));
+        };
+        menu->addElement(t, false);
+
 
         Tilegrid* tilegrid = new Tilegrid(Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\plains"), {16,16});
         editPanel->append(tilegrid);
+        tilegrid->Update = [](GuiElementEventContext ctx) {
+            if (ctx.f_deep_hovering) {
+                std::cout << "hovering" << std::endl;
+            }
+        };
         tilegrid->setGlobalScale({2,2});
 
         return menu;

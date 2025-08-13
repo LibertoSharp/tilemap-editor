@@ -9,6 +9,8 @@ namespace gui {
 			else
 				showDropdown();
 		}
+		if (ctx.f_globalclick && dropped)
+			hideDropdown();
 		Button::update();
 	}
 

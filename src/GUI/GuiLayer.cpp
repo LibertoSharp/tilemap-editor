@@ -38,7 +38,7 @@ namespace gui {
 
     Vector2f GuiLayer::getPositionRelativeToAnchor(AnchorType anchor) {
         float width = static_cast<float>(window->getSize().x);
-        float height = static_cast<float>(window->getSize().x);
+        float height = static_cast<float>(window->getSize().y);
         switch (anchor) {
             case TopLeft: return {0, 0};
             case TopRight: return {width,0};
@@ -59,10 +59,20 @@ namespace gui {
     }
 
     void callEventsInternal(GuiElement* element, GuiEventContext& ctx, bool& first) {
+        auto& children = *element->getChildren();
+        for (auto it = children.rbegin(); it != children.rend(); ++it) {
+            GuiElement *child = *it;
+            if (child) {
+                callEventsInternal(child, ctx, first);
+            } else
+                children.erase(it.base()-1);
+        }
+
         if (element->isHidden()) return;
         GuiElementEventContext elementCtx{};
         elementCtx.mousePos = ctx.mousePos;
-
+        elementCtx.f_globalclick = ctx.f_clickDown;
+        elementCtx.is_inside_window = ctx.is_inside_window;
         if (element->isInsideBoundingBox(ctx.mousePos)) {
             elementCtx.f_deep_hovering = true;
             if (first) {
@@ -76,15 +86,6 @@ namespace gui {
 
         element->ctx = elementCtx;
         element->update();
-
-        auto& children = *element->getChildren();
-        for (auto it = children.rbegin(); it != children.rend(); ++it) {
-            GuiElement *child = *it;
-            if (child) {
-                callEventsInternal(child, ctx, first);
-            } else
-                children.erase(it.base()-1);
-        }
     }
 
     void GuiLayer::callEvents() {

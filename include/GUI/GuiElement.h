@@ -13,10 +13,12 @@ namespace gui {
         GuiElement* element = nullptr;
         sf::Vector2i mousePos;
         bool f_hovering = false;
+        bool f_globalclick = false;
         bool f_deep_hovering = false;
         bool f_clickDown = false;
         bool f_clickUp = false;
         bool f_mouseDown = false;
+        bool is_inside_window = false;
 
         void ResetFlags() {
             f_hovering = false;
@@ -24,6 +26,8 @@ namespace gui {
             f_clickDown = false;
             f_clickUp = false;
             f_mouseDown = false;
+            f_globalclick = false;
+            is_inside_window = false;
         }
     };
 
@@ -53,7 +57,7 @@ namespace gui {
         void append(GuiElement *element);
 
         void hide() {hideFlag = true;}
-        bool isHidden() const {return hideFlag;}
+        bool isHidden() const;
         void show() {hideFlag = false;}
         void destroy();
 
@@ -64,6 +68,8 @@ namespace gui {
         void normalizeScaleRelativeToParent(Vector2f scale);
         Vector2f getNormalizedScale();
         void setGlobalScale(Vector2f scale);
+        void setBoundingBoxScale(Vector2f scale);
+        void setBoundingBoxOffset(Vector2f offset);
 
 
         //Fields
@@ -80,6 +86,8 @@ namespace gui {
         Vector2f normalizedScale = {0,0};
         bool hideFlag = false;
         std::vector<GuiElement*> children;
+        Vector2f boundingBoxScale = {1,1};
+        Vector2f boundingBoxOffset = {0,0};
     };
 }
 #endif //GUIELEMENT_H

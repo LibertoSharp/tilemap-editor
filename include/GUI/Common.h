@@ -13,4 +13,11 @@ inline sf::Vector2f damp(const sf::Vector2f& source, const sf::Vector2f& target,
 
     return result;
 }
+
+template<typename T>
+inline string vec2tostring(const sf::Vector2<T>& source) {
+    stringstream ss;
+    ss << "X: " << source.x << " Y: " << source.y;
+    return ss.str();
+}
 #endif //COMMON_H

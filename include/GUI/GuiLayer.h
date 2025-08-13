@@ -9,6 +9,7 @@ namespace gui {
     bool f_clickDown = false;
     bool f_clickUp = false;
     bool f_mouseDown = false;
+    bool is_inside_window = false;
 
     void Reset() {
       mousePos = {};
@@ -16,6 +17,7 @@ namespace gui {
       f_clickDown = false;
       f_clickUp = false;
       f_mouseDown = false;
+      is_inside_window = false;
     }
   };
 

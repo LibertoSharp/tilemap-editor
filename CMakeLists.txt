@@ -49,7 +49,7 @@ add_executable(makean_rpg src/main.cpp
         src/GUI/TextElement.cpp
         include/GUI/TextElement.h
         src/GUI/Tilegrid.cpp
-        src/GUI/Tilegrid.h)
+        include/GUI/Tilegrid.h)
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 

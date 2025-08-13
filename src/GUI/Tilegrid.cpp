@@ -1,5 +1,9 @@
 #include "GUI/Tilegrid.h"
 
+#include <cmath>
+
+#include "engine/Application.h"
+
 namespace gui {
 	Tilegrid::Tilegrid(const sf::Texture *textureAtlas, sf::Vector2u tileSize): GuiElement(this)
 	{
@@ -12,6 +16,13 @@ namespace gui {
 				tileButton->Update = [this](GuiElementEventContext ctx){this->ButtonUpdate(ctx);};
 				tileButtons.push_back(tileButton);
 			}
+		}
+		bounds.size = static_cast<Vector2<float>>(textureAtlas->getSize());
+	}
+
+	Tilegrid::~Tilegrid() {
+		for (auto tileButton: tileButtons) {
+			delete tileButton;
 		}
 	}
 
@@ -27,7 +38,15 @@ namespace gui {
 		}
 	}
 
+	FloatRect Tilegrid::getGlobalBounds() {
+		return bounds;
+	}
+
 	void Tilegrid::ButtonUpdate(GuiElementEventContext ctx) {
-		//highlight
+		Sprite *s = dynamic_cast<Sprite*>(ctx.element->activeGraphic);
+		if (ctx.f_hovering) {
+			s->setColor(Color::Red);
+		} else
+			s->setColor(Color::White);
 	}
 } // gui

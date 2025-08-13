@@ -30,6 +30,10 @@ public:
         return dt;
     }
 
+    const float getTime() const {
+        return t;
+    }
+
     Window* const getWindow() {
         return window;
     }
@@ -49,10 +53,11 @@ private:
     Vector2i windowSize;
     RenderWindow* window{};
     gui::GuiLayer* guiLayer;
-    PixelPerfectRenderTarget renderTarget;
+    PixelPerfectRenderTarget renderTarget;;
 
     Clock dtClock;
     float dt{}; //seconds
+    float t;
 };
 
 #endif //APPLICATION_H

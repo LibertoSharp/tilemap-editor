@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <GUI/Tilegrid.h>
 
 #include "engine/Application.h"
 #include "GUI/GuiLayer.h"
@@ -61,6 +62,14 @@ namespace gui {
         children.push_back(element);
     }
 
+    bool GuiElement::isHidden() const {
+        bool hide = hideFlag;
+        if (auto element = dynamic_cast<GuiElement*>(parent)) {
+            hide = hide || element->isHidden();
+        }
+        return hide;
+    }
+
     FloatRect transformRect(const sf::FloatRect& rect, const sf::Transform& transform) {
         Vector2f topLeft = transform.transformPoint(rect.position);
         Vector2f bottomRight = transform.transformPoint({rect.position.x+rect.size.x, rect.position.y+rect.size.y});
@@ -72,14 +81,17 @@ namespace gui {
         if (auto graphics = dynamic_cast<Sprite*>(activeGraphic)) return graphics->getGlobalBounds();
         else if (auto graphics = dynamic_cast<Shape*>(activeGraphic)) return graphics->getGlobalBounds();
         else if (auto graphics = dynamic_cast<Text*>(activeGraphic)) return graphics->getGlobalBounds();
+        else if (auto graphics = dynamic_cast<Tilegrid*>(activeGraphic)) return graphics->getGlobalBounds();
 
-        //std::cerr << "Couldn't get bounding box" << std::endl;
+        std::cerr << "Couldn't get bounding box" << std::endl;
         return {};
     }
 
     bool GuiElement::isInsideBoundingBox(Vector2i mousePos) {
         FloatRect boundingBox = getBoundingBox(activeGraphic);
         boundingBox = transformRect(boundingBox, getParentTransform());
+        boundingBox.size = {boundingBox.size.x * boundingBoxScale.x,boundingBox.size.y * boundingBoxScale.y};
+        boundingBox.position = boundingBox.position + boundingBoxOffset;
         return boundingBox.contains(Vector2<float>(mousePos));
     }
 
@@ -167,6 +179,14 @@ namespace gui {
 
         scale = {1.0f / pscale.x * scale.x, 1.0f / pscale.y * scale.y};
         setScale(scale);
+    }
+
+    void GuiElement::setBoundingBoxScale(Vector2f scale) {
+        boundingBoxScale = scale;
+    }
+
+    void GuiElement::setBoundingBoxOffset(Vector2f offset) {
+        boundingBoxOffset = offset;
     }
 
     std::vector<GuiElement *> *GuiElement::getChildren() {
