@@ -3,14 +3,10 @@
 #include <iostream>
 namespace gui {
 	void Dropdown::update() {
-		if (ctx.f_clickUp) {
-			if (dropped)
+		if ((ctx.f_clickUp || ctx.f_globalclickup) && dropped)
 				hideDropdown();
-			else
+		else if (ctx.f_clickUp && !dropped)
 				showDropdown();
-		}
-		if (ctx.f_globalclick && dropped)
-			hideDropdown();
 		Button::update();
 	}
 

@@ -13,7 +13,8 @@ namespace gui {
         GuiElement* element = nullptr;
         sf::Vector2i mousePos;
         bool f_hovering = false;
-        bool f_globalclick = false;
+        bool f_globalclickdown = false;
+        bool f_globalclickup = false;
         bool f_deep_hovering = false;
         bool f_clickDown = false;
         bool f_clickUp = false;
@@ -26,7 +27,8 @@ namespace gui {
             f_clickDown = false;
             f_clickUp = false;
             f_mouseDown = false;
-            f_globalclick = false;
+            f_globalclickdown = false;
+            f_globalclickup = false;
             is_inside_window = false;
         }
     };

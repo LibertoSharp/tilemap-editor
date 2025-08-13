@@ -71,7 +71,8 @@ namespace gui {
         if (element->isHidden()) return;
         GuiElementEventContext elementCtx{};
         elementCtx.mousePos = ctx.mousePos;
-        elementCtx.f_globalclick = ctx.f_clickDown;
+        elementCtx.f_globalclickdown = ctx.f_clickDown;
+        elementCtx.f_globalclickup = ctx.f_clickUp;
         elementCtx.is_inside_window = ctx.is_inside_window;
         if (element->isInsideBoundingBox(ctx.mousePos)) {
             elementCtx.f_deep_hovering = true;
