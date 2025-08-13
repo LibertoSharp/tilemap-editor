@@ -2,7 +2,6 @@
 #define APPLICATION_H
 #include "graphics/PixelPerfectRenderTarget.h"
 #include "GUI/GuiLayer.h"
-#include "managers/FontManager.h"
 #include "managers/TextureManager.h"
 #include "SFML/Graphics.hpp"
 
@@ -12,9 +11,10 @@ class Application : public Singleton<Application>{
 public:
      Application() : Singleton<Application>(this) {}
     ~Application() {
-        delete textureManager;
-        delete window;
+         delete textureManager;
+         delete window;
          delete fontManager;
+         delete shaderManager;
     }
 
     void run(unsigned width = 960, unsigned height = 540);
@@ -22,8 +22,11 @@ public:
     TextureManager* getTextureManager() {
         return textureManager;
     }
-    FontManager* getFontManager() {
+    AssetLoader<Font>* getFontManager() {
         return fontManager;
+    }
+    AssetLoader<Shader>* getShaderManager() {
+        return shaderManager;
     }
 
     const float getDeltaTime() const {
@@ -48,7 +51,8 @@ private:
 
     std::filesystem::path assetsPath = std::filesystem::current_path() / ".." / R"(assets)";
     TextureManager* textureManager = nullptr;
-    FontManager* fontManager = nullptr;
+    AssetLoader<sf::Font>* fontManager = nullptr;
+    AssetLoader<sf::Shader>* shaderManager = nullptr;
 
     Vector2i windowSize;
     RenderWindow* window{};

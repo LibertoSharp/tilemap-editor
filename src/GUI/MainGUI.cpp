@@ -70,7 +70,7 @@ namespace gui {
         editButton->setPosition({36*2,0});
         menu->addElement(editButton, true);
 
-        TextElement* t = new TextElement(Application::getInstance()->getFontManager()->getFont("PixelOperator8"), "Hiii");
+        TextElement* t = new TextElement(Application::getInstance()->getFontManager()->getResource("PixelOperator8"), "Hiii");
         t->setAnchor(AnchorType::BottomLeft);
         t->setOrigin({0,35});
         t->setRelativePosition({0,0});
@@ -84,11 +84,6 @@ namespace gui {
 
         Tilegrid* tilegrid = new Tilegrid(Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\plains"), {16,16});
         editPanel->append(tilegrid);
-        tilegrid->Update = [](GuiElementEventContext ctx) {
-            if (ctx.f_deep_hovering) {
-                std::cout << "hovering" << std::endl;
-            }
-        };
         tilegrid->setGlobalScale({2,2});
 
         return menu;

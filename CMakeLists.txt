@@ -42,14 +42,13 @@ add_executable(makean_rpg src/main.cpp
         include/GUI/Panel.h
         include/GUI/AnchorsType.h
         include/GUI/Common.h
-        src/managers/FontManager.cpp
-        include/managers/FontManager.h
         src/GUI/Dropdown.cpp
         include/GUI/Dropdown.h
         src/GUI/TextElement.cpp
         include/GUI/TextElement.h
         src/GUI/Tilegrid.cpp
-        include/GUI/Tilegrid.h)
+        include/GUI/Tilegrid.h
+)
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 

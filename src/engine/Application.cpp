@@ -42,8 +42,10 @@ void Application::createManagers() {
     textureManager = new TextureManager( assetsPath / "textures", Vector2i(16,16));
     textureManager->loadResources();
 
-    fontManager = new FontManager(assetsPath / "fonts");
+    fontManager = new AssetLoader<Font>(assetsPath / "fonts");
     fontManager->loadResources();
+
+    shaderManager = new AssetLoader<Shader>(assetsPath / "shaders");
 }
 
 void Application::render() {

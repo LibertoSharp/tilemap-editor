@@ -15,6 +15,7 @@ protected:
 
 public:
     explicit AssetLoader(path path);
+    const Resource* const getResource(const std::string& id);
     void loadResources();
 
 private:
@@ -25,6 +26,11 @@ template<typename Resource>
 AssetLoader<Resource>::AssetLoader(path path) : localPath(std::move(path)) {
 
 }
+
+template<typename Resource>
+const Resource* const AssetLoader<Resource>::getResource(const std::string& id) {
+    return resources.find(id)->second;
+};
 
 template<typename Resource>
 void AssetLoader<Resource>::loadResources() {
