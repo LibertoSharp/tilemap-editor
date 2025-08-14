@@ -44,10 +44,10 @@ namespace gui {
 	}
 
 	void Tilegrid::ButtonUpdate(GuiElementEventContext ctx) {
-		Sprite *s = dynamic_cast<Sprite*>(ctx.element->activeGraphic);
+		ctx.element->getShader()->setUniform("uTime", Application::getInstance()->getTime());
 		if (ctx.f_hovering) {
-			s->setColor(Color::Red);
+			ctx.element->getShader()->setUniform("hovering", true);
 		} else
-			s->setColor(Color::White);
+			ctx.element->getShader()->setUniform("hovering", false);
 	}
 } // gui

@@ -24,10 +24,8 @@ namespace gui {
         if (isHidden()) return;
 
         states.transform *= getTransform();
-        if (shader != nullptr) {
-            shader->setUniform("uTime", Application::getInstance()->getTime());
+        if (shader != nullptr)
             states.shader = shader;
-        }
         target.draw(*activeGraphic, states);
 
         for (auto child: children) {
@@ -200,6 +198,10 @@ namespace gui {
 
     void GuiElement::setShader(Shader *shader) {
         this->shader = shader;
+        shader->setUniform("uTexture", sf::Shader::CurrentTexture);
+    }
+    Shader * GuiElement::getShader() {
+        return shader;
     }
 
     std::vector<GuiElement *> *GuiElement::getChildren() {

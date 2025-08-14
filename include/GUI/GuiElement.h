@@ -74,6 +74,7 @@ namespace gui {
         void setBoundingBoxScale(Vector2f scale);
         void setBoundingBoxOffset(Vector2f offset);
         void setShader(Shader *shader);
+        Shader *getShader();
 
         //Fields
         Drawable* defaultGraphic;
