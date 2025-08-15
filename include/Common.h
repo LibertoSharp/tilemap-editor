@@ -2,6 +2,8 @@
 #define COMMON_H
 #include <cmath>
 #include <SFML//System/Vector2.hpp>
+#include "SFML/Graphics/Image.hpp"
+
 using namespace  std::filesystem;
 using namespace std;
 const float RadToDeg = 57.2958f;
@@ -24,9 +26,25 @@ inline string vec2tostring(const sf::Vector2<T>& source) {
     return ss.str();
 }
 
+inline string vec4tostring(const sf::Glsl::Vec4& source) {
+    stringstream ss;
+    ss << "X: " << source.x << " Y: " << source.y << " Z: " << source.z << " W: " << source.w;;
+    return ss.str();
+}
+
 inline path RelativePath(path fullPath, path localPath) {
     path relativePath = relative(fullPath, localPath);
     relativePath = relativePath.parent_path() / relativePath.stem();
     return relativePath;
+}
+
+inline bool isEmptySprite(sf::Image& s, sf::IntRect r) {
+    for (unsigned int x = r.position.x; x < r.size.x+r.position.x; x++) {
+        for (unsigned int y = r.position.y; y < r.size.y+r.position.y; y++) {
+            if (s.getPixel({x,y}).a != 0)
+                return false;
+        }
+    }
+    return true;
 }
 #endif //COMMON_H

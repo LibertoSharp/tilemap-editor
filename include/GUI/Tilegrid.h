@@ -11,11 +11,11 @@ public:
 	~Tilegrid();
 	void draw(RenderTarget &target, RenderStates states) const override;
 	FloatRect getGlobalBounds();
-
+	void update() override;
 private:
 	void ButtonUpdate(GuiElementEventContext ctx);
+
 	std::vector<Button*> tileButtons;
-	FloatRect bounds;
 };
 
 } // gui

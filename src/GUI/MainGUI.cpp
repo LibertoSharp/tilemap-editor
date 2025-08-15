@@ -76,6 +76,7 @@ namespace gui {
         t->setAnchor(AnchorType::BottomLeft);
         t->setOrigin({0,35});
         t->setRelativePosition({0,0});
+        t->setGlobalScale({0.75f,0.75f});
         t->setFillColor(Color(255,0,0,200));
         t->Update = [](GuiElementEventContext ctx) {
             TextElement* t = dynamic_cast<TextElement*>(ctx.element);
@@ -83,9 +84,14 @@ namespace gui {
         };
         menu->addElement(t, false);
 
+        Panel* p = new Panel({300,300});
+        editPanel->append(p);
+        p->getRectangleShape()->setFillColor(Color(0,0,0,200));
+        p->setGlobalScale({1,1});
+        p->setPosition({0,100});
 
         Tilegrid* tilegrid = new Tilegrid(Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\plains"), {16,16});
-        editPanel->append(tilegrid);
+        p->append(tilegrid);
         tilegrid->setGlobalScale({2,2});
 
         return menu;

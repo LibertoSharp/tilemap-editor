@@ -54,6 +54,9 @@ namespace gui {
         const Drawable *getParent() const;
         std::vector<GuiElement*> getChildrens() const;
         Transform getParentTransform() const;
+
+        Transform getGlobalTransform() const;
+
         Vector2f getGlobalScale() const;
 
         std::vector<GuiElement *> *getChildren();
@@ -61,6 +64,9 @@ namespace gui {
 
         void hide() {hideFlag = true;}
         bool isHidden() const;
+
+        FloatRect transformRect(const sf::FloatRect &rect, const sf::Transform &transform);
+
         void show() {hideFlag = false;}
         void destroy();
 
@@ -71,6 +77,10 @@ namespace gui {
         void normalizeScaleRelativeToParent(Vector2f scale);
         Vector2f getNormalizedScale();
         void setGlobalScale(Vector2f scale);
+        void setGlobalPosition(Vector2f pos);
+
+        Vector2f getGlobalPosition();
+
         void setBoundingBoxScale(Vector2f scale);
         void setBoundingBoxOffset(Vector2f offset);
         void setShader(Shader *shader);
@@ -80,6 +90,8 @@ namespace gui {
         Drawable* defaultGraphic;
         Drawable* activeGraphic;
         GuiElementEventContext ctx;
+
+        bool clickTransparent = false;
 
     protected:
         Drawable* parent = nullptr;

@@ -81,6 +81,7 @@ namespace gui {
                 elementCtx.f_clickDown = ctx.f_clickDown;
                 elementCtx.f_mouseDown = ctx.f_mouseDown;
                 elementCtx.f_clickUp = ctx.f_clickUp;
+                if (!element->clickTransparent)
                 first = false;
             }
         }

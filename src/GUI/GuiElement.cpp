@@ -47,10 +47,14 @@ namespace gui {
     }
 
     Transform GuiElement::getParentTransform() const {
-        Transform transform;
-        if (auto element = dynamic_cast<GuiElement*>(parent)) { transform = element->getParentTransform().combine(getTransform());}
-        else transform = getTransform();
-        return transform;
+        if (auto element = dynamic_cast<GuiElement*>(parent)) {
+            return element->getGlobalTransform();  // parent’s global transform
+        }
+        return Transform::Identity;  // no parent = identity
+    }
+
+    Transform GuiElement::getGlobalTransform() const {
+        return getParentTransform().combine(getTransform());
     }
 
     Vector2f GuiElement::getGlobalScale() const {
@@ -77,7 +81,7 @@ namespace gui {
         return hide;
     }
 
-    FloatRect transformRect(const sf::FloatRect& rect, const sf::Transform& transform) {
+    FloatRect GuiElement::transformRect(const sf::FloatRect& rect, const sf::Transform& transform) {
         Vector2f topLeft = transform.transformPoint(rect.position);
         Vector2f bottomRight = transform.transformPoint({rect.position.x+rect.size.x, rect.position.y+rect.size.y});
 
@@ -96,7 +100,7 @@ namespace gui {
 
     bool GuiElement::isInsideBoundingBox(Vector2i mousePos) {
         FloatRect boundingBox = getBoundingBox(activeGraphic);
-        boundingBox = transformRect(boundingBox, getParentTransform());
+        boundingBox = transformRect(boundingBox, getGlobalTransform());
         boundingBox.size = {boundingBox.size.x * boundingBoxScale.x,boundingBox.size.y * boundingBoxScale.y};
         boundingBox.position = boundingBox.position + boundingBoxOffset;
         return boundingBox.contains(Vector2<float>(mousePos));
@@ -186,6 +190,15 @@ namespace gui {
 
         scale = {1.0f / pscale.x * scale.x, 1.0f / pscale.y * scale.y};
         setScale(scale);
+    }
+
+    void GuiElement::setGlobalPosition(Vector2f pos) {
+        pos = getParentTransform().getInverse().transformPoint(pos);
+        setPosition(pos);
+    }
+
+    Vector2f GuiElement::getGlobalPosition() {
+        return getParentTransform().transformPoint(getPosition());
     }
 
     void GuiElement::setBoundingBoxScale(Vector2f scale) {
