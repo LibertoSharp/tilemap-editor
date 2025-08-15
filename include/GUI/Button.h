@@ -11,7 +11,7 @@ namespace gui {
         ~Button();
 
         void update() override;
-        void addText(const Font *font, std::string text);
+        void addText(const Font *font, std::string text, Color c = sf::Color::White);
         void centerText();
         Text* getText();
 
@@ -20,6 +20,8 @@ namespace gui {
         std::optional<Sprite> hovered;
         std::optional<Sprite> pressed;
         sf::Text *text = nullptr;
+        Color textColor;
+        Color hoveredColor;
     };
 }
 

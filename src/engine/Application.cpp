@@ -74,13 +74,12 @@ void Application::performEvent(std::optional<Event> event) {
         window->close();
     else if (const auto* mousePressedEvent = event->getIf<sf::Event::MouseButtonPressed >()) {
         if (mousePressedEvent->button == Mouse::Button::Left)
-        guiLayer->ctx.f_clickDown = true;
+            guiLayer->ctx.f_clickDown = true;
     } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
         if (mouseReleasedEvent->button == Mouse::Button::Left)
-        guiLayer->ctx.f_clickUp = true;
+            guiLayer->ctx.f_clickUp = true;
     } else if (const auto* mouseWheelEvent = event->getIf<sf::Event::MouseWheelScrolled>()) {
-            guiLayer->ctx.mouse_wheel_delta = mouseWheelEvent->delta;
+        guiLayer->ctx.mouse_wheel_delta = mouseWheelEvent->delta;
     }
-
 }
 

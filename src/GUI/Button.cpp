@@ -12,6 +12,12 @@ namespace gui {
     }
 
     void Button::update() {
+        if (text != nullptr)
+        if (ctx.f_hovering)
+            text->setFillColor(hoveredColor);
+        else
+            text->setFillColor(textColor);
+
         if (pressed.has_value() && ctx.f_mouseDown) {
             activeGraphic = &pressed.value();
         }
@@ -23,8 +29,11 @@ namespace gui {
         GuiElement::update();
     }
 
-    void Button::addText(const Font *font, std::string text) {
+    void Button::addText(const Font *font, std::string text, Color c) {
         this->text = new Text(*font, text);
+        textColor = c;
+        hoveredColor = {static_cast<unsigned char>(textColor.r * 0.75f), static_cast<unsigned char>(textColor.g * 0.75f), static_cast<unsigned char>(textColor.b * 0.75f), textColor.a};
+        this->text->setFillColor(c);
     }
 
     void Button::centerText() {
