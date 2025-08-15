@@ -59,6 +59,13 @@ inline void EditPanelUpdate(GuiElementEventContext ctx) {
 	                                     Application::getInstance()->getDeltaTime()));
 }
 
+inline void TileGridResetButtonUpdate(GuiElementEventContext ctx, Tilegrid *tilegrid) {
+	if (ctx.f_clickDown) {
+		tilegrid->setRelativePosition({0, 0});
+		tilegrid->setScale({1,1});
+	}
+}
+
 inline GuiLayer *createMainMenu() {
 	pixelFont = Application::getInstance()->getFontManager()->getResource("PixelOperator8");
 	Bold_pixelFont = Application::getInstance()->getFontManager()->getResource("PixelOperator8-Bold");
@@ -216,6 +223,7 @@ inline GuiLayer *createMainMenu() {
 	GridResetButton->setAnchor(TopRight);
 	GridResetButton->SetOriginByAnchor(AnchorType::TopRight);
 	GridResetButton->setRelativePosition({-5, 5});
+	GridResetButton->Update = [tilegrid](GuiElementEventContext ctx) {TileGridResetButtonUpdate(ctx, tilegrid);};
 #pragma endregion
 
 #pragma region Selected Header
