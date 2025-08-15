@@ -16,6 +16,7 @@ private:
 	void ButtonUpdate(GuiElementEventContext ctx);
 
 	std::vector<Button*> tileButtons;
+	float scrollSensitivity = 0.35f;
 };
 
 } // gui

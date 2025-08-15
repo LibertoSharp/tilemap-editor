@@ -1,101 +1,272 @@
+#ifndef MAINMENU_H
+#define MAINMENU_H
 #include <iostream>
-
 #include "GUI/Dropdown.h"
 #include "GUI/TextElement.h"
 #include "GUI/Tilegrid.h"
-#ifndef MAINMENU_H
-#define MAINMENU_H
 #include "../../include/GUI/Button.h"
 #include "../../include/GUI/GuiLayer.h"
-#include "../../include/GUI/Panel.h"
 #include "../../include/Common.h"
 #include  "engine/Application.h"
+
 using namespace gui;
-static Dropdown* fileButton;
-static Dropdown* editButton;
-static Panel* editPanel;
-static Sprite getGuiSprite(std::string atlasid,int posx, int posy, int width, int height) {
-    return Application::getInstance()->getTextureManager()->getSprite(atlasid, posx, posy, width, height);
+
+static Dropdown *fileButton;
+static Button *editButton;
+static GuiElement *editPanel;
+static TextElement *ModeLabel;
+static Button *DrawModeButton;
+static Button *EraseModeButton;
+static Button *SelectModeButton;
+static TextElement *TileScriptLabel;
+static GuiElement *TileScriptPanel;
+static Button *OpenButton;
+static GuiElement *OpenPathBackground;
+static TextElement *OpenPathLabel;
+static Button *GridResetButton;
+static GuiElement *TileGridPanel;
+static Tilegrid *TileGrid;
+static TextElement *SelectedHeader;
+static GuiElement *SelectedTile;
+static TextElement *SelectedModeHeader;
+static TextElement *SelectedModeLabel;
+static TextElement *MousePositionLabel;
+
+static const Font* pixelFont;
+static const Font* Bold_pixelFont;
+
+static Sprite getGuiSprite(std::string atlasid, int posx, int posy, int width, int height) {
+	return Application::getInstance()->getTextureManager()->getSprite(atlasid, posx, posy, width, height);
 }
 
-namespace gui {
-    inline void EditButton(GuiElementEventContext ctx) {
-        if (ctx.f_clickDown) {
-            if (editPanel->isHidden()) editPanel->show();
-            else editPanel->hide();
-        }
-    }
+inline void FileValueChanged(int index) {
+	std::cout << index << std::endl;
+}
 
-    inline void FileValueChanged(int index) {
-        std::cout << index << std::endl;
-    }
+inline void EditButtonUpdate(GuiElementEventContext ctx) {
+	if (ctx.f_clickDown) {
+		if (editPanel->isHidden()) editPanel->show();
+		else editPanel->hide();
+	}
+}
 
-    inline void PanelHover(GuiElementEventContext ctx) {
-        Panel* panel = dynamic_cast<Panel*>(ctx.element);
-        if (ctx.f_deep_hovering && ctx.is_inside_window)
-            panel->setRelativePosition(damp(panel->getRelativePosition(), Vector2f(-200,0),1.0f,Application::getInstance()->getDeltaTime()));
-        else panel->setRelativePosition(damp(panel->getRelativePosition(), Vector2f(0,0),1.0f,Application::getInstance()->getDeltaTime()));
-    }
+inline void EditPanelUpdate(GuiElementEventContext ctx) {
+	GuiElement *panel = ctx.element;
+	if (ctx.f_deep_hovering && ctx.is_inside_window)
+		panel->setRelativePosition(damp(panel->getRelativePosition(), Vector2f(-200, 0), 1.0f,
+		                                Application::getInstance()->getDeltaTime()));
+	else panel->setRelativePosition(damp(panel->getRelativePosition(), Vector2f(0, 0), 1.0f,
+	                                     Application::getInstance()->getDeltaTime()));
+}
 
-    inline GuiLayer* createMainMenu() {
-        GuiLayer* menu = new GuiLayer();
+inline GuiLayer *createMainMenu() {
+	pixelFont = Application::getInstance()->getFontManager()->getResource("PixelOperator8");
+	Bold_pixelFont = Application::getInstance()->getFontManager()->getResource("PixelOperator8-Bold");
+	GuiLayer *menu = new GuiLayer();
 
-        //FILE BUTTON
-        fileButton = new Dropdown(getGuiSprite("GUI00", 0, 0, 36,12));
-        fileButton->hovered = getGuiSprite("GUI00",0,13,36,12);
-        fileButton->setGlobalScale({2,2});
-        fileButton->addEntry(getGuiSprite("GUI00", 0, 26, 36,12),
-            getGuiSprite("GUI00", 0, 39, 36,12));
-        fileButton->addEntry(getGuiSprite("GUI00", 0, 52, 36,12),
-            getGuiSprite("GUI00", 0, 65, 36,12));
-        fileButton->ValueChanged = &FileValueChanged;
-        menu->addElement(fileButton, true);
+#pragma region File Dropdown
+	fileButton = new Dropdown(getGuiSprite("GUI00", 0, 0, 36, 12));
+	fileButton->hovered = getGuiSprite("GUI00", 0, 13, 36, 12);
+	fileButton->setGlobalScale({2, 2});
+	fileButton->addEntry(getGuiSprite("GUI00", 0, 26, 36, 12),
+	                     getGuiSprite("GUI00", 0, 39, 36, 12));
+	fileButton->addEntry(getGuiSprite("GUI00", 0, 52, 36, 12),
+	                     getGuiSprite("GUI00", 0, 65, 36, 12));
+	fileButton->ValueChanged = &FileValueChanged;
+	menu->addElement(fileButton, true);
+#pragma endregion
 
-        //FILE PANEL
-        editPanel = new Panel({300,300});
-        editPanel->hide();
-        editPanel->setOrigin({100,0});
-        editPanel->setAnchor(TopRight);
-        editPanel->setRelativePosition({0,0});
-        editPanel->getRectangleShape()->setFillColor(Color(0,0,0,200));
-        editPanel->normalizeScaleRelativeToParent({0,1});
-        editPanel->Update = &PanelHover;
-        editPanel->setBoundingBoxScale({1.5f,1.0f});
-        editPanel->setBoundingBoxOffset({-50.0f,0.0f});
-        menu->addElement(editPanel, false);
+#pragma region Edit Button
+	editButton = new Dropdown(getGuiSprite("GUI00", 36, 0, 36, 12));
+	editButton->hovered = getGuiSprite("GUI00", 36, 13, 36, 12);
+	editButton->Update = &EditButtonUpdate;
+	editButton->setGlobalScale({2, 2});
+	editButton->setPosition({36 * 2, 0});
+	menu->addElement(editButton, true);
+#pragma endregion
 
-        //EDIT BUTTON
-        editButton = new Dropdown(getGuiSprite("GUI00", 36, 0, 36,12));
-        editButton->hovered = getGuiSprite("GUI00", 36, 13, 36,12);
-        editButton->Update = &EditButton;
-        editButton->setGlobalScale({2,2});
-        editButton->setPosition({36*2,0});
-        menu->addElement(editButton, true);
+#pragma region Edit Panel
+	editPanel = new GuiElement({300, 300});
+	editPanel->hide();
+	editPanel->setOrigin({100, 0});
+	editPanel->setAnchor(TopRight);
+	editPanel->setRelativePosition({0, 0});
+	editPanel->getRectangleShape()->setFillColor(Color(0, 0, 0, 200));
+	editPanel->normalizeScaleRelativeToParent({0, 1});
+	editPanel->Update = &EditPanelUpdate;
+	editPanel->setBoundingBoxScale({1.5f, 1.0f});
+	editPanel->setBoundingBoxOffset({-50.0f, 0.0f});
+	menu->addElement(editPanel, false);
+#pragma endregion
 
-        TextElement* t = new TextElement(Application::getInstance()->getFontManager()->getResource("PixelOperator8"), "Hiii");
-        t->setAnchor(AnchorType::BottomLeft);
-        t->setOrigin({0,35});
-        t->setRelativePosition({0,0});
-        t->setGlobalScale({0.75f,0.75f});
-        t->setFillColor(Color(255,0,0,200));
-        t->Update = [](GuiElementEventContext ctx) {
-            TextElement* t = dynamic_cast<TextElement*>(ctx.element);
-            t->setString(vec2tostring(ctx.mousePos));
-        };
-        menu->addElement(t, false);
+#pragma region Mode Label
+	ModeLabel = new TextElement(Bold_pixelFont, "Mode");
+	ModeLabel->setAnchor(AnchorType::TopCenter);
+	ModeLabel->setOrigin(ModeLabel->getCenter());
+	editPanel->append(ModeLabel);
+	ModeLabel->setGlobalScale({0.30, 0.30});
+	ModeLabel->setRelativePosition({0, 5});
+#pragma endregion
 
-        Panel* p = new Panel({300,300});
-        editPanel->append(p);
-        p->getRectangleShape()->setFillColor(Color(0,0,0,200));
-        p->setGlobalScale({1,1});
-        p->setPosition({0,100});
+#pragma region Draw Mode Button
+	DrawModeButton = new Button(Vector2f(90,25));
+	editPanel->append(DrawModeButton);
+	DrawModeButton->setGlobalScale({1, 1});
+	DrawModeButton->getRectangleShape()->setFillColor(Color(17, 17, 14, 255));
+	DrawModeButton->addText(pixelFont, "Draw");
+	DrawModeButton->getText()->setScale({0.5,0.5});
+	DrawModeButton->centerText();
+	DrawModeButton->setRelativePosition({7, 10});
+#pragma endregion
 
-        Tilegrid* tilegrid = new Tilegrid(Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\plains"), {16,16});
-        p->append(tilegrid);
-        tilegrid->setGlobalScale({2,2});
+#pragma region Erase Mode Button
+	EraseModeButton = new Button(Vector2f(90,25));
+	editPanel->append(EraseModeButton);
+	EraseModeButton->setGlobalScale({1, 1});
+	EraseModeButton->getRectangleShape()->setFillColor(Color(17, 17, 14, 255));
+	EraseModeButton->addText(pixelFont, "Erase");
+	EraseModeButton->getText()->setScale({0.5,0.5});
+	EraseModeButton->centerText();
+	EraseModeButton->setRelativePosition({104, 10});
+#pragma endregion
 
-        return menu;
-    }
+#pragma region Select Mode Button
+	SelectModeButton = new Button(Vector2f(90,25));
+	editPanel->append(SelectModeButton);
+	SelectModeButton->setGlobalScale({1, 1});
+	SelectModeButton->getRectangleShape()->setFillColor(Color(17, 17, 14, 255));
+	SelectModeButton->addText(pixelFont, "Select");
+	SelectModeButton->getText()->setScale({0.5,0.5});
+	SelectModeButton->centerText();
+	SelectModeButton->setRelativePosition({201, 10});
+#pragma endregion
+
+#pragma region Tile Script Label
+	ModeLabel = new TextElement(Bold_pixelFont, "Tile Script");
+	ModeLabel->setAnchor(AnchorType::TopCenter);
+	ModeLabel->setOrigin(ModeLabel->getCenter());
+	editPanel->append(ModeLabel);
+	ModeLabel->setGlobalScale({0.30, 0.30});
+	ModeLabel->setRelativePosition({0, 32});
+#pragma endregion
+
+#pragma region Tile Script Panel
+	TileScriptPanel = new GuiElement(Vector2f(280,100));
+	editPanel->append(TileScriptPanel);
+	TileScriptPanel->setAnchor(TopCenter);
+	TileScriptPanel->SetOriginByAnchor(AnchorType::TopCenter);
+	TileScriptPanel->setGlobalScale({1,1});
+	TileScriptPanel->getRectangleShape()->setFillColor(Color(17, 17, 14, 255));
+	TileScriptPanel->setRelativePosition({0, 37});
+#pragma endregion
+
+#pragma region Open Button
+	OpenButton = new Button(Vector2f(90,25));
+	editPanel->append(OpenButton);
+	OpenButton->setGlobalScale({1, 1});
+	OpenButton->getRectangleShape()->setFillColor(Color(17, 17, 14, 255));
+	OpenButton->addText(pixelFont, "Open");
+	OpenButton->getText()->setScale({0.5,0.5});
+	OpenButton->centerText();
+	OpenButton->setRelativePosition({10, 100});
+#pragma endregion
+
+#pragma region Open Path Background
+	OpenPathBackground = new GuiElement(Vector2f(180,25));
+	OpenButton->append(OpenPathBackground);
+	OpenPathBackground->setGlobalScale({1, 1});
+	OpenPathBackground->getRectangleShape()->setFillColor(Color(17, 17, 14, 120));
+	OpenPathBackground->setRelativePosition({100, 0});
+#pragma endregion
+
+#pragma region Open Path Label
+	OpenPathLabel = new TextElement(pixelFont, "Path...");
+	OpenPathBackground->append(OpenPathLabel);
+	OpenPathLabel->setGlobalScale({0.5, 0.5});
+	OpenPathLabel->setAnchor(AnchorType::MiddleLeft);
+	OpenPathLabel->SetOriginByAnchor(AnchorType::MiddleLeft);
+	OpenPathLabel->setRelativePosition({1,0});
+	OpenPathLabel->setFillColor(Color(255,255,255,120));
+
+#pragma endregion
+
+#pragma region Tile Grid Panel
+	TileGridPanel = new GuiElement({300, 300});
+	editPanel->append(TileGridPanel);
+	TileGridPanel->getRectangleShape()->setFillColor(Color(0, 0, 0, 200));
+	TileGridPanel->setGlobalScale({1, 1});
+	TileGridPanel->setPosition({0, 120});
+#pragma endregion
+
+#pragma region Tile Grid
+	Tilegrid *tilegrid = new Tilegrid(
+		Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\plains"), {16, 16});
+	TileGridPanel->append(tilegrid);
+	tilegrid->setGlobalScale({2, 2});
+#pragma endregion
+
+#pragma region Grid Reset Button
+	GridResetButton = new Button({30, 30});
+	TileGridPanel->append(GridResetButton);
+	GridResetButton->setGlobalScale({0.75, 0.75});
+	GridResetButton->getRectangleShape()->setFillColor(Color(170, 17, 14, 255));
+	GridResetButton->addText(pixelFont, "R");
+	GridResetButton->centerText();
+	GridResetButton->getText()->setScale({0.75,0.75});
+	GridResetButton->setAnchor(TopRight);
+	GridResetButton->SetOriginByAnchor(AnchorType::TopRight);
+	GridResetButton->setRelativePosition({-5, 5});
+#pragma endregion
+
+#pragma region Selected Header
+	SelectedHeader = new TextElement(pixelFont, "Selected:");
+	editPanel->append(SelectedHeader);
+	SelectedHeader->setGlobalScale({0.3,0.3});
+	SelectedHeader->setAnchor(AnchorType::BottomLeft);
+	SelectedHeader->setRelativePosition({3, -9});
+#pragma endregion
+
+#pragma region Selected Tile
+	SelectedTile = new GuiElement({32, 32});
+	SelectedHeader->append(SelectedTile);
+	SelectedTile->setGlobalScale({0.5, 0.5});
+	SelectedTile->setAnchor(AnchorType::MiddleRight);
+	SelectedTile->SetOriginByAnchor(MiddleLeft);
+	SelectedTile->setRelativePosition({12, 0});
+#pragma endregion
+
+#pragma region Selected Mode Header
+	SelectedModeHeader = new TextElement(Bold_pixelFont, "Mode:");
+	editPanel->append(SelectedModeHeader);
+	SelectedModeHeader->setGlobalScale({0.3,0.3});
+	SelectedModeHeader->setAnchor(AnchorType::BottomLeft);
+	SelectedModeHeader->setRelativePosition({120, -9});
+#pragma endregion
+
+#pragma region Selected Mode Label
+	SelectedModeLabel = new TextElement(pixelFont, "Draw");
+	SelectedModeHeader->append(SelectedModeLabel);
+	SelectedModeLabel->setGlobalScale({0.3,0.3});
+	SelectedModeLabel->setAnchor(AnchorType::MiddleRight);
+	SelectedModeLabel->SetOriginByAnchor(MiddleLeft);
+	SelectedModeLabel->setRelativePosition({2, 0});
+#pragma endregion
+
+#pragma region Mouse Position Label
+	MousePositionLabel = new TextElement(pixelFont, "X: 0 Y: 0");
+	MousePositionLabel->setAnchor(AnchorType::BottomLeft);
+	MousePositionLabel->setOrigin(MousePositionLabel->getPositionRelativeToAnchor(AnchorType::BottomLeft));
+	MousePositionLabel->setRelativePosition({0, -5});
+	MousePositionLabel->setGlobalScale({0.55f, 0.55f});
+	MousePositionLabel->setFillColor(Color(0, 0, 0, 255));
+	MousePositionLabel->Update = [](GuiElementEventContext ctx) {
+		TextElement *t = static_cast<TextElement *>(ctx.element);
+		t->setString(vec2tostring(ctx.mousePos));
+	};
+	menu->addElement(MousePositionLabel, false);
+#pragma endregion
+
+	return menu;
 }
 
 

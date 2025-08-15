@@ -4,6 +4,12 @@
 #include <utility>
 namespace gui {
     Button::Button(sf::Sprite sprite): GuiElement(new Sprite(std::move(sprite))) {}
+    Button::Button(Vector2f size): GuiElement(size) {}
+
+    Button::~Button() {
+        if (text)
+            delete text;
+    }
 
     void Button::update() {
         if (pressed.has_value() && ctx.f_mouseDown) {
@@ -15,5 +21,35 @@ namespace gui {
             activeGraphic = defaultGraphic;
 
         GuiElement::update();
+    }
+
+    void Button::addText(const Font *font, std::string text) {
+        this->text = new Text(*font, text);
+    }
+
+    void Button::centerText() {
+        text->setOrigin(text->getLocalBounds().getCenter());
+        text->setPosition(getCenter());
+    }
+
+
+    Text *Button::getText() {
+        return text;
+    }
+
+    void Button::draw(RenderTarget &target, RenderStates states) const {
+        if (isHidden()) return;
+
+        states.transform *= getTransform();
+        if (shader != nullptr)
+            states.shader = shader;
+        target.draw(*activeGraphic, states);
+        if (text != nullptr)
+            target.draw(*text, states);
+
+        for (auto child: getChildrens()) {
+            if (child)
+                target.draw(*child, states);
+        }
     }
 }

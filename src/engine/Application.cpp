@@ -78,6 +78,8 @@ void Application::performEvent(std::optional<Event> event) {
     } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
         if (mouseReleasedEvent->button == Mouse::Button::Left)
         guiLayer->ctx.f_clickUp = true;
+    } else if (const auto* mouseWheelEvent = event->getIf<sf::Event::MouseWheelScrolled>()) {
+            guiLayer->ctx.mouse_wheel_delta = mouseWheelEvent->delta;
     }
 
 }

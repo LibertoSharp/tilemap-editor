@@ -58,6 +58,10 @@ namespace gui {
 	void Tilegrid::update() {
 		if (!element) element = dynamic_cast<GuiElement*>(parent);
 		if (element && element->ctx.f_deep_hovering) {
+			Vector2f s = this->getScale();
+			s = {s.x + ctx.mouse_wheel_delta * scrollSensitivity, s.y + ctx.mouse_wheel_delta * scrollSensitivity};
+			if (s.x > 0 && s.y > 0)
+				this->setScale(s);
 			if (element->ctx.f_clickDown) {
 				initialMousePos = Vector2f(ctx.mousePos) - this->getGlobalPosition();
 				dragging = true;
@@ -86,7 +90,7 @@ namespace gui {
 				initialMousePos = ctx.mousePos;
 			}
 			if (ctx.f_clickUp && initialMousePos == ctx.mousePos) {
-				cout << "click up" << endl;
+				cout << "megasbors" << endl;
 			}
 		} else
 			ctx.element->getShader()->setUniform("hovering", false);

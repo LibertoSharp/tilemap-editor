@@ -47,4 +47,5 @@ inline bool isEmptySprite(sf::Image& s, sf::IntRect r) {
     }
     return true;
 }
+
 #endif //COMMON_H

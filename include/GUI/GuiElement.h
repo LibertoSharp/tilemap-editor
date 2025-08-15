@@ -20,6 +20,7 @@ namespace gui {
         bool f_clickUp = false;
         bool f_mouseDown = false;
         bool is_inside_window = false;
+        float mouse_wheel_delta = 0;
 
         void ResetFlags() {
             f_hovering = false;
@@ -30,6 +31,7 @@ namespace gui {
             f_globalclickdown = false;
             f_globalclickup = false;
             is_inside_window = false;
+            mouse_wheel_delta = 0;
         }
     };
 
@@ -43,11 +45,16 @@ namespace gui {
         void draw(RenderTarget& target, RenderStates states) const override;
         Sprite* getActiveSprite() const {if (auto sprite = dynamic_cast<sf::Sprite*>(activeGraphic)) return sprite; return nullptr;}
         FloatRect getBoundingBox(const Drawable *graphic) const;
+
+        Vector2f getCenter();
+
         bool isInsideBoundingBox(Vector2i mousePos);
 
         //Virtual Methdos
         virtual void update(); //called every frame
-       std::function<void(GuiElementEventContext)> Update = nullptr;
+        void SetOriginByAnchor(AnchorType anchor);
+
+        std::function<void(GuiElementEventContext)> Update = nullptr;
 
         //Hierarchy
         void setParent(GuiLayer* parent);
@@ -66,6 +73,8 @@ namespace gui {
         bool isHidden() const;
 
         FloatRect transformRect(const sf::FloatRect &rect, const sf::Transform &transform);
+
+        RectangleShape *getRectangleShape();
 
         void show() {hideFlag = false;}
         void destroy();

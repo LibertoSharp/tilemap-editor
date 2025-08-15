@@ -38,8 +38,6 @@ add_executable(makean_rpg src/main.cpp
         src/GUI/MainGUI.cpp
         src/GUI/Button.cpp
         include/GUI/Button.h
-        src/GUI/Panel.cpp
-        include/GUI/Panel.h
         include/GUI/AnchorsType.h
         include/Common.h
         src/GUI/Dropdown.cpp

@@ -88,6 +88,10 @@ namespace gui {
         return {topLeft,bottomRight-topLeft};
     }
 
+    RectangleShape *GuiElement::getRectangleShape() {
+        return dynamic_cast<RectangleShape*>(activeGraphic);
+    }
+
     FloatRect GuiElement::getBoundingBox(const Drawable* graphic) const {
         if (auto graphics = dynamic_cast<Sprite*>(activeGraphic)) return graphics->getGlobalBounds();
         else if (auto graphics = dynamic_cast<Shape*>(activeGraphic)) return graphics->getGlobalBounds();
@@ -96,6 +100,10 @@ namespace gui {
 
         std::cerr << "Couldn't get bounding box" << std::endl;
         return {};
+    }
+
+    Vector2f GuiElement::getCenter() {
+        return getBoundingBox(activeGraphic).getCenter();
     }
 
     bool GuiElement::isInsideBoundingBox(Vector2i mousePos) {
@@ -111,6 +119,10 @@ namespace gui {
             ctx.element = this;
             Update(ctx);
         }
+    }
+
+    void GuiElement::SetOriginByAnchor(AnchorType anchor) {
+        setOrigin(getPositionRelativeToAnchor(anchor));
     }
 
     void GuiElement::destroy() {
