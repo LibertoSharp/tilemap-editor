@@ -1,15 +1,23 @@
 #ifndef EDITOR_H
 #define EDITOR_H
+#include "level/Level.h"
 #include "level/Tile.h"
 
 enum editorState {
-    TILE_EDITING,
-    INFO_EDITING
+    DRAW,
+    ERASE,
+    SELECT
 };
+
 class Editor {
+public:
+    Editor(Level **level);
+    void update();
+    void setState(editorState state);
 private:
-    Tile selectedTile;
-    editorState state = TILE_EDITING;
+    std::optional<Tile> selectedTile;
+    editorState state = DRAW;
+    Level** level;
 };
 
 

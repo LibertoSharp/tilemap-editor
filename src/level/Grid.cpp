@@ -2,7 +2,6 @@
 
 Grid::Grid(unsigned _tileSize, sf::Vector2i _gridSize) : tileSize(_tileSize), gridSize(_gridSize) {
     this->tilemap = new std::optional<Tile>[gridSize.x * gridSize.y];
-    this->infomap = new std::optional<TileInfo>[gridSize.x * gridSize.y];
 }
 
 unsigned Grid::getTileSize() const {
@@ -23,7 +22,7 @@ void Grid::setTile(sf::Vector2i pos, Tile tile) {
 }
 
 void Grid::setTileInfo(int x, int y, TileInfo tile) {
-    infomap[(tileSize*x+y)] = tile;
+    tilemap[(tileSize*x+y)]->setInfo(tile);
 }
 
 void Grid::setTileInfo(sf::Vector2i pos, TileInfo tile) {

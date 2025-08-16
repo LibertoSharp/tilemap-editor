@@ -1,7 +1,9 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
+#include "Editor.h"
 #include "graphics/PixelPerfectRenderTarget.h"
 #include "GUI/GuiLayer.h"
+#include "level/Level.h"
 #include "managers/ShaderManager.h"
 #include "managers/TextureManager.h"
 #include "SFML/Graphics.hpp"
@@ -16,6 +18,9 @@ public:
          delete window;
          delete fontManager;
          delete shaderManager;
+         delete level;
+         delete guiLayer;
+         delete editor;
     }
 
     void run(unsigned width = 960, unsigned height = 540);
@@ -42,6 +47,10 @@ public:
         return window;
     }
 
+    Level* const getLevel() const {
+        return level;
+    }
+
 private:
     void render();
     void update();
@@ -59,10 +68,12 @@ private:
     RenderWindow* window{};
     gui::GuiLayer* guiLayer;
     PixelPerfectRenderTarget renderTarget;;
+    Level *level;
+    Editor *editor;
 
     Clock dtClock;
-    float dt{}; //seconds
-    float t;
+    float dt = 0; //seconds
+    float t = 0; //seconds
 };
 
 #endif //APPLICATION_H

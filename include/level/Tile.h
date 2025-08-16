@@ -1,5 +1,6 @@
 #ifndef TILE_H
 #define TILE_H
+#include "TileInfo.h"
 #include "SFML/Graphics/Sprite.hpp"
 
 using namespace sf;
@@ -12,8 +13,15 @@ public:
         return &sprite;
     }
 
+    void setInfo(TileInfo info) {
+        this->info = info;
+    }
+
+
+
 private:
     Sprite sprite;
+    TileInfo info;
 };
 
 #endif //TILE_H

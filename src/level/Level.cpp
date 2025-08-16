@@ -2,6 +2,10 @@
 
 #include "SFML/Graphics/RenderTarget.hpp"
 
+Level::Level(unsigned int tileSize, unsigned int width, unsigned int height) {
+    createGrid(tileSize, width, height);
+}
+
 void Level::draw(RenderTarget &target, RenderStates states) const {
     for (int x = 0; x < grid->getGridSize().x; x++) {
         for (int y = 0; y < grid->getGridSize().y; y++) {
@@ -15,6 +19,6 @@ void Level::draw(RenderTarget &target, RenderStates states) const {
     }
 }
 
-void Level::createGrid(unsigned tileSize, unsigned width, unsigned height) {
+void Level::createGrid(unsigned int tileSize, unsigned int width, unsigned int height) {
     grid = new Grid(tileSize, Vector2i(width, height));
 }

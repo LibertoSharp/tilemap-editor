@@ -22,7 +22,6 @@ private:
     unsigned tileSize; //tile size in pixel
     sf::Vector2i gridSize; //grid size in tiles
     std::optional<Tile>* tilemap;
-    std::optional<TileInfo>* infomap;
 };
 
 #endif //GRID_H

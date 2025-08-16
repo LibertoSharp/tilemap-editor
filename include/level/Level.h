@@ -6,8 +6,10 @@
 
 using namespace sf;
 
-class Level : public Drawable {
+class Level final : public Drawable {
 public:
+    Level(unsigned int tileSize, unsigned int width, unsigned int height);
+
     void draw(RenderTarget& target, RenderStates states) const override;
     void createGrid(unsigned tileSize, unsigned width, unsigned height);
     Grid* getGrid() const{
@@ -15,7 +17,7 @@ public:
     }
 
 private:
-    Grid* grid;
+    Grid* grid = nullptr;
 };
 
 

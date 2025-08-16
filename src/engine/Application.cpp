@@ -9,7 +9,9 @@ void Application::run(unsigned width, unsigned height) {
     renderTarget.create(width,height,4);
     renderTarget.zoom(4);
 
-    guiLayer = createMainMenu();
+    editor = new Editor(&level);
+    guiLayer = createEditorGui(editor);
+    level = new Level(16, 100, 100);
 
     dtClock.start();
     while (window->isOpen()) {
@@ -25,7 +27,6 @@ void Application::run(unsigned width, unsigned height) {
 
         render();
         renderTarget.display();
-
         window->draw(renderTarget);
         window->draw(*guiLayer);
         window->display();
@@ -50,7 +51,7 @@ void Application::createManagers() {
 }
 
 void Application::render() {
-
+    renderTarget.draw(*level);
 }
 
 void Application::CallGuiEvents() {

@@ -66,7 +66,7 @@ inline void TileGridResetButtonUpdate(GuiElementEventContext ctx, Tilegrid *tile
 	}
 }
 
-inline GuiLayer *createMainMenu() {
+inline GuiLayer *createEditorGui(Editor *editor) {
 	pixelFont = Application::getInstance()->getFontManager()->getResource("PixelOperator8");
 	Bold_pixelFont = Application::getInstance()->getFontManager()->getResource("PixelOperator8-Bold");
 	GuiLayer *menu = new GuiLayer();
@@ -124,6 +124,12 @@ inline GuiLayer *createMainMenu() {
 	DrawModeButton->getText()->setScale({0.5,0.5});
 	DrawModeButton->centerText();
 	DrawModeButton->setRelativePosition({7, 10});
+	DrawModeButton->Update = [editor](GuiElementEventContext ctx) {
+		if (ctx.f_clickUp) {
+			editor->setState(DRAW);
+			SelectedModeLabel->setString("Draw");
+		}
+	};
 #pragma endregion
 
 #pragma region Erase Mode Button
@@ -135,6 +141,12 @@ inline GuiLayer *createMainMenu() {
 	EraseModeButton->getText()->setScale({0.5,0.5});
 	EraseModeButton->centerText();
 	EraseModeButton->setRelativePosition({104, 10});
+	EraseModeButton->Update = [editor](GuiElementEventContext ctx) {
+		if (ctx.f_clickUp) {
+			editor->setState(ERASE);
+			SelectedModeLabel->setString("Erase");
+		}
+	};
 #pragma endregion
 
 #pragma region Select Mode Button
@@ -146,6 +158,12 @@ inline GuiLayer *createMainMenu() {
 	SelectModeButton->getText()->setScale({0.5,0.5});
 	SelectModeButton->centerText();
 	SelectModeButton->setRelativePosition({201, 10});
+	SelectModeButton->Update = [editor](GuiElementEventContext ctx) {
+		if (ctx.f_clickUp) {
+			editor->setState(SELECT);
+			SelectedModeLabel->setString("Select");
+		}
+	};
 #pragma endregion
 
 #pragma region Tile Script Label
@@ -207,7 +225,7 @@ inline GuiLayer *createMainMenu() {
 
 #pragma region Tile Grid
 	Tilegrid *tilegrid = new Tilegrid(
-		Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\plains"), {16, 16});
+		Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\furnitures"), {16, 16});
 	TileGridPanel->append(tilegrid);
 	tilegrid->setGlobalScale({1, 1});
 #pragma endregion
