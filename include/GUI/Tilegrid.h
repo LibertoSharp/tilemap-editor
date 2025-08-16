@@ -15,8 +15,10 @@ public:
 private:
 	void ButtonUpdate(GuiElementEventContext ctx);
 
-	std::vector<Button*> tileButtons;
 	float scrollSensitivity = 0.35f;
+	Button *tileMap = nullptr;
+	GuiElement *highlight = nullptr;
+	Vector2u tileSize;
 };
 
 } // gui
