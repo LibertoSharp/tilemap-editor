@@ -209,7 +209,7 @@ inline GuiLayer *createMainMenu() {
 	Tilegrid *tilegrid = new Tilegrid(
 		Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\plains"), {16, 16});
 	TileGridPanel->append(tilegrid);
-	tilegrid->setGlobalScale({2, 2});
+	tilegrid->setGlobalScale({1, 1});
 #pragma endregion
 
 #pragma region Grid Reset Button
@@ -266,7 +266,7 @@ inline GuiLayer *createMainMenu() {
 	MousePositionLabel->setOrigin(MousePositionLabel->getPositionRelativeToAnchor(AnchorType::BottomLeft));
 	MousePositionLabel->setRelativePosition({0, -5});
 	MousePositionLabel->setGlobalScale({0.55f, 0.55f});
-	MousePositionLabel->setFillColor(Color(0, 0, 0, 255));
+	MousePositionLabel->setFillColor(Color(255, 255, 255, 255));
 	MousePositionLabel->Update = [](GuiElementEventContext ctx) {
 		TextElement *t = static_cast<TextElement *>(ctx.element);
 		t->setString(vec2tostring(ctx.mousePos));
