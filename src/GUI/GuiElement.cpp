@@ -73,6 +73,14 @@ namespace gui {
         children.push_back(element);
     }
 
+    void GuiElement::goFront() {
+        if (parent == nullptr) return;
+        if (auto element = dynamic_cast<GuiElement*>(parent)) {
+            element->removeChildren(this);
+            element->append(this);
+        }
+    }
+
     bool GuiElement::isHidden() const {
         bool hide = hideFlag;
         if (auto element = dynamic_cast<GuiElement*>(parent)) {
@@ -128,12 +136,15 @@ namespace gui {
     void GuiElement::destroy() {
         if (auto element = dynamic_cast<GuiElement*>(parent))
         {
-            for (auto& child : element->children) {
-                if (child == this) {
-                    child = nullptr;
-                }
-            }
+            element->removeChildren(this);
             delete this;
+        }
+    }
+
+    void GuiElement::removeChildren(GuiElement *toErase) {
+        for (auto& child : this->children) {
+            if (child == toErase)
+                child = nullptr;
         }
     }
 

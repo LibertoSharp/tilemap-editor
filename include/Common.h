@@ -26,12 +26,6 @@ inline string vec2tostring(const sf::Vector2<T>& source) {
     return ss.str();
 }
 
-inline string vec4tostring(const sf::Glsl::Vec4& source) {
-    stringstream ss;
-    ss << "X: " << source.x << " Y: " << source.y << " Z: " << source.z << " W: " << source.w;;
-    return ss.str();
-}
-
 inline path RelativePath(path fullPath, path localPath) {
     path relativePath = relative(fullPath, localPath);
     relativePath = relativePath.parent_path() / relativePath.stem();

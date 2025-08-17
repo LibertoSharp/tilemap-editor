@@ -5,7 +5,10 @@ TextureManager::TextureManager(const std::filesystem::path &path, sf::Vector2i t
 }
 
 const sf::Texture* TextureManager::getAtlasTexture(const std::string& atlasName) const {
-    return resources.find(atlasName)->second;
+    if (resources.find(atlasName) != resources.end())
+        return resources.find(atlasName)->second;
+
+    return nullptr;
 }
 
 sf::Sprite TextureManager::createTileSprite(const std::string& atlasName, int x, int y) const {

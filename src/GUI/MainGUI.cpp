@@ -1,3 +1,4 @@
+#include "GUI/TextInput.h"
 #ifndef MAINMENU_H
 #define MAINMENU_H
 #include <iostream>
@@ -22,7 +23,7 @@ static TextElement *TileScriptLabel;
 static GuiElement *TileScriptPanel;
 static Button *OpenButton;
 static GuiElement *OpenPathBackground;
-static TextElement *OpenPathLabel;
+static TextInput *OpenPathLabel;
 static Button *GridResetButton;
 static GuiElement *TileGridPanel;
 static Tilegrid *TileGrid;
@@ -194,24 +195,34 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	OpenButton->getText()->setScale({0.5,0.5});
 	OpenButton->centerText();
 	OpenButton->setRelativePosition({10, 100});
+	OpenButton->Update = [](GuiElementEventContext ctx) {
+		if (ctx.f_clickUp) {
+			if (auto* atlas = Application::getInstance()->getTextureManager()->getAtlasTexture(OpenPathLabel->getInput()))
+				TileGrid->setTilemap(atlas, {16,16});
+		}
+	};
 #pragma endregion
 
 #pragma region Open Path Background
-	OpenPathBackground = new GuiElement(Vector2f(180,25));
+	/*OpenPathBackground = new GuiElement(Vector2f(180,25));
 	OpenButton->append(OpenPathBackground);
 	OpenPathBackground->setGlobalScale({1, 1});
 	OpenPathBackground->getRectangleShape()->setFillColor(Color(17, 17, 14, 120));
-	OpenPathBackground->setRelativePosition({100, 0});
+	OpenPathBackground->setRelativePosition({100, 0});*/
 #pragma endregion
 
 #pragma region Open Path Label
-	OpenPathLabel = new TextElement(pixelFont, "Path...");
-	OpenPathBackground->append(OpenPathLabel);
+	OpenPathLabel = new TextInput(Vector2f(350,50),pixelFont, "id...");
+	OpenButton->append(OpenPathLabel);
+	OpenPathLabel->getBackground()->setFillColor(Color(17, 17, 14, 120));
 	OpenPathLabel->setGlobalScale({0.5, 0.5});
-	OpenPathLabel->setAnchor(AnchorType::MiddleLeft);
+	OpenPathLabel->setAnchor(AnchorType::MiddleRight);
 	OpenPathLabel->SetOriginByAnchor(AnchorType::MiddleLeft);
-	OpenPathLabel->setRelativePosition({1,0});
-	OpenPathLabel->setFillColor(Color(255,255,255,120));
+	OpenPathLabel->setRelativePosition({10,0});
+	OpenPathLabel->HitEnter = []() {
+		if (auto* atlas = Application::getInstance()->getTextureManager()->getAtlasTexture(OpenPathLabel->getInput()))
+			TileGrid->setTilemap(atlas, {16,16});
+	};
 
 #pragma endregion
 
@@ -224,10 +235,10 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 #pragma endregion
 
 #pragma region Tile Grid
-	Tilegrid *tilegrid = new Tilegrid(
+	TileGrid = new Tilegrid(
 		Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\furnitures"), {16, 16});
-	TileGridPanel->append(tilegrid);
-	tilegrid->setGlobalScale({1, 1});
+	TileGridPanel->append(TileGrid);
+	TileGrid->setGlobalScale({1, 1});
 #pragma endregion
 
 #pragma region Grid Reset Button
@@ -241,7 +252,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	GridResetButton->setAnchor(TopRight);
 	GridResetButton->SetOriginByAnchor(AnchorType::TopRight);
 	GridResetButton->setRelativePosition({-5, 5});
-	GridResetButton->Update = [tilegrid](GuiElementEventContext ctx) {TileGridResetButtonUpdate(ctx, tilegrid);};
+	GridResetButton->Update = [](GuiElementEventContext ctx) {TileGridResetButtonUpdate(ctx, TileGrid);};
 #pragma endregion
 
 #pragma region Selected Header

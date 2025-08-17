@@ -75,6 +75,8 @@ namespace gui {
         elementCtx.f_globalclickup = ctx.f_clickUp;
         elementCtx.is_inside_window = ctx.is_inside_window;
         elementCtx.mouse_wheel_delta = ctx.mouse_wheel_delta;
+        elementCtx.textEntered = ctx.textEntered;
+        elementCtx.keyPressed = ctx.keyPressed;
         if (element->isInsideBoundingBox(ctx.mousePos)) {
             elementCtx.f_deep_hovering = true;
             if (first) {

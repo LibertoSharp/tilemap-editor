@@ -21,6 +21,8 @@ namespace gui {
         bool f_mouseDown = false;
         bool is_inside_window = false;
         float mouse_wheel_delta = 0;
+        char32_t textEntered;
+        Keyboard::Key keyPressed;
 
         void ResetFlags() {
             f_hovering = false;
@@ -32,6 +34,8 @@ namespace gui {
             f_globalclickup = false;
             is_inside_window = false;
             mouse_wheel_delta = 0;
+            textEntered = -1;
+            keyPressed = Keyboard::Key::Unknown;
         }
     };
 
@@ -68,6 +72,7 @@ namespace gui {
 
         std::vector<GuiElement *> *getChildren();
         void append(GuiElement *element);
+        void goFront();
 
         void hide() {hideFlag = true;}
         bool isHidden() const;
@@ -78,6 +83,7 @@ namespace gui {
 
         void show() {hideFlag = false;}
         void destroy();
+        void removeChildren(GuiElement* child);
 
         void setAnchor(AnchorType anchor);
         Vector2f getPositionRelativeToAnchor(AnchorType anchor) const;

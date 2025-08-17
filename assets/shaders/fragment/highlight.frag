@@ -17,7 +17,9 @@ void main()
     {
         pixel.rgb += 1;
         pixel.a = (cos(uTime*3) + 1.0) / 5.0 + 0.1;
-    }
+    } else
+        pixel.a = 0;
+
     if (pixelPos.x <= maskRect.x || pixelPos.x >= (maskRect.x + maskRect.z) || pixelPos.y <= maskRect.y || pixelPos.y >= (maskRect.y + maskRect.w))
     pixel = vec4(0,0,0,0);
     outputColor =  pixel;

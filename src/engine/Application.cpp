@@ -81,6 +81,11 @@ void Application::performEvent(std::optional<Event> event) {
             guiLayer->ctx.f_clickUp = true;
     } else if (const auto* mouseWheelEvent = event->getIf<sf::Event::MouseWheelScrolled>()) {
         guiLayer->ctx.mouse_wheel_delta = mouseWheelEvent->delta;
+    } else if (const auto* textEnteredEvent = event->getIf<sf::Event::TextEntered>()) {
+        guiLayer->ctx.textEntered = textEnteredEvent->unicode;
+    }
+    else if (const auto* keyPressedEvent = event->getIf<sf::Event::KeyPressed>()) {
+        guiLayer->ctx.keyPressed = keyPressedEvent->code;
     }
 }
 

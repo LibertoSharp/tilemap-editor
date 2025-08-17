@@ -11,6 +11,8 @@ namespace gui {
     bool f_mouseDown = false;
     bool is_inside_window = false;
     float mouse_wheel_delta = 0;
+    char32_t textEntered;
+    Keyboard::Key keyPressed;
 
     void Reset() {
       mousePos = {};
@@ -20,6 +22,8 @@ namespace gui {
       f_mouseDown = false;
       is_inside_window = false;
       mouse_wheel_delta = 0;
+      textEntered = -1;
+      keyPressed = Keyboard::Key::Unknown;
     }
   };
 

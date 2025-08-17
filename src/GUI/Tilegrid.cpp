@@ -7,20 +7,14 @@
 namespace gui {
 	Tilegrid::Tilegrid(const sf::Texture *textureAtlas, sf::Vector2u tileSize): GuiElement(this), tileSize(tileSize) {
 		this->clickTransparent = true;
-		IntRect rect = {{0, 0}, Vector2<int>(textureAtlas->getSize())};
-		Sprite s = Sprite(*textureAtlas, rect);
-		tileMap = new Button(s);
-		this->append(tileMap);
-		tileMap->setRelativePosition({0, 0});
-		tileMap->Update = [this](GuiElementEventContext ctx) { this->ButtonUpdate(ctx); };
-		tileMap->setShader(Application::getInstance()->getShaderManager()->getShader("tileButton"));
-		tileMap->clickTransparent = true;
 
 		highlight = new GuiElement(Vector2f(tileSize));
 		highlight->setRelativePosition({0, 0});
 		highlight->setShader(Application::getInstance()->getShaderManager()->getShader("highlight"));
 		highlight->clickTransparent = true;
 		this->append(highlight);
+
+		setTilemap(textureAtlas, tileSize);
 	}
 
 	Tilegrid::~Tilegrid() {
@@ -39,8 +33,6 @@ namespace gui {
 		}
 	}
 
-	GuiElement *element = nullptr;
-
 	FloatRect Tilegrid::getGlobalBounds() {
 		if (!element) element = dynamic_cast<GuiElement *>(parent);
 		if (element) {
@@ -49,19 +41,36 @@ namespace gui {
 		return {};
 	}
 
-	bool dragging = false;
-	Vector2f initialMousePos;
-
 	void Tilegrid::update() {
 		if (!element) element = dynamic_cast<GuiElement *>(parent);
-		if (element && element->ctx.f_deep_hovering) {
-			Vector2f s = this->getScale();
-			s = {s.x + ctx.mouse_wheel_delta * scrollSensitivity, s.y + ctx.mouse_wheel_delta * scrollSensitivity};
-			if (s.x > 0 && s.y > 0)
-				this->setScale(s);
+		if (element && element->ctx.f_deep_hovering && !dragging) {
 			if (element->ctx.f_clickDown) {
 				initialMousePos = Vector2f(ctx.mousePos) - this->getGlobalPosition();
 				dragging = true;
+			}
+			Vector2f oldScale = this->getScale();
+			Vector2f newScale = {
+				oldScale.x + ctx.mouse_wheel_delta * scrollSensitivity,
+				oldScale.y + ctx.mouse_wheel_delta * scrollSensitivity
+			};
+
+			if (newScale.x > 0 && newScale.y > 0) {
+				Vector2f cursor = Vector2f(ctx.mousePos);
+
+				Vector2f oldPos = this->getGlobalPosition();
+
+				Vector2f factor = {
+					newScale.x / oldScale.x,
+					newScale.y / oldScale.y
+				};
+
+				Vector2f newPos = {
+					cursor.x - (cursor.x - oldPos.x) * factor.x,
+					cursor.y - (cursor.y - oldPos.y) * factor.y
+				};
+
+				this->setScale(newScale);
+				this->setGlobalPosition(newPos);
 			}
 		}
 
@@ -71,6 +80,22 @@ namespace gui {
 			this->setGlobalPosition(Vector2f(ctx.mousePos) - initialMousePos);
 
 		GuiElement::update();
+	}
+
+	void Tilegrid::setTilemap(const sf::Texture *textureAtlas, sf::Vector2u tileSize) {
+		this->tileSize = tileSize;
+		if (tileMap)
+			tileMap->destroy();
+
+		IntRect rect = {{0, 0}, Vector2<int>(textureAtlas->getSize())};
+		Sprite s = Sprite(*textureAtlas, rect);
+		tileMap = new Button(s);
+		this->append(tileMap);
+		tileMap->setRelativePosition({0, 0});
+		tileMap->Update = [this](GuiElementEventContext ctx) { this->ButtonUpdate(ctx); };
+		tileMap->setShader(Application::getInstance()->getShaderManager()->getShader("tileButton"));
+		tileMap->clickTransparent = true;
+		highlight->goFront();
 	}
 
 	void Tilegrid::ButtonUpdate(GuiElementEventContext ctx) {
