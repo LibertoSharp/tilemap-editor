@@ -27,7 +27,6 @@ void gui::TextInput::update() {
 		text->setFillColor(defaultColor);
 		if (ctx.textEntered >= 32 && ctx.textEntered < 127) {
 			if ((onlyNums && ((ctx.textEntered >= 48 && ctx.textEntered < 58) || (ctx.textEntered == 45 && inputText.empty()))) || !onlyNums) {
-				std::cout << ctx.textEntered << std::endl;
 				inputText += ctx.textEntered;
 				if (TextChanged)
 					TextChanged();

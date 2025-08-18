@@ -75,3 +75,8 @@ void Editor::scroll(float mouse_wheel_delta, Vector2f mousePos,PixelPerfectRende
 		(**level).setPosition(newPos);
 	}
 }
+
+void Editor::hideUnselected(bool active) {
+	(*level)->ShowOnly(layerIndex);
+	(*level)->f_showOnly = active;
+}

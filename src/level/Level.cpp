@@ -20,6 +20,7 @@ Level::~Level() {
 void Level::draw(RenderTarget &target, RenderStates states) const {
     states.transform *= getTransform();
     for (auto [index, grid]: grids) {
+        if (f_showOnly && index != layerToShow) continue;
         for (int x = 0; x < grid->getGridSize().x; x++) {
             for (int y = 0; y < grid->getGridSize().y; y++) {
                 int index = x + grid->getGridSize().x*y;
@@ -35,4 +36,8 @@ void Level::draw(RenderTarget &target, RenderStates states) const {
 
 BackgroundGrid * Level::getBackgroundGrid() {
     return background;
+}
+
+void Level::ShowOnly(int layer_index) {
+    layerToShow = layer_index;
 }

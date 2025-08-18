@@ -34,6 +34,7 @@ static TextElement *SelectedModeLabel;
 static TextElement *MousePositionLabel;
 static TextElement *LayerIndexLabel;
 static TextInput *LayerIndex;
+static Button *HideOtherLayers;
 
 
 static const Font* pixelFont;
@@ -68,6 +69,20 @@ inline void TileGridResetButtonUpdate(GuiElementEventContext ctx, Tilegrid *tile
 		tilegrid->setRelativePosition({0, 0});
 		tilegrid->setScale({1,1});
 	}
+}
+
+static bool active = false;
+
+inline void ActiveHideOtherLayers(Editor *editor) {
+	active = true;
+	HideOtherLayers->getRectangleShape()->setFillColor(Color(170,17,14,255));
+	editor->hideUnselected(true);
+}
+
+inline void DisableHideOtherLayers(Editor *editor) {
+	active = false;
+	HideOtherLayers->getRectangleShape()->setFillColor(Color(17,17,14,255));
+	editor->hideUnselected(false);
 }
 
 inline GuiLayer *createEditorGui(Editor *editor) {
@@ -306,7 +321,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	MousePositionLabel = new TextElement(pixelFont, "X: 0 Y: 0");
 	MousePositionLabel->setAnchor(AnchorType::BottomLeft);
 	MousePositionLabel->setOrigin(MousePositionLabel->getPositionRelativeToAnchor(AnchorType::BottomLeft));
-	MousePositionLabel->setRelativePosition({170, -5});
+	MousePositionLabel->setRelativePosition({210, -5});
 	MousePositionLabel->setGlobalScale({0.55f, 0.55f});
 	MousePositionLabel->setFillColor(Color(255, 255, 255, 255));
 	MousePositionLabel->Update = [](GuiElementEventContext ctx) {
@@ -334,12 +349,32 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	LayerIndex->setRelativePosition({10, 0});
 	LayerIndex->onlyNums = true;
 	LayerIndex->TextChanged = [editor]() {
+		DisableHideOtherLayers(editor);
 		try {
 			editor->setLayer(std::stoi(LayerIndex->getInput()));
 		} catch (std::invalid_argument) {
 			editor->setLayer(0);
 		}
 
+	};
+#pragma endregion
+
+#pragma region Hide Other Layers
+	HideOtherLayers = new Button({40,40});
+	LayerIndex->append(HideOtherLayers);
+	HideOtherLayers->setAnchor(AnchorType::MiddleRight);
+	HideOtherLayers->SetOriginByAnchor(MiddleLeft);
+	HideOtherLayers->setRelativePosition({10, 0});
+	HideOtherLayers->addText(pixelFont, "H", Color::White);
+	HideOtherLayers->getRectangleShape()->setFillColor(Color(17,17,14,255));
+	HideOtherLayers->centerText();
+	HideOtherLayers->Update = [editor](GuiElementEventContext ctx) {
+		if (ctx.f_clickUp) {
+			if (active)
+				DisableHideOtherLayers(editor);
+			else
+				ActiveHideOtherLayers(editor);
+		}
 	};
 #pragma endregion
 	return menu;

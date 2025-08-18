@@ -21,6 +21,7 @@ public:
     void setLayer(int layer);
     void update(gui::GuiEventContext ctx, bool mouseOverGUI);
     void scroll(float mouse_wheel_delta, Vector2f mousePos, PixelPerfectRenderTarget *renderTarget);
+    void hideUnselected(bool active);
 
 private:
     std::optional<Tile> selectedTile;
