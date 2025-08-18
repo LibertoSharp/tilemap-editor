@@ -85,6 +85,8 @@ void Application::performEvent(std::optional<Event> event) {
     } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
         if (mouseReleasedEvent->button == Mouse::Button::Left)
             ctx.f_clickUp = true;
+        if (mouseReleasedEvent->button == Mouse::Button::Middle)
+            ctx.f_wheelUp = true;
     } else if (const auto* mouseWheelEvent = event->getIf<sf::Event::MouseWheelScrolled>()) {
         ctx.mouse_wheel_delta = mouseWheelEvent->delta;
     } else if (const auto* textEnteredEvent = event->getIf<sf::Event::TextEntered>()) {

@@ -81,6 +81,7 @@ namespace gui {
         elementCtx.keyPressed = ctx.keyPressed;
         elementCtx.f_wheelClick = ctx.f_wheelClick;
         elementCtx.f_wheelDown = ctx.f_wheelDown;
+        elementCtx.f_globalWheelUp = ctx.f_wheelUp;
         if (element->isInsideBoundingBox(ctx.mousePos)) {
             elementCtx.f_deep_hovering = true;
             if (first) {
@@ -88,6 +89,7 @@ namespace gui {
                 elementCtx.f_clickDown = ctx.f_clickDown;
                 elementCtx.f_mouseDown = ctx.f_mouseDown;
                 elementCtx.f_clickUp = ctx.f_clickUp;
+                elementCtx.f_wheelUp = ctx.f_wheelUp;
                 if (!element->clickTransparent)
                 first = false;
             }

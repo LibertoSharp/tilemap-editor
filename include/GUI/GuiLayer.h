@@ -9,6 +9,7 @@ namespace gui {
     bool f_clickDown = false;
     bool f_clickUp = false;
     bool f_wheelClick = false;
+    bool f_wheelUp = false;
     bool f_wheelDown = false;
     bool f_mouseDown = false;
     bool is_inside_window = false;
@@ -27,6 +28,7 @@ namespace gui {
       is_inside_window = false;
       mouse_wheel_delta = 0;
       textEntered = -1;
+      f_wheelUp = false;
       keyPressed = Keyboard::Key::Unknown;
     }
   };

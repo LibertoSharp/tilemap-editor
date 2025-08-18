@@ -19,6 +19,8 @@ namespace gui {
         bool f_clickDown = false;
         bool f_clickUp = false;
         bool f_wheelClick = false;
+        bool f_globalWheelUp = false;
+        bool f_wheelUp = false;
         bool f_wheelDown = false;
         bool f_mouseDown = false;
         bool is_inside_window = false;
@@ -33,6 +35,8 @@ namespace gui {
             f_clickUp = false;
             f_wheelClick = false;
             f_wheelDown = false;
+            f_wheelUp = false;
+            f_globalWheelUp = false;
             f_mouseDown = false;
             f_globalclickdown = false;
             f_globalclickup = false;

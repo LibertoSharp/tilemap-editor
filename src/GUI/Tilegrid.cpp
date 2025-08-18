@@ -44,7 +44,7 @@ namespace gui {
 	void Tilegrid::update() {
 		if (!element) element = dynamic_cast<GuiElement *>(parent);
 		if (element && element->ctx.f_deep_hovering && !dragging) {
-			if (element->ctx.f_clickDown) {
+			if (element->ctx.f_wheelClick) {
 				initialMousePos = Vector2f(ctx.mousePos) - this->getGlobalPosition();
 				dragging = true;
 			}
@@ -74,7 +74,7 @@ namespace gui {
 			}
 		}
 
-		if (ctx.f_globalclickup)
+		if (ctx.f_globalWheelUp)
 			dragging = false;
 		if (dragging)
 			this->setGlobalPosition(Vector2f(ctx.mousePos) - initialMousePos);
@@ -104,8 +104,6 @@ namespace gui {
 	}
 
 	void Tilegrid::ButtonUpdate(GuiElementEventContext ctx) {
-		static Vector2i initialMousePos;
-
 		FloatRect bounds = this->transformRect(this->getGlobalBounds(), getParentTransform());
 		Glsl::Vec4 globalrect = {bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y};
 		ctx.element->getShader()->setUniform("maskRect", globalrect);
@@ -116,10 +114,7 @@ namespace gui {
 			Vector2i relativeMousePos = (ctx.mousePos - Vector2i(this->getGlobalPosition()));
 			relativeMousePos = Vector2i(relativeMousePos.x / this->getGlobalScale().x, relativeMousePos.y / this->getGlobalScale().y);
 			highlight->setPosition(Vector2f((relativeMousePos.x/tileSize.x)*tileSize.x,(relativeMousePos.y/tileSize.y)*tileSize.y));
-			if (ctx.f_clickDown) {
-				initialMousePos = ctx.mousePos;
-			}
-			if (ctx.f_clickUp && initialMousePos == ctx.mousePos) {
+			if (ctx.f_clickUp) {
 				IntRect r;
 				r.position = Vector2i((relativeMousePos.x/tileSize.x)*tileSize.x,(relativeMousePos.y/tileSize.y)*tileSize.y);
 				r.size = Vector2i(tileSize);
