@@ -50,6 +50,8 @@ namespace gui {
             case BottomCenter: return {width/2.0f,height};
             case BottomRight: return {width,height};
         }
+
+        return {0, 0};
     }
 
     void GuiLayer::draw(RenderTarget &target, RenderStates states) const {

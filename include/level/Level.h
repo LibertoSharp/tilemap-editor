@@ -1,5 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
+#include <map>
+
 #include "Grid.h"
 #include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/RenderStates.hpp"
@@ -11,16 +13,18 @@ public:
     Level(unsigned int tileSize, unsigned int width, unsigned int height);
 
     void draw(RenderTarget& target, RenderStates states) const override;
-    void createGrid(unsigned tileSize, unsigned width, unsigned height);
-    Grid* getGrid() const{
-        return grid;
+    Grid* getGrid(int layerIndex) {
+        if (grids.find(layerIndex) == grids.end())
+            grids[layerIndex] = new Grid(tileSize, Vector2i(width, height));
+        return grids[layerIndex];
     }
 
     unsigned int getTileSize() const { return tileSize;}
 private:
-    Grid* grid = nullptr;
-    unsigned int writeIndex;
+    std::map<int, Grid*> grids;
     unsigned int tileSize = 0;
+    unsigned int width = 0;
+    unsigned int height = 0;
 };
 
 
