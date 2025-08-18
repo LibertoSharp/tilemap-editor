@@ -35,7 +35,8 @@ static TextElement *MousePositionLabel;
 static TextElement *LayerIndexLabel;
 static TextInput *LayerIndex;
 static Button *HideOtherLayers;
-
+static Button *Pin;
+static bool pinned = false;
 
 static const Font* pixelFont;
 static const Font* Bold_pixelFont;
@@ -57,7 +58,7 @@ inline void EditButtonUpdate(GuiElementEventContext ctx) {
 
 inline void EditPanelUpdate(GuiElementEventContext ctx) {
 	GuiElement *panel = ctx.element;
-	if (ctx.f_deep_hovering && ctx.is_inside_window)
+	if ((ctx.f_deep_hovering && ctx.is_inside_window) || pinned)
 		panel->setRelativePosition(damp(panel->getRelativePosition(), Vector2f(-200, 0), 1.0f,
 		                                Application::getInstance()->getDeltaTime()));
 	else panel->setRelativePosition(damp(panel->getRelativePosition(), Vector2f(0, 0), 1.0f,
@@ -378,6 +379,25 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 				ActiveHideOtherLayers(editor);
 		}
 	};
+#pragma endregion
+
+#pragma region Pin
+	Pin = new Button(getGuiSprite("pin",0,0,16,16));
+	Pin->setAnchor(AnchorType::BottomRight);
+	Pin->SetOriginByAnchor(AnchorType::BottomRight);
+	editPanel->append(Pin);
+	Pin->setRelativePosition({-5, -1});
+	Pin->setGlobalScale({1,1});
+	Pin->Update = [](GuiElementEventContext ctx) {
+		if (ctx.f_clickUp) {
+			pinned = !pinned;
+			if (pinned)
+				static_cast<Sprite*>(Pin->activeGraphic)->setColor(Color::Cyan);
+			else
+				static_cast<Sprite*>(Pin->activeGraphic)->setColor(Color::White);
+		}
+	};
+
 #pragma endregion
 	return menu;
 }
