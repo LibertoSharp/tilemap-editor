@@ -11,33 +11,46 @@ namespace gui {
 	}
 
 	void Dropdown::addEntry(Sprite s, Sprite hovered) {
-		entries.push_back(std::make_pair(s, hovered));
+		int index = entries.size();
+		Button *btn = new Button(s);
+		btn->hovered = hovered;
+		btn->pressed = hovered;
+		if (index == 0) this->append(btn);
+		else (*(entries.end()-1))->append(btn);
+		btn->setAnchor(AnchorType::BottomLeft);
+		btn->setRelativePosition({0,0});
+		btn->Update = [this,index](gui::GuiElementEventContext ctx) {if (ctx.f_clickDown) {if (this->ValueChanged) this->ValueChanged(index); this->hideDropdown();}};
+		btn->hide();
+		entries.push_back(btn);
+	}
+
+	void Dropdown::addEntry(const Font *font, std::string text) {
+		int index = entries.size();
+		Button *btn = new Button(size);
+		btn->addText(font,text);
+		btn->centerText();
+		btn->getText()->setScale(this->getText()->getScale());
+		btn->getRectangleShape()->setFillColor(this->getRectangleShape()->getFillColor());
+		if (index == 0) this->append(btn);
+		else (*(entries.end()-1))->append(btn);
+		btn->setAnchor(AnchorType::BottomLeft);
+		btn->setRelativePosition({0,0});
+		btn->Update = [this,index](gui::GuiElementEventContext ctx) {if (ctx.f_clickDown) {if (this->ValueChanged) this->ValueChanged(index); this->hideDropdown();}};
+		btn->hide();
+		entries.push_back(btn);
 	}
 
 	void Dropdown::showDropdown() {
-		float y = this->getActiveSprite()->getGlobalBounds().size.y;
-		int i = 0;
-		for (std::pair<Sprite,Sprite> s: entries) {
-			Button *btn = new Button(s.first);
-			btn->hovered = s.second;
-			btn->pressed = s.second;
-			append(btn);
-			btn->normalizeScaleRelativeToParent({1,1});
-			btn->setAnchor(gui::TopLeft);
-			btn->setRelativePosition({0,y});
-			btn->Update = [this,i](gui::GuiElementEventContext ctx) {if (ctx.f_clickDown) {if (this->ValueChanged) this->ValueChanged(i); this->hideDropdown();}};
-			y += btn->getActiveSprite()->getGlobalBounds().size.y;
-			buttons.push_back(btn);
-			i++;
+		for (Button *s: entries) {
+			s->show();
 		}
 		dropped = true;
 	}
 
 	void Dropdown::hideDropdown() {
-		for (auto btn: buttons) {
-			btn->destroy();
+		for (Button *s: entries) {
+			s->hide();
 		}
-		buttons.clear();
 		dropped = false;
 	}
 }

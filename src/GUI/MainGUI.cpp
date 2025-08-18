@@ -91,22 +91,24 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	GuiLayer *menu = new GuiLayer();
 
 #pragma region File Dropdown
-	fileButton = new Dropdown(getGuiSprite("GUI00", 0, 0, 36, 12));
-	fileButton->hovered = getGuiSprite("GUI00", 0, 13, 36, 12);
-	fileButton->setGlobalScale({2, 2});
-	fileButton->addEntry(getGuiSprite("GUI00", 0, 26, 36, 12),
-	                     getGuiSprite("GUI00", 0, 39, 36, 12));
-	fileButton->addEntry(getGuiSprite("GUI00", 0, 52, 36, 12),
-	                     getGuiSprite("GUI00", 0, 65, 36, 12));
+	fileButton = new Dropdown({72,24});
+	fileButton->addText(pixelFont, "File");
+	fileButton->getRectangleShape()->setFillColor(Color(17,17,14,255));
+	fileButton->centerText();
+	fileButton->getText()->setScale({0.5,0.5});
+	fileButton->addEntry(pixelFont, "Open");
+	fileButton->addEntry(pixelFont, "Save");
 	fileButton->ValueChanged = &FileValueChanged;
 	menu->addElement(fileButton, true);
 #pragma endregion
 
 #pragma region Edit Button
-	editButton = new Dropdown(getGuiSprite("GUI00", 36, 0, 36, 12));
-	editButton->hovered = getGuiSprite("GUI00", 36, 13, 36, 12);
+	editButton = new Button({72,24});
+	editButton->addText(pixelFont, "Edit");
+	editButton->getRectangleShape()->setFillColor(Color(17,17,14,255));
+	editButton->centerText();
+	editButton->getText()->setScale({0.5,0.5});
 	editButton->Update = &EditButtonUpdate;
-	editButton->setGlobalScale({2, 2});
 	editButton->setPosition({36 * 2, 0});
 	menu->addElement(editButton, true);
 #pragma endregion

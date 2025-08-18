@@ -6,7 +6,7 @@ void Application::run(unsigned width, unsigned height) {
     createManagers();
     createWindow(width,height);
 
-    renderTarget.create(width,height,4);
+    renderTarget.create(width,height,1);
     renderTarget.zoom(4);
 
     editor = new Editor(&level);
