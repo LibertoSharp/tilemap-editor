@@ -11,7 +11,7 @@ void Application::run(unsigned width, unsigned height) {
 
     editor = new Editor(&level);
     guiLayer = createEditorGui(editor);
-    level = new Level(16, 100, 100);
+    level = new Level(16, 10, 10);
 
     dtClock.start();
     while (window->isOpen()) {
@@ -58,6 +58,7 @@ void Application::render() {
 
 bool Application::CallGuiEvents() {
     ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
+    ctx.f_wheelDown = isButtonPressed(sf::Mouse::Button::Middle);
     if (!window->hasFocus()) ctx.Reset();
     Vector2i mousePos = sf::Mouse::getPosition(*window);
     Vector2u windowSize = window->getSize();
@@ -69,8 +70,8 @@ bool Application::CallGuiEvents() {
 }
 
 void Application::update() {
-    ctx.f_clickDown = CallGuiEvents() && ctx.f_mouseDown;
-    editor->update(ctx);
+    bool mouseOverGUI = CallGuiEvents();
+    editor->update(ctx, mouseOverGUI);
 }
 
 void Application::performEvent(std::optional<Event> event) {
@@ -79,6 +80,8 @@ void Application::performEvent(std::optional<Event> event) {
     else if (const auto* mousePressedEvent = event->getIf<sf::Event::MouseButtonPressed >()) {
         if (mousePressedEvent->button == Mouse::Button::Left)
             ctx.f_clickDown = true;
+        if (mousePressedEvent->button == Mouse::Button::Middle)
+            ctx.f_wheelClick = true;
     } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
         if (mouseReleasedEvent->button == Mouse::Button::Left)
             ctx.f_clickUp = true;

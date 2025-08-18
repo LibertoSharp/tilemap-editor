@@ -16,12 +16,12 @@ public:
     void setTileInfo(int x, int y, TileInfo tile);
     void setTileInfo(sf::Vector2i pos, TileInfo tile);
 
-    std::optional<Tile>* operator [](int index) const;
+    std::optional<Tile>* operator [](int index);
 
 private:
     unsigned tileSize; //tile size in pixel
     sf::Vector2i gridSize; //grid size in tiles
-    std::optional<Tile>* tilemap;
+    std::vector<std::optional<Tile>> tilemap;
 };
 
 #endif //GRID_H

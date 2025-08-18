@@ -8,6 +8,8 @@ namespace gui {
     bool f_hovering = false;
     bool f_clickDown = false;
     bool f_clickUp = false;
+    bool f_wheelClick = false;
+    bool f_wheelDown = false;
     bool f_mouseDown = false;
     bool is_inside_window = false;
     float mouse_wheel_delta = 0;
@@ -19,7 +21,9 @@ namespace gui {
       f_hovering = false;
       f_clickDown = false;
       f_clickUp = false;
+      f_wheelClick = false;
       f_mouseDown = false;
+      f_wheelDown = false;
       is_inside_window = false;
       mouse_wheel_delta = 0;
       textEntered = -1;

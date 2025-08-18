@@ -22,7 +22,7 @@ void Level::draw(RenderTarget &target, RenderStates states) const {
     for (auto [index, grid]: grids) {
         for (int x = 0; x < grid->getGridSize().x; x++) {
             for (int y = 0; y < grid->getGridSize().y; y++) {
-                int index = x * grid->getTileSize()+y;
+                int index = x + grid->getGridSize().x*y;
 
                 if (!(*grid)[index]->has_value()) continue;
 

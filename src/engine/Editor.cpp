@@ -27,23 +27,37 @@ void Editor::setLayer(int layer) {
 	layerIndex = layer;
 }
 
-void Editor::update(gui::GuiEventContext ctx) {
+void Editor::update(gui::GuiEventContext ctx, bool mouseOverGUI) {
+	static Vector2i initialMousePos;
+	static Vector2f initialDragPos;
 	PixelPerfectRenderTarget *renderTarget = Application::getInstance()->getRenderTarget();
-	if (ctx.f_clickDown)
-		click({ctx.mousePos.x / (renderTarget->getZoom()),ctx.mousePos.y / (renderTarget->getZoom())});
+	Vector2f clickPosition = {(ctx.mousePos.x / renderTarget->getZoom()) ,ctx.mousePos.y / (renderTarget->getZoom())};
 
-	//scroll(ctx.mouse_wheel_delta, Vector2f(ctx.mousePos));
+	if (!mouseOverGUI) return;
+
+	if (ctx.f_mouseDown)
+		click({(clickPosition.x - (**level).getPosition().x) / (**level).getScale().x, (clickPosition.y - (**level).getPosition().y) / (**level).getScale().y});
+
+	scroll(ctx.mouse_wheel_delta, Vector2f(ctx.mousePos), renderTarget);
+	if (ctx.f_wheelClick) {
+		initialMousePos = Vector2i(clickPosition);
+		initialDragPos = (**level).getPosition();
+	}
+	if (ctx.f_wheelDown) {
+		(**level).setPosition({initialDragPos.x + clickPosition.x - initialMousePos.x,initialDragPos.y + clickPosition.y - initialMousePos.y});
+	}
+
 }
 
-void Editor::scroll(float mouse_wheel_delta, Vector2f mousePos) {
+void Editor::scroll(float mouse_wheel_delta, Vector2f mousePos,PixelPerfectRenderTarget *renderTarget) {
 	Vector2f oldScale = (**level).getScale();
 	Vector2f newScale = {
-		oldScale.x + mouse_wheel_delta,
-		oldScale.y + mouse_wheel_delta
+		oldScale.x + mouse_wheel_delta * 0.1f,
+		oldScale.y + mouse_wheel_delta * 0.1f
 	};
 
 	if (newScale.x > 0 && newScale.y > 0) {
-		Vector2f cursor = Vector2f(mousePos);
+		Vector2f cursor = Vector2f(mousePos.x/renderTarget->getZoom(),mousePos.y/renderTarget->getZoom());
 
 		Vector2f oldPos = (**level).getPosition();
 
