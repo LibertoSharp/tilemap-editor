@@ -32,6 +32,9 @@ static GuiElement *SelectedTile;
 static TextElement *SelectedModeHeader;
 static TextElement *SelectedModeLabel;
 static TextElement *MousePositionLabel;
+static TextElement *LayerIndexLabel;
+static TextInput *LayerIndex;
+
 
 static const Font* pixelFont;
 static const Font* Bold_pixelFont;
@@ -303,7 +306,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	MousePositionLabel = new TextElement(pixelFont, "X: 0 Y: 0");
 	MousePositionLabel->setAnchor(AnchorType::BottomLeft);
 	MousePositionLabel->setOrigin(MousePositionLabel->getPositionRelativeToAnchor(AnchorType::BottomLeft));
-	MousePositionLabel->setRelativePosition({0, -5});
+	MousePositionLabel->setRelativePosition({170, -5});
 	MousePositionLabel->setGlobalScale({0.55f, 0.55f});
 	MousePositionLabel->setFillColor(Color(255, 255, 255, 255));
 	MousePositionLabel->Update = [](GuiElementEventContext ctx) {
@@ -313,6 +316,32 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	menu->addElement(MousePositionLabel, false);
 #pragma endregion
 
+#pragma region Layer Index Label
+	LayerIndexLabel = new TextElement(pixelFont, "Layer:");
+	LayerIndexLabel->setAnchor(AnchorType::BottomLeft);
+	LayerIndexLabel->SetOriginByAnchor(BottomLeft);
+	LayerIndexLabel->setRelativePosition({0, -5});
+	LayerIndexLabel->setScale({0.5, 0.5});
+	menu->addElement(LayerIndexLabel, false);
+#pragma endregion
+
+#pragma region Layer Index
+	LayerIndex = new TextInput(Vector2f(150,50),pixelFont, "0");
+	LayerIndexLabel->append(LayerIndex);
+	LayerIndex->setAnchor(AnchorType::MiddleRight);
+	LayerIndex->SetOriginByAnchor(MiddleLeft);
+	LayerIndex->getBackground()->setFillColor({17,17,14,255});
+	LayerIndex->setRelativePosition({10, 0});
+	LayerIndex->onlyNums = true;
+	LayerIndex->TextChanged = [editor]() {
+		try {
+			editor->setLayer(std::stoi(LayerIndex->getInput()));
+		} catch (std::invalid_argument) {
+			editor->setLayer(0);
+		}
+
+	};
+#pragma endregion
 	return menu;
 }
 

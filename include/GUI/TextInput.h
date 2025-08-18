@@ -28,6 +28,9 @@ namespace gui {
 		TextElement *getTextElement();
 		string getInput();
 		std::function<void()> HitEnter = nullptr;
+		std::function<void()> TextChanged = nullptr;
+
+		bool onlyNums = false;
 	private:
 		RectangleShape *background;
 		TextElement *text;

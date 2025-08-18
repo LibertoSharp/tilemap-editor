@@ -16,10 +16,12 @@ public:
     void setState(editorState state);
     void setSelectedTile(Sprite s);
     void click(Vector2f pos);
+    void setLayer(int layer);
 private:
     std::optional<Tile> selectedTile;
     editorState state = DRAW;
     Level** level;
+    int layerIndex = 0;
 };
 
 

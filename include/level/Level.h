@@ -19,6 +19,7 @@ public:
     unsigned int getTileSize() const { return tileSize;}
 private:
     Grid* grid = nullptr;
+    unsigned int writeIndex;
     unsigned int tileSize = 0;
 };
 

@@ -20,3 +20,7 @@ void Editor::click(Vector2f pos) {
 	if (state == ERASE)
 		(*level)->getGrid()->setTile(pos.x / (*level)->getTileSize(), pos.y / (*level)->getTileSize(), std::nullopt);
 }
+
+void Editor::setLayer(int layer) {
+	layerIndex = layer;
+}

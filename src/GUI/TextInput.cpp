@@ -25,10 +25,19 @@ void gui::TextInput::update() {
 	text->setFillColor(noFocusColor);
 	if (focus) {
 		text->setFillColor(defaultColor);
-		if (ctx.textEntered >= 32 && ctx.textEntered < 127)
-			inputText += ctx.textEntered;
-		if (ctx.keyPressed == Keyboard::Key::Backspace)
+		if (ctx.textEntered >= 32 && ctx.textEntered < 127) {
+			if ((onlyNums && ((ctx.textEntered >= 48 && ctx.textEntered < 58) || (ctx.textEntered == 45 && inputText.empty()))) || !onlyNums) {
+				std::cout << ctx.textEntered << std::endl;
+				inputText += ctx.textEntered;
+				if (TextChanged)
+					TextChanged();
+			}
+		}
+		if (ctx.keyPressed == Keyboard::Key::Backspace) {
 			inputText = inputText.substr(0, inputText.length() - 1);
+			if (TextChanged)
+				TextChanged();
+		}
 		if (ctx.keyPressed == Keyboard::Key::Enter && HitEnter)
 			HitEnter();
 	}
