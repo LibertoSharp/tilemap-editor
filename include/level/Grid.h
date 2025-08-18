@@ -11,8 +11,8 @@ public:
     unsigned getTileSize() const;
     sf::Vector2i getGridSize() const;
 
-    void setTile(int x, int y, Tile tile);
-    void setTile(sf::Vector2i pos, Tile tile);
+    void setTile(int x, int y, std::optional<Tile> tile);
+    void setTile(sf::Vector2i pos, std::optional<Tile> tile);
     void setTileInfo(int x, int y, TileInfo tile);
     void setTileInfo(sf::Vector2i pos, TileInfo tile);
 

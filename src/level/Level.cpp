@@ -3,6 +3,7 @@
 #include "SFML/Graphics/RenderTarget.hpp"
 
 Level::Level(unsigned int tileSize, unsigned int width, unsigned int height) {
+    this->tileSize = tileSize;
     createGrid(tileSize, width, height);
 }
 

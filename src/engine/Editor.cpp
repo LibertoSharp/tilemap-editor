@@ -16,5 +16,7 @@ void Editor::setSelectedTile(Sprite s) {
 
 void Editor::click(Vector2f pos) {
 	if (selectedTile.has_value() && state == DRAW)
-		(*level)->getGrid()->setTile(pos.x, pos.y, selectedTile.value());
+		(*level)->getGrid()->setTile(pos.x / (*level)->getTileSize(), pos.y / (*level)->getTileSize(), selectedTile.value());
+	if (state == ERASE)
+		(*level)->getGrid()->setTile(pos.x / (*level)->getTileSize(), pos.y / (*level)->getTileSize(), std::nullopt);
 }

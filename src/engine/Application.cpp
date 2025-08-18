@@ -70,7 +70,7 @@ void Application::update() {
     bool leftClick = guiLayer->ctx.f_clickDown;
     Vector2i mousePos = sf::Mouse::getPosition(*window);
     if (CallGuiEvents() && leftClick)
-        editor->click({mousePos.x / (renderTarget.getZoom() * 16),mousePos.y / (renderTarget.getZoom() * 16)});
+        editor->click({mousePos.x / (renderTarget.getZoom()),mousePos.y / (renderTarget.getZoom())});
 }
 
 void Application::performEvent(std::optional<Event> event) {

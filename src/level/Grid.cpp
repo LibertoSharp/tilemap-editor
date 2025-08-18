@@ -12,12 +12,14 @@ sf::Vector2i Grid::getGridSize() const {
     return this->gridSize;
 }
 
-void Grid::setTile(int x, int y, Tile tile) {
-    tile.getSprite()->setPosition(Vector2f(x*tileSize, y*tileSize));
+void Grid::setTile(int x, int y, std::optional<Tile> tile) {
+    if (tile.has_value())
+    tile.value().getSprite()->setPosition(Vector2f(x*tileSize, y*tileSize));
+
     tilemap[(tileSize*x+y)] = tile;
 }
 
-void Grid::setTile(sf::Vector2i pos, Tile tile) {
+void Grid::setTile(sf::Vector2i pos, std::optional<Tile> tile) {
     setTile(pos.x, pos.y, tile);
 }
 
