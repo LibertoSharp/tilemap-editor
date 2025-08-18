@@ -18,6 +18,7 @@ namespace gui {
     GuiElement::~GuiElement() {
         if (shader != nullptr)
             delete shader;
+        delete activeGraphic;
     }
 
     void GuiElement::draw(RenderTarget &target, RenderStates states) const {
@@ -146,6 +147,11 @@ namespace gui {
             if (child == toErase)
                 child = nullptr;
         }
+    }
+
+    void GuiElement::setSprite(Sprite s) {
+        activeGraphic = new Sprite(s);
+        defaultGraphic = activeGraphic;
     }
 
     void GuiElement::setAnchor(AnchorType anchor) {

@@ -54,7 +54,7 @@ void Application::render() {
     renderTarget.draw(*level);
 }
 
-void Application::CallGuiEvents() {
+bool Application::CallGuiEvents() {
     guiLayer->ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
     if (!window->hasFocus()) guiLayer->ctx.Reset();
     Vector2i mousePos = sf::Mouse::getPosition(*window);
@@ -63,11 +63,14 @@ void Application::CallGuiEvents() {
     guiLayer->ctx.mousePos = mousePos;
     guiLayer->ctx.is_inside_window = windowSize.x > mousePos.x && windowSize.y > mousePos.y;
 
-    guiLayer->callEvents();
+    return guiLayer->callEvents();
 }
 
 void Application::update() {
-    CallGuiEvents();
+    bool leftClick = guiLayer->ctx.f_clickDown;
+    Vector2i mousePos = sf::Mouse::getPosition(*window);
+    if (CallGuiEvents() && leftClick)
+        editor->click({mousePos.x / (renderTarget.getZoom() * 16),mousePos.y / (renderTarget.getZoom() * 16)});
 }
 
 void Application::performEvent(std::optional<Event> event) {

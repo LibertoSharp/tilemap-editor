@@ -14,6 +14,8 @@ public:
     Editor(Level **level);
     void update();
     void setState(editorState state);
+    void setSelectedTile(Sprite s);
+    void click(Vector2f pos);
 private:
     std::optional<Tile> selectedTile;
     editorState state = DRAW;

@@ -83,6 +83,7 @@ namespace gui {
 	}
 
 	void Tilegrid::setTilemap(const sf::Texture *textureAtlas, sf::Vector2u tileSize) {
+		this->textureAtlas = textureAtlas;
 		this->tileSize = tileSize;
 		if (tileMap)
 			tileMap->destroy();
@@ -98,6 +99,10 @@ namespace gui {
 		highlight->goFront();
 	}
 
+	const Texture * Tilegrid::getTilemap() const {
+		return textureAtlas;
+	}
+
 	void Tilegrid::ButtonUpdate(GuiElementEventContext ctx) {
 		static Vector2i initialMousePos;
 
@@ -110,12 +115,15 @@ namespace gui {
 			highlight->getShader()->setUniform("hovering", true);
 			Vector2i relativeMousePos = (ctx.mousePos - Vector2i(this->getGlobalPosition()));
 			relativeMousePos = Vector2i(relativeMousePos.x / this->getGlobalScale().x, relativeMousePos.y / this->getGlobalScale().y);
-			highlight->setPosition(Vector2f((relativeMousePos.x/16)*16,(relativeMousePos.y/16)*16));
+			highlight->setPosition(Vector2f((relativeMousePos.x/tileSize.x)*tileSize.x,(relativeMousePos.y/tileSize.y)*tileSize.y));
 			if (ctx.f_clickDown) {
 				initialMousePos = ctx.mousePos;
 			}
 			if (ctx.f_clickUp && initialMousePos == ctx.mousePos) {
-				cout << "megasbors" << endl;
+				IntRect r;
+				r.position = Vector2i((relativeMousePos.x/tileSize.x)*tileSize.x,(relativeMousePos.y/tileSize.y)*tileSize.y);
+				r.size = Vector2i(tileSize);
+				SelectTile(r);
 			}
 		} else
 			highlight->getShader()->setUniform("hovering", false);

@@ -20,7 +20,7 @@ static Button *DrawModeButton;
 static Button *EraseModeButton;
 static Button *SelectModeButton;
 static TextElement *TileScriptLabel;
-static GuiElement *TileScriptPanel;
+static TextInput *TileScriptPanel;
 static Button *OpenButton;
 static GuiElement *OpenPathBackground;
 static TextInput *OpenPathLabel;
@@ -177,13 +177,18 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 #pragma endregion
 
 #pragma region Tile Script Panel
-	TileScriptPanel = new GuiElement(Vector2f(280,100));
+	TileScriptPanel = new TextInput(Vector2f(280,100),pixelFont, "write here...");
 	editPanel->append(TileScriptPanel);
 	TileScriptPanel->setAnchor(TopCenter);
 	TileScriptPanel->SetOriginByAnchor(AnchorType::TopCenter);
 	TileScriptPanel->setGlobalScale({1,1});
 	TileScriptPanel->getRectangleShape()->setFillColor(Color(17, 17, 14, 255));
 	TileScriptPanel->setRelativePosition({0, 37});
+
+	TileScriptPanel->getTextElement()->setScale({0.5,0.5});
+	TileScriptPanel->getTextElement()->setAnchor(TopLeft);
+	TileScriptPanel->getTextElement()->SetOriginByAnchor(TopLeft);
+	TileScriptPanel->getTextElement()->setRelativePosition({5, 5});
 #pragma endregion
 
 #pragma region Open Button
@@ -239,6 +244,11 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 		Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\furnitures"), {16, 16});
 	TileGridPanel->append(TileGrid);
 	TileGrid->setGlobalScale({1, 1});
+	TileGrid->SelectTile = [editor](IntRect r) {
+		Sprite s = Sprite(*TileGrid->getTilemap(),r);
+		SelectedTile->setSprite(s);
+		editor->setSelectedTile(s);
+	};
 #pragma endregion
 
 #pragma region Grid Reset Button

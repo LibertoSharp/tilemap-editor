@@ -93,7 +93,7 @@ namespace gui {
         element->update();
     }
 
-    void GuiLayer::callEvents() {
+    bool GuiLayer::callEvents() {
         bool first = true;
         for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
             GuiElement *element = *it;
@@ -103,5 +103,6 @@ namespace gui {
                 elements.erase(it.base()-1);
         }
         ctx.Reset();
+        return first;
     }
 }

@@ -57,7 +57,8 @@ private:
     void performEvent(std::optional<Event> event);
     void createWindow(unsigned width, unsigned height);
     void createManagers();
-    void CallGuiEvents();
+
+     bool CallGuiEvents();
 
     std::filesystem::path assetsPath = std::filesystem::current_path() / ".." / R"(assets)";
     TextureManager* textureManager = nullptr;

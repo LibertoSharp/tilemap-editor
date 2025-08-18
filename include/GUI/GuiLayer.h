@@ -39,7 +39,7 @@ namespace gui {
 
     void draw(RenderTarget& target, RenderStates states) const override;
 
-    void callEvents();
+    bool callEvents();
 
     GuiEventContext ctx;
   private:

@@ -84,6 +84,7 @@ namespace gui {
         void show() {hideFlag = false;}
         void destroy();
         void removeChildren(GuiElement* child);
+        void setSprite(Sprite s);
 
         void setAnchor(AnchorType anchor);
         Vector2f getPositionRelativeToAnchor(AnchorType anchor) const;

@@ -25,10 +25,9 @@ namespace gui {
 		RectangleShape *getBackground();
 		void SetDefaultColor(Color c);
 		void update() override;
+		TextElement *getTextElement();
 		string getInput();
 		std::function<void()> HitEnter = nullptr;
-
-
 	private:
 		RectangleShape *background;
 		TextElement *text;

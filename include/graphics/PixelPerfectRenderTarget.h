@@ -19,6 +19,9 @@ public:
     float getZoom() const {
         return zoomValue;
     }
+
+    sf::RenderTexture* const getRenderTexture() const { return renderTexture; }
+
 private:
     int pixelSize;
     sf::RenderTexture* renderTexture = nullptr;

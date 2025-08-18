@@ -25,11 +25,11 @@ void gui::TextInput::update() {
 	text->setFillColor(noFocusColor);
 	if (focus) {
 		text->setFillColor(defaultColor);
-		if (ctx.textEntered > 32 && ctx.textEntered < 127)
+		if (ctx.textEntered >= 32 && ctx.textEntered < 127)
 			inputText += ctx.textEntered;
 		if (ctx.keyPressed == Keyboard::Key::Backspace)
 			inputText = inputText.substr(0, inputText.length() - 1);
-		if (ctx.keyPressed == Keyboard::Key::Enter)
+		if (ctx.keyPressed == Keyboard::Key::Enter && HitEnter)
 			HitEnter();
 	}
 
@@ -37,7 +37,7 @@ void gui::TextInput::update() {
 		text->setString(placeholderText);
 	else {
 		text->setString(inputText);
-		if (text->getBoundingBox(text->activeGraphic).size.x > this->getBoundingBox(activeGraphic).size.x) {
+		if (text->transformRect( text->getBoundingBox(text->activeGraphic),text->getTransform()).size.x > this->getBoundingBox(activeGraphic).size.x) {
 			inputText = inputText.substr(0, inputText.length() - 1);
 			text->setString(inputText);
 		}
@@ -46,6 +46,10 @@ void gui::TextInput::update() {
 
 
 	GuiElement::update();
+}
+
+gui::TextElement * gui::TextInput::getTextElement() {
+	return text;
 }
 
 string gui::TextInput::getInput() {
