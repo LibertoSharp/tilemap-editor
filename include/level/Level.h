@@ -3,13 +3,13 @@
 #include <map>
 
 #include "Grid.h"
-#include "graphics/BackgroundGrid.h"
 #include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/RenderStates.hpp"
 
+class BackgroundGrid;
 using namespace sf;
 
-class Level final : public Drawable {
+class Level final : public Drawable, public Transformable {
 public:
     Level(unsigned int tileSize, unsigned int width, unsigned int height);
     ~Level();

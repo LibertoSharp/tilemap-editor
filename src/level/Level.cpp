@@ -8,7 +8,7 @@ Level::Level(unsigned int tileSize, unsigned int width, unsigned int height) {
     this->width = width;
     this->height = height;
     grids[0] = new Grid(tileSize, Vector2i(width, height));
-    background = new BackgroundGrid(tileSize, width, height);
+    background = new BackgroundGrid(tileSize, width, height, this);
 }
 
 Level::~Level() {
@@ -18,6 +18,7 @@ Level::~Level() {
 }
 
 void Level::draw(RenderTarget &target, RenderStates states) const {
+    states.transform *= getTransform();
     for (auto [index, grid]: grids) {
         for (int x = 0; x < grid->getGridSize().x; x++) {
             for (int y = 0; y < grid->getGridSize().y; y++) {
@@ -26,7 +27,7 @@ void Level::draw(RenderTarget &target, RenderStates states) const {
                 if (!(*grid)[index]->has_value()) continue;
 
                 Sprite *sprite = (*grid)[index]->value().getSprite();
-                target.draw(*sprite);
+                target.draw(*sprite, states);
             }
         }
     }

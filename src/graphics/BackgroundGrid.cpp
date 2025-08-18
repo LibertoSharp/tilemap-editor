@@ -2,8 +2,9 @@
 
 #include "engine/Application.h"
 
-BackgroundGrid::BackgroundGrid(unsigned int tileSize, unsigned int width, unsigned int height)
+BackgroundGrid::BackgroundGrid(unsigned int tileSize, unsigned int width, unsigned int height, Level *level)
 {
+    this->level = level;
     sf::Color gridColor = sf::Color(175, 175, 175,120);
     gridLines.setPrimitiveType(sf::PrimitiveType::Lines);
 
@@ -20,5 +21,6 @@ BackgroundGrid::BackgroundGrid(unsigned int tileSize, unsigned int width, unsign
 void BackgroundGrid::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     unsigned int zoom = Application::getInstance()->getRenderTarget()->getZoom();
     states.transform.scale({static_cast<float>(zoom),static_cast<float>(zoom)});
+    states.transform *= level->getTransform();
     target.draw(gridLines, states);
 }

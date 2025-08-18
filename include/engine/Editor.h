@@ -1,6 +1,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 #include "graphics/BackgroundGrid.h"
+#include "GUI/GuiLayer.h"
 #include "level/Level.h"
 #include "level/Tile.h"
 
@@ -18,6 +19,9 @@ public:
     void setSelectedTile(Sprite s);
     void click(Vector2f pos);
     void setLayer(int layer);
+    void update(gui::GuiEventContext ctx);
+    void scroll(float mouse_wheel_delta, Vector2f mousePos);
+
 private:
     std::optional<Tile> selectedTile;
     editorState state = DRAW;

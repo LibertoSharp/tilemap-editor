@@ -17,6 +17,7 @@ void Application::run(unsigned width, unsigned height) {
     while (window->isOpen()) {
         dt = dtClock.restart().asSeconds();
         t += dt;
+        ctx.Reset();
         while (const std::optional event = window->pollEvent())
         {
             performEvent(event);
@@ -56,22 +57,20 @@ void Application::render() {
 }
 
 bool Application::CallGuiEvents() {
-    guiLayer->ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
-    if (!window->hasFocus()) guiLayer->ctx.Reset();
+    ctx.f_mouseDown = isButtonPressed(sf::Mouse::Button::Left);
+    if (!window->hasFocus()) ctx.Reset();
     Vector2i mousePos = sf::Mouse::getPosition(*window);
     Vector2u windowSize = window->getSize();
 
-    guiLayer->ctx.mousePos = mousePos;
-    guiLayer->ctx.is_inside_window = windowSize.x > mousePos.x && windowSize.y > mousePos.y;
-
+    ctx.mousePos = mousePos;
+    ctx.is_inside_window = windowSize.x > mousePos.x && windowSize.y > mousePos.y;
+    guiLayer->ctx = ctx;
     return guiLayer->callEvents();
 }
 
 void Application::update() {
-    bool leftClick = guiLayer->ctx.f_clickDown;
-    Vector2i mousePos = sf::Mouse::getPosition(*window);
-    if (CallGuiEvents() && leftClick)
-        editor->click({mousePos.x / (renderTarget.getZoom()),mousePos.y / (renderTarget.getZoom())});
+    ctx.f_clickDown = CallGuiEvents() && ctx.f_mouseDown;
+    editor->update(ctx);
 }
 
 void Application::performEvent(std::optional<Event> event) {
@@ -79,17 +78,17 @@ void Application::performEvent(std::optional<Event> event) {
         window->close();
     else if (const auto* mousePressedEvent = event->getIf<sf::Event::MouseButtonPressed >()) {
         if (mousePressedEvent->button == Mouse::Button::Left)
-            guiLayer->ctx.f_clickDown = true;
+            ctx.f_clickDown = true;
     } else if (const auto* mouseReleasedEvent = event->getIf<sf::Event::MouseButtonReleased >()) {
         if (mouseReleasedEvent->button == Mouse::Button::Left)
-            guiLayer->ctx.f_clickUp = true;
+            ctx.f_clickUp = true;
     } else if (const auto* mouseWheelEvent = event->getIf<sf::Event::MouseWheelScrolled>()) {
-        guiLayer->ctx.mouse_wheel_delta = mouseWheelEvent->delta;
+        ctx.mouse_wheel_delta = mouseWheelEvent->delta;
     } else if (const auto* textEnteredEvent = event->getIf<sf::Event::TextEntered>()) {
-        guiLayer->ctx.textEntered = textEnteredEvent->unicode;
+        ctx.textEntered = textEnteredEvent->unicode;
     }
     else if (const auto* keyPressedEvent = event->getIf<sf::Event::KeyPressed>()) {
-        guiLayer->ctx.keyPressed = keyPressedEvent->code;
+        ctx.keyPressed = keyPressedEvent->code;
     }
 }
 

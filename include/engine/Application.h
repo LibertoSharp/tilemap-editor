@@ -75,6 +75,7 @@ private:
     PixelPerfectRenderTarget renderTarget;;
     Level *level;
     Editor *editor;
+    gui::GuiEventContext ctx;
 
     Clock dtClock;
     float dt = 0; //seconds
