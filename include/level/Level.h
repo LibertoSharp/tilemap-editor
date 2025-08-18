@@ -3,6 +3,7 @@
 #include <map>
 
 #include "Grid.h"
+#include "graphics/BackgroundGrid.h"
 #include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/RenderStates.hpp"
 
@@ -11,6 +12,7 @@ using namespace sf;
 class Level final : public Drawable {
 public:
     Level(unsigned int tileSize, unsigned int width, unsigned int height);
+    ~Level();
 
     void draw(RenderTarget& target, RenderStates states) const override;
     Grid* getGrid(int layerIndex) {
@@ -20,11 +22,14 @@ public:
     }
 
     unsigned int getTileSize() const { return tileSize;}
+    BackgroundGrid *getBackgroundGrid();
 private:
     std::map<int, Grid*> grids;
     unsigned int tileSize = 0;
     unsigned int width = 0;
     unsigned int height = 0;
+    BackgroundGrid *background;
+
 };
 
 

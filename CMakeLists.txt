@@ -49,6 +49,8 @@ add_executable(makean_rpg src/main.cpp
         include/managers/ShaderManager.h
         src/GUI/TextInput.cpp
         include/GUI/TextInput.h
+        include/graphics/BackgroundGrid.h
+        src/graphics/BackgroundGrid.cpp
 )
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)

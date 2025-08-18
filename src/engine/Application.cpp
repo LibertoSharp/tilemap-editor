@@ -22,11 +22,12 @@ void Application::run(unsigned width, unsigned height) {
             performEvent(event);
         }
         update();
-        window->clear();
-        renderTarget.clear(Color(26,26,30,255));
+        window->clear(Color(26,26,30,255));
+        renderTarget.clear(Color::Transparent);
 
         render();
         renderTarget.display();
+        window->draw(*level->getBackgroundGrid());
         window->draw(renderTarget);
         window->draw(*guiLayer);
         window->display();

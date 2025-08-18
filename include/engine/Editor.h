@@ -1,5 +1,6 @@
 #ifndef EDITOR_H
 #define EDITOR_H
+#include "graphics/BackgroundGrid.h"
 #include "level/Level.h"
 #include "level/Tile.h"
 

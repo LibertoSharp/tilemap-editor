@@ -43,12 +43,16 @@ public:
         return t;
     }
 
-    Window* const getWindow() {
+    RenderWindow* const getWindow() {
         return window;
     }
 
     Level* const getLevel() const {
         return level;
+    }
+
+    PixelPerfectRenderTarget* const getRenderTarget() {
+        return &renderTarget;
     }
 
 private:
