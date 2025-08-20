@@ -63,6 +63,7 @@ void AssetLoader<Resource>::loadResources() {
 template<>
 inline void AssetLoader<shader_files>::loadResources() {
     std::map<std::string, shader_files*> shaders;
+    if (exists(localPath / "vertex") && is_directory(localPath / "vertex"))
     for (const auto& entry : recursive_directory_iterator(localPath / "vertex")) {
         if (!entry.is_regular_file()) continue;
         if (shaders.empty() || shaders.find(entry.path().stem().string()) == shaders.end())
@@ -70,6 +71,7 @@ inline void AssetLoader<shader_files>::loadResources() {
         else
             shaders[entry.path().stem().string()]->vertex = entry.path().string();
     }
+    if (exists(localPath / "fragment") && is_directory(localPath / "fragment"))
     for (const auto& entry : recursive_directory_iterator(localPath / "fragment")) {
         if (!entry.is_regular_file()) continue;
         if (shaders.empty() || shaders.find(entry.path().stem().string()) == shaders.end())

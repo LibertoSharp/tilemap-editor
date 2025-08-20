@@ -77,6 +77,7 @@ void Level::saveFile(std::string filePath) const {
         write_raw(file, static_cast<char>(0x00));
     }
     for (auto [key, grid]: grids) {
+        write_raw(file, key);
         write_raw(file, grid->getGridSize().x);
         write_raw(file, grid->getGridSize().y);
         for (int x = 0; x < grid->getGridSize().x; x++) {

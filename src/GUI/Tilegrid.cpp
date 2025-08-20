@@ -97,7 +97,7 @@ namespace gui {
 		this->append(tileMap);
 		tileMap->setRelativePosition({0, 0});
 		tileMap->Update = [this](GuiElementEventContext ctx) { this->ButtonUpdate(ctx); };
-		tileMap->setShader(Application::getInstance()->getShaderManager()->getShader("tileButton"));
+		tileMap->setShader(Application::getInstance()->getShaderManager()->getShader("mask"));
 		tileMap->clickTransparent = true;
 		highlight->goFront();
 	}

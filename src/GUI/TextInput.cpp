@@ -17,6 +17,10 @@ void gui::TextInput::SetDefaultColor(Color c) {
 }
 
 void gui::TextInput::update() {
+	FloatRect bounds = this->transformRect(background->getGlobalBounds(), getGlobalTransform());
+	Glsl::Vec4 globalrect = {bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y};
+	text->getShader()->setUniform("maskRect", globalrect);
+
 	if (ctx.f_globalclickdown)
 		focus = false;
 	if (ctx.f_clickUp) {
@@ -45,13 +49,7 @@ void gui::TextInput::update() {
 		text->setString(placeholderText);
 	else {
 		text->setString(inputText);
-		if (text->transformRect( text->getBoundingBox(text->activeGraphic),text->getTransform()).size.x > this->getBoundingBox(activeGraphic).size.x) {
-			inputText = inputText.substr(0, inputText.length() - 1);
-			text->setString(inputText);
-		}
 	}
-
-
 
 	GuiElement::update();
 }

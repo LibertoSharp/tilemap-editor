@@ -28,6 +28,7 @@ void Editor::setLayer(int layer) {
 }
 
 void Editor::update(gui::GuiEventContext ctx, bool mouseOverGUI) {
+	static bool startDrag = false;
 	static Vector2i initialMousePos;
 	static Vector2f initialDragPos;
 	PixelPerfectRenderTarget *renderTarget = Application::getInstance()->getRenderTarget();
@@ -42,10 +43,13 @@ void Editor::update(gui::GuiEventContext ctx, bool mouseOverGUI) {
 	if (ctx.f_wheelClick) {
 		initialMousePos = Vector2i(clickPosition);
 		initialDragPos = (**level).getPosition();
+		startDrag = true;
 	}
-	if (ctx.f_wheelDown) {
+	if (ctx.f_wheelDown && startDrag) {
 		(**level).setPosition({initialDragPos.x + clickPosition.x - initialMousePos.x,initialDragPos.y + clickPosition.y - initialMousePos.y});
 	}
+	if (ctx.f_wheelUp)
+		startDrag = false;
 
 }
 

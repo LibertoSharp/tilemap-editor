@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Common.h"
 #include "TextElement.h"
+#include "engine/Application.h"
 
 namespace gui {
 	class TextInput final : public GuiElement {
@@ -19,6 +20,7 @@ namespace gui {
 			text->SetOriginByAnchor(MiddleLeft);
 			text->setRelativePosition({2,0});
 			text->clickTransparent = true;
+			text->setShader(Application::getInstance()->getShaderManager()->getShader("mask"));
 		}
 		~TextInput() override;
 		RectangleShape *getBackground();
