@@ -15,7 +15,6 @@ namespace gui {
 		void setFont(Font *font);
 
 		void setFillColor(Color color);
-
 	protected:
 		sf::Text text;
 	};

@@ -32,6 +32,7 @@ namespace gui {
 		std::function<void()> TextChanged = nullptr;
 
 		bool onlyNums = false;
+		bool multiline = false;
 	private:
 		RectangleShape *background;
 		TextElement *text;

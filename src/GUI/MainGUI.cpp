@@ -212,6 +212,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	TileScriptPanel->getTextElement()->setAnchor(TopLeft);
 	TileScriptPanel->getTextElement()->SetOriginByAnchor(TopLeft);
 	TileScriptPanel->getTextElement()->setRelativePosition({5, 5});
+	TileScriptPanel->multiline = true;
 #pragma endregion
 
 #pragma region Open Button

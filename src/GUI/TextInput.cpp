@@ -49,6 +49,31 @@ void gui::TextInput::update() {
 		text->setString(placeholderText);
 	else {
 		text->setString(inputText);
+		if (text->transformRect( text->getBoundingBox(text->activeGraphic),text->getTransform()).size.x > this->getBoundingBox(activeGraphic).size.x) {
+
+			if (multiline) {
+				text->setAnchor(TopRight);
+				text->SetOriginByAnchor(TopRight);
+				text->setRelativePosition({5,5});
+			}
+			else {
+				text->setAnchor(MiddleRight);
+				text->SetOriginByAnchor(MiddleRight);
+				text->setRelativePosition({0,0});
+			}
+		}
+		else {
+			if (multiline) {
+				text->setAnchor(TopLeft);
+				text->SetOriginByAnchor(TopLeft);
+				text->setRelativePosition({5,5});
+			}
+			else {
+				text->setAnchor(MiddleLeft);
+				text->SetOriginByAnchor(MiddleLeft);
+				text->setRelativePosition({0,0});
+			}
+		}
 	}
 
 	GuiElement::update();
