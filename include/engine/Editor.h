@@ -22,7 +22,7 @@ public:
     void update(gui::GuiEventContext ctx, bool mouseOverGUI);
     void scroll(float mouse_wheel_delta, Vector2f mousePos, PixelPerfectRenderTarget *renderTarget);
     void hideUnselected(bool active);
-    void saveLevel();
+    void saveLevel(std::string filename);
 
 private:
     std::optional<Tile> selectedTile;
@@ -31,8 +31,8 @@ private:
     int layerIndex = 0;
 };
 
-inline void Editor::saveLevel() {
-    (**level).saveFile("C:\\Users\\lucav\\Desktop\\out.bin");
+inline void Editor::saveLevel(std::string filename) {
+    (**level).saveFile(filename);
 }
 
 

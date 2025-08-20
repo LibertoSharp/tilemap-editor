@@ -1,3 +1,4 @@
+#include "engine/DialogExplorer.h"
 #include "GUI/TextInput.h"
 #ifndef MAINMENU_H
 #define MAINMENU_H
@@ -47,7 +48,7 @@ static Sprite getGuiSprite(std::string atlasid, int posx, int posy, int width, i
 
 inline void FileValueChanged(int index, Editor *editor) {
 	if (index == 1)
-		editor->saveLevel();
+		editor->saveLevel(showSaveFileDialog());
 }
 
 inline void EditButtonUpdate(GuiElementEventContext ctx) {
