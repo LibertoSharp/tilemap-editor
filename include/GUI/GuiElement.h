@@ -1,7 +1,6 @@
 #ifndef GUIELEMENT_H
 #define GUIELEMENT_H
 #include <functional>
-
 #include "AnchorsType.h"
 #include "SFML/Graphics.hpp"
 namespace gui {

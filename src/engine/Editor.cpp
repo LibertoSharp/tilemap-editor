@@ -12,8 +12,8 @@ void Editor::setState(editorState state) {
 	this->state = state;
 }
 
-void Editor::setSelectedTile(Sprite s) {
-	selectedTile = Tile(s);
+void Editor::setSelectedTile(string atlasID, IntRect r) {
+	selectedTile = Tile(r, atlasID);
 }
 
 void Editor::click(Vector2f pos) {

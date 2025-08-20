@@ -16,12 +16,13 @@ class Editor {
 public:
     Editor(Level **level);
     void setState(editorState state);
-    void setSelectedTile(Sprite s);
+    void setSelectedTile(std::string atlasID, IntRect r);
     void click(Vector2f pos);
     void setLayer(int layer);
     void update(gui::GuiEventContext ctx, bool mouseOverGUI);
     void scroll(float mouse_wheel_delta, Vector2f mousePos, PixelPerfectRenderTarget *renderTarget);
     void hideUnselected(bool active);
+    void saveLevel();
 
 private:
     std::optional<Tile> selectedTile;
@@ -30,6 +31,9 @@ private:
     int layerIndex = 0;
 };
 
+inline void Editor::saveLevel() {
+    (**level).saveFile("C:\\Users\\lucav\\Desktop\\out.bin");
+}
 
 
 #endif //EDITOR_H

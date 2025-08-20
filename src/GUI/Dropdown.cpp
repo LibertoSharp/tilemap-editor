@@ -19,7 +19,7 @@ namespace gui {
 		else (*(entries.end()-1))->append(btn);
 		btn->setAnchor(AnchorType::BottomLeft);
 		btn->setRelativePosition({0,0});
-		btn->Update = [this,index](gui::GuiElementEventContext ctx) {if (ctx.f_clickDown) {if (this->ValueChanged) this->ValueChanged(index); this->hideDropdown();}};
+		btn->Update = [this,index](gui::GuiElementEventContext ctx) {if (ctx.f_clickUp) {if (this->ValueChanged) this->ValueChanged(index); this->hideDropdown();}};
 		btn->hide();
 		entries.push_back(btn);
 	}
@@ -35,7 +35,7 @@ namespace gui {
 		else (*(entries.end()-1))->append(btn);
 		btn->setAnchor(AnchorType::BottomLeft);
 		btn->setRelativePosition({0,0});
-		btn->Update = [this,index](gui::GuiElementEventContext ctx) {if (ctx.f_clickDown) {if (this->ValueChanged) this->ValueChanged(index); this->hideDropdown();}};
+		btn->Update = [this,index](gui::GuiElementEventContext ctx) {if (ctx.f_clickUp) {if (this->ValueChanged) this->ValueChanged(index); this->hideDropdown();}};
 		btn->hide();
 		entries.push_back(btn);
 	}

@@ -8,14 +8,15 @@ namespace gui {
 
 class Tilegrid final : public GuiElement{
 public:
-	Tilegrid(const sf::Texture *textureAtlas, sf::Vector2u tileSize);
+	Tilegrid(const std::string atlasID, sf::Vector2u tileSize);
 	~Tilegrid();
 	void draw(RenderTarget &target, RenderStates states) const override;
 	FloatRect getGlobalBounds();
 	void update() override;
 	std::function<void(IntRect r)> SelectTile = nullptr;
-	void setTilemap(const sf::Texture *textureAtlas, sf::Vector2u tileSize);
+	void setTilemap(std::string atlasID, sf::Vector2u tileSize);
 	const Texture *getTilemap() const;
+	std::string getTilemapID() const;
 private:
 	void ButtonUpdate(GuiElementEventContext ctx);
 
@@ -27,6 +28,7 @@ private:
 	Vector2f initialMousePos;
 	GuiElement *element = nullptr;
 	const sf::Texture *textureAtlas = nullptr;
+	std::string atlasID;
 };
 
 } // gui

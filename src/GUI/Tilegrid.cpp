@@ -5,7 +5,7 @@
 #include "engine/Application.h"
 
 namespace gui {
-	Tilegrid::Tilegrid(const sf::Texture *textureAtlas, sf::Vector2u tileSize): GuiElement(this), tileSize(tileSize) {
+	Tilegrid::Tilegrid(const string atlasID, sf::Vector2u tileSize): GuiElement(this), tileSize(tileSize) {
 		this->clickTransparent = true;
 
 		highlight = new GuiElement(Vector2f(tileSize));
@@ -14,7 +14,7 @@ namespace gui {
 		highlight->clickTransparent = true;
 		this->append(highlight);
 
-		setTilemap(textureAtlas, tileSize);
+		setTilemap(atlasID, tileSize);
 	}
 
 	Tilegrid::~Tilegrid() {
@@ -82,8 +82,11 @@ namespace gui {
 		GuiElement::update();
 	}
 
-	void Tilegrid::setTilemap(const sf::Texture *textureAtlas, sf::Vector2u tileSize) {
-		this->textureAtlas = textureAtlas;
+	void Tilegrid::setTilemap(const string atlasID, sf::Vector2u tileSize) {
+		const Texture* t = Application::getInstance()->getTextureManager()->getAtlasTexture(atlasID);
+		if (!t) return;
+		this->textureAtlas = t;
+		this->atlasID = atlasID;
 		this->tileSize = tileSize;
 		if (tileMap)
 			tileMap->destroy();
@@ -101,6 +104,10 @@ namespace gui {
 
 	const Texture * Tilegrid::getTilemap() const {
 		return textureAtlas;
+	}
+
+	std::string Tilegrid::getTilemapID() const {
+		return atlasID;
 	}
 
 	void Tilegrid::ButtonUpdate(GuiElementEventContext ctx) {

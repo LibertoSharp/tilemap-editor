@@ -1,6 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 #include <cmath>
+#include <fstream>
 #include <SFML//System/Vector2.hpp>
 #include "SFML/Graphics/Image.hpp"
 
@@ -40,6 +41,16 @@ inline bool isEmptySprite(sf::Image& s, sf::IntRect r) {
         }
     }
     return true;
+}
+
+template <typename T>
+void write_raw(std::ofstream& f, const T& value) {
+    f.write(reinterpret_cast<const char*>(&value), sizeof(T));
+}
+
+template <typename T>
+void write_raw(std::ofstream& f, const T& value, int size) {
+    f.write(reinterpret_cast<const char*>(&value), size);
 }
 
 #endif //COMMON_H

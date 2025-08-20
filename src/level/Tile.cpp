@@ -2,5 +2,9 @@
 
 #include "level/Tile.h"
 
-Tile::Tile(Sprite _sprite): sprite(std::move(_sprite)) {
+#include "engine/Application.h"
+
+Tile::Tile(IntRect r, std::string atlasID): sprite(Application::getInstance()->getTextureManager()->getSprite(atlasID, r)) {
+	this->atlasID = atlasID;
+	this->rect = r;
 }

@@ -45,8 +45,9 @@ static Sprite getGuiSprite(std::string atlasid, int posx, int posy, int width, i
 	return Application::getInstance()->getTextureManager()->getSprite(atlasid, posx, posy, width, height);
 }
 
-inline void FileValueChanged(int index) {
-	std::cout << index << std::endl;
+inline void FileValueChanged(int index, Editor *editor) {
+	if (index == 1)
+		editor->saveLevel();
 }
 
 inline void EditButtonUpdate(GuiElementEventContext ctx) {
@@ -99,7 +100,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	fileButton->getText()->setScale({0.5,0.5});
 	fileButton->addEntry(pixelFont, "Open");
 	fileButton->addEntry(pixelFont, "Save");
-	fileButton->ValueChanged = &FileValueChanged;
+	fileButton->ValueChanged = [editor](int index){FileValueChanged(index, editor);};
 	menu->addElement(fileButton, true);
 #pragma endregion
 
@@ -223,8 +224,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	OpenButton->setRelativePosition({10, 100});
 	OpenButton->Update = [](GuiElementEventContext ctx) {
 		if (ctx.f_clickUp) {
-			if (auto* atlas = Application::getInstance()->getTextureManager()->getAtlasTexture(OpenPathLabel->getInput()))
-				TileGrid->setTilemap(atlas, {16,16});
+				TileGrid->setTilemap(OpenPathLabel->getInput(), {16,16});
 		}
 	};
 #pragma endregion
@@ -246,8 +246,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	OpenPathLabel->SetOriginByAnchor(AnchorType::MiddleLeft);
 	OpenPathLabel->setRelativePosition({10,0});
 	OpenPathLabel->HitEnter = []() {
-		if (auto* atlas = Application::getInstance()->getTextureManager()->getAtlasTexture(OpenPathLabel->getInput()))
-			TileGrid->setTilemap(atlas, {16,16});
+			TileGrid->setTilemap(OpenPathLabel->getInput(), {16,16});
 	};
 
 #pragma endregion
@@ -261,14 +260,13 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 #pragma endregion
 
 #pragma region Tile Grid
-	TileGrid = new Tilegrid(
-		Application::getInstance()->getTextureManager()->getAtlasTexture("tileset\\furnitures"), {16, 16});
+	TileGrid = new Tilegrid("tileset\\furnitures", {16, 16});
 	TileGridPanel->append(TileGrid);
 	TileGrid->setGlobalScale({1, 1});
 	TileGrid->SelectTile = [editor](IntRect r) {
 		Sprite s = Sprite(*TileGrid->getTilemap(),r);
 		SelectedTile->setSprite(s);
-		editor->setSelectedTile(s);
+		editor->setSelectedTile(TileGrid->getTilemapID(), r);
 	};
 #pragma endregion
 

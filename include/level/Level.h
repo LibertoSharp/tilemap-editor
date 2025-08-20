@@ -24,6 +24,7 @@ public:
     unsigned int getTileSize() const { return tileSize;}
     BackgroundGrid *getBackgroundGrid();
     void ShowOnly(int layer_index);
+    void saveFile(std::string filePath) const;
 
     bool f_showOnly = false;
 private:

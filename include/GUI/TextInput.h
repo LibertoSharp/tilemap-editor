@@ -1,7 +1,6 @@
 #ifndef TEXTINPUT_H
 #define TEXTINPUT_H
 #include <iostream>
-
 #include "Common.h"
 #include "TextElement.h"
 
