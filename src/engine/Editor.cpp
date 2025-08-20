@@ -84,3 +84,12 @@ void Editor::hideUnselected(bool active) {
 	(*level)->ShowOnly(layerIndex);
 	(*level)->f_showOnly = active;
 }
+
+
+void Editor::saveLevel(std::string filename) const {
+	(**level).saveFile(filename);
+}
+
+void Editor::loadLevel(std::string filename) {
+	(**level).loadFile(filename);
+}

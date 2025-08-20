@@ -49,6 +49,8 @@ static Sprite getGuiSprite(std::string atlasid, int posx, int posy, int width, i
 inline void FileValueChanged(int index, Editor *editor) {
 	if (index == 1)
 		editor->saveLevel(showSaveFileDialog());
+	else if (index == 0)
+		editor->loadLevel(showOpenFileDialog());
 }
 
 inline void EditButtonUpdate(GuiElementEventContext ctx) {

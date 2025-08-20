@@ -53,4 +53,19 @@ void write_raw(std::ofstream& f, const T& value, int size) {
     f.write(reinterpret_cast<const char*>(&value), size);
 }
 
+inline uint8_t read_8(const uint8_t* buf, std::size_t addr) {
+    return buf[addr];
+}
+
+inline uint16_t read_16(const uint8_t* buf, std::size_t addr) {
+    return static_cast<uint16_t>(buf[addr])
+         | (static_cast<uint16_t>(buf[addr + 1]) << 8);
+}
+
+inline uint32_t read_32(const uint8_t* buf, std::size_t addr) {
+    return static_cast<uint32_t>(buf[addr])
+         | (static_cast<uint32_t>(buf[addr + 1]) << 8)
+         | (static_cast<uint32_t>(buf[addr + 2]) << 16)
+         | (static_cast<uint32_t>(buf[addr + 3]) << 24);
+}
 #endif //COMMON_H
