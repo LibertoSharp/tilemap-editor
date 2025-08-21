@@ -12,7 +12,8 @@ namespace gui {
 			background = new RectangleShape(Vector2f(size.x, size.y));
 			placeholderText = placeholder;
 			activeGraphic = background;
-			noFocusColor = Color(191,191, 191);
+			noFocusColor = Color(255,255, 255, 220);
+			emptyColor = Color(255,255, 255, 80);
 
 			text = new TextElement(font, placeholderText);
 			this->append(text);
@@ -41,6 +42,7 @@ namespace gui {
 		string placeholderText = "";
 		Color defaultColor = Color::White;
 		Color noFocusColor;
+		Color emptyColor;
 	};
 } // gui
 

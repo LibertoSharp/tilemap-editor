@@ -12,7 +12,8 @@ sf::RectangleShape * gui::TextInput::getBackground() {
 
 void gui::TextInput::SetDefaultColor(Color c) {
 	defaultColor = c;
-	noFocusColor = {static_cast<unsigned char>(c.r * 0.75), static_cast<unsigned char>(c.g * 0.75), static_cast<unsigned char>(c.b * 0.75), c.a};
+	noFocusColor = {c.r, c.g, c.b, static_cast<unsigned char>(c.a * 0.85)};
+	emptyColor = {c.r, c.g, c.b, static_cast<unsigned char>(c.a * 0.30)};
 	text->setFillColor(c);
 }
 
@@ -27,8 +28,11 @@ void gui::TextInput::update() {
 		focus = true;
 	}
 	text->setFillColor(noFocusColor);
+	if (inputText.empty())
+		text->setFillColor(emptyColor);
 	if (focus) {
-		text->setFillColor(defaultColor);
+		if (!inputText.empty())
+			text->setFillColor(defaultColor);
 		if (ctx.textEntered >= 32 && ctx.textEntered < 127) {
 			if ((onlyNums && ((ctx.textEntered >= 48 && ctx.textEntered < 58) || (ctx.textEntered == 45 && inputText.empty()))) || !onlyNums) {
 				inputText += ctx.textEntered;
