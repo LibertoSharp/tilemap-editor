@@ -21,6 +21,17 @@ namespace gui {
 		delete tileMap;
 	}
 
+	void Tilegrid::setSize(sf::Vector2u tileSize) {
+		this->tileSize = tileSize;
+		highlight->destroy();
+		highlight = new GuiElement(Vector2f(tileSize));
+		highlight->setScale({1,1});
+		highlight->setRelativePosition({0, 0});
+		highlight->setShader(Application::getInstance()->getShaderManager()->getShader("highlight"));
+		highlight->clickTransparent = true;
+		this->append(highlight);
+	}
+
 	void Tilegrid::draw(RenderTarget &target, RenderStates states) const {
 		if (isHidden()) return;
 

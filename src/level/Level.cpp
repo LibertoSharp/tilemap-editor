@@ -17,6 +17,7 @@ Level::~Level() {
     for (auto [key,grid]: grids) {
         delete grid;
     }
+    delete background;
 }
 
 void Level::draw(RenderTarget &target, RenderStates states) const {

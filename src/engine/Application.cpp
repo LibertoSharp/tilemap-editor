@@ -11,7 +11,7 @@ void Application::run(unsigned width, unsigned height) {
 
     editor = new Editor(&level);
     guiLayer = createEditorGui(editor);
-    level = new Level(16, 10, 10);
+    level = new Level(16 , 10, 10);
 
     dtClock.start();
     while (window->isOpen()) {

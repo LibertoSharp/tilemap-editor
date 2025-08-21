@@ -55,7 +55,12 @@ public:
         return &renderTarget;
     }
 
-private:
+    void newLevel(int tileSize, int sizeX, int sizeY) {
+        delete level;
+        level = new Level(tileSize, sizeX, sizeY);
+    }
+
+ private:
     void render();
     void update();
     void performEvent(std::optional<Event> event);

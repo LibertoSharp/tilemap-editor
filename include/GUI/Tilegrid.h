@@ -10,6 +10,9 @@ class Tilegrid final : public GuiElement{
 public:
 	Tilegrid(const std::string atlasID, sf::Vector2u tileSize);
 	~Tilegrid();
+
+	void setSize(sf::Vector2u tileSize);
+
 	void draw(RenderTarget &target, RenderStates states) const override;
 	FloatRect getGlobalBounds();
 	void update() override;

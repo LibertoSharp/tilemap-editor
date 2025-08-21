@@ -37,6 +37,13 @@ static TextElement *LayerIndexLabel;
 static TextInput *LayerIndex;
 static Button *HideOtherLayers;
 static Button *Pin;
+static GuiElement *newPanel;
+static TextElement *tileSizeLabel;
+static TextInput *tileSizeInput;
+static TextElement *gridSizeLabel;
+static TextInput *gridSizeInputX;
+static TextInput *gridSizeInputY;
+static Button *doneButton;
 static bool pinned = false;
 
 static const Font* pixelFont;
@@ -47,10 +54,16 @@ static Sprite getGuiSprite(std::string atlasid, int posx, int posy, int width, i
 }
 
 inline void FileValueChanged(int index, Editor *editor) {
-	if (index == 1)
+	if (index == 2)
 		editor->saveLevel(showSaveFileDialog());
-	else if (index == 0)
+	else if (index == 1)
 		editor->loadLevel(showOpenFileDialog());
+	else if (index == 0) {
+		if (newPanel->isHidden())
+			newPanel->show();
+		else
+			newPanel->hide();
+	}
 }
 
 inline void EditButtonUpdate(GuiElementEventContext ctx) {
@@ -101,6 +114,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	fileButton->getRectangleShape()->setFillColor(Color(17,17,14,255));
 	fileButton->centerText();
 	fileButton->getText()->setScale({0.5,0.5});
+	fileButton->addEntry(pixelFont, "New");
 	fileButton->addEntry(pixelFont, "Open");
 	fileButton->addEntry(pixelFont, "Save");
 	fileButton->ValueChanged = [editor](int index){FileValueChanged(index, editor);};
@@ -270,6 +284,7 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 	TileGrid->SelectTile = [editor](IntRect r) {
 		Sprite s = Sprite(*TileGrid->getTilemap(),r);
 		SelectedTile->setSprite(s);
+		SelectedTile->setGlobalScale({16.0f/r.size.x, 16.0f/r.size.y});
 		editor->setSelectedTile(TileGrid->getTilemapID(), r);
 	};
 #pragma endregion
@@ -297,9 +312,9 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 #pragma endregion
 
 #pragma region Selected Tile
-	SelectedTile = new GuiElement({32, 32});
+	SelectedTile = new GuiElement({16, 16});
 	SelectedHeader->append(SelectedTile);
-	SelectedTile->setGlobalScale({0.5, 0.5});
+	SelectedTile->setGlobalScale({1, 1});
 	SelectedTile->setAnchor(AnchorType::MiddleRight);
 	SelectedTile->SetOriginByAnchor(MiddleLeft);
 	SelectedTile->setRelativePosition({12, 0});
@@ -397,6 +412,96 @@ inline GuiLayer *createEditorGui(Editor *editor) {
 				static_cast<Sprite*>(Pin->activeGraphic)->setColor(Color::Cyan);
 			else
 				static_cast<Sprite*>(Pin->activeGraphic)->setColor(Color::White);
+		}
+	};
+
+#pragma endregion
+
+#pragma region New Panel
+	newPanel = new GuiElement({400,250});
+	newPanel->getRectangleShape()->setFillColor({0,0,0,255});
+	newPanel->setAnchor(AnchorType::MiddleCenter);
+	newPanel->SetOriginByAnchor(MiddleCenter);
+	newPanel->setRelativePosition({0, 0});
+	newPanel->hide();
+	menu->addElement(newPanel, false);
+	newPanel->Update = [](GuiElementEventContext ctx) {
+		if (ctx.f_globalclickup && !ctx.f_deep_hovering)
+			newPanel->hide();
+	};
+#pragma endregion
+
+#pragma region Tile Size Label
+	tileSizeLabel = new TextElement(pixelFont, "Tile Size:");
+	tileSizeLabel->setAnchor(AnchorType::TopLeft);
+	tileSizeLabel->SetOriginByAnchor(TopLeft);
+	tileSizeLabel->setScale({0.5, 0.5});
+	newPanel->append(tileSizeLabel);
+	tileSizeLabel->setRelativePosition({5, 5});
+#pragma endregion
+
+#pragma region Tile Size Input
+	tileSizeInput = new TextInput(Vector2f(100,50),pixelFont, "16");
+	tileSizeLabel->append(tileSizeInput);
+	tileSizeInput->getBackground()->setFillColor(Color(34, 35, 28, 120));
+	tileSizeInput->setGlobalScale({0.5, 0.5});
+	tileSizeInput->setAnchor(AnchorType::MiddleRight);
+	tileSizeInput->SetOriginByAnchor(AnchorType::MiddleLeft);
+	tileSizeInput->setRelativePosition({22,3});
+	tileSizeInput->onlyNums = true;
+#pragma endregion
+
+#pragma region Grid Size Label
+	gridSizeLabel = new TextElement(pixelFont, "Grid Size:");
+	gridSizeLabel->setAnchor(AnchorType::TopLeft);
+	gridSizeLabel->SetOriginByAnchor(TopLeft);
+	gridSizeLabel->setScale({0.5, 0.5});
+	newPanel->append(gridSizeLabel);
+	gridSizeLabel->setRelativePosition({5, 50});
+#pragma endregion
+
+#pragma region Grid Size Input
+	gridSizeInputX = new TextInput(Vector2f(100,50),pixelFont, "10");
+	gridSizeLabel->append(gridSizeInputX);
+	gridSizeInputX->getBackground()->setFillColor(Color(34, 35, 28, 120));
+	gridSizeInputX->setGlobalScale({0.5, 0.5});
+	gridSizeInputX->setAnchor(AnchorType::MiddleRight);
+	gridSizeInputX->SetOriginByAnchor(AnchorType::MiddleLeft);
+	gridSizeInputX->setRelativePosition({15,3});
+	gridSizeInputX->onlyNums = true;
+
+	gridSizeInputY = new TextInput(Vector2f(100,50),pixelFont, "10");
+	gridSizeLabel->append(gridSizeInputY);
+	gridSizeInputY->getBackground()->setFillColor(Color(34, 35, 28, 120));
+	gridSizeInputY->setGlobalScale({0.5, 0.5});
+	gridSizeInputY->setAnchor(AnchorType::MiddleRight);
+	gridSizeInputY->SetOriginByAnchor(AnchorType::MiddleLeft);
+	gridSizeInputY->setRelativePosition({135,3});
+	gridSizeInputY->onlyNums = true;
+#pragma endregion
+
+#pragma region Done Button
+	doneButton = new Button({90,25});
+	newPanel->append(doneButton);
+	doneButton->getRectangleShape()->setFillColor(Color(34, 34, 28, 255));
+	doneButton->addText(pixelFont, "Done");
+	doneButton->getText()->setScale({0.5,0.5});
+	doneButton->centerText();
+	doneButton->setAnchor(BottomRight);
+	doneButton->SetOriginByAnchor(BottomRight);
+	doneButton->setRelativePosition({-10, -10});
+	doneButton->Update = [](GuiElementEventContext ctx) {
+		if (ctx.f_clickUp) {
+			try {
+				unsigned int sizeX = stoi(gridSizeInputX->getInput());
+				unsigned int sizeY = stoi(gridSizeInputY->getInput());
+				unsigned int tileSize = stoi(tileSizeInput->getInput());
+				Application::getInstance()->newLevel(tileSize, sizeX, sizeY);
+				TileGrid->setSize({tileSize,tileSize});
+			} catch (std::invalid_argument) {
+
+			}
+			newPanel->hide();
 		}
 	};
 
