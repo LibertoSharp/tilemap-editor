@@ -57,7 +57,7 @@ inline void FileValueChanged(int index, Editor *editor) {
 	if (index == 2)
 		editor->saveLevel(showSaveFileDialog());
 	else if (index == 1)
-		editor->loadLevel(showOpenFileDialog());
+		editor->loadLevel(showOpenFileDialog(), TileGrid);
 	else if (index == 0) {
 		if (newPanel->isHidden())
 			newPanel->show();

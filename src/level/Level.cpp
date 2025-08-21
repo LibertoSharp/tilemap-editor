@@ -1,8 +1,7 @@
 #include "level/Level.h"
-
 #include <fstream>
-
 #include "engine/Application.h"
+#include "GUI/Tilegrid.h"
 #include "SFML/Graphics/RenderTarget.hpp"
 
 Level::Level(unsigned int tileSize, unsigned int width, unsigned int height) {
@@ -78,8 +77,9 @@ int getMapLength(map<string, char> map) {
 void Level::saveFile(std::string filePath) const {
     ofstream file(filePath, std::ios::binary);
     map<string, char> tilesetMap = getTilesetMap(grids);
-    int dataIndex = getMapLength(tilesetMap) + 4;
+    int dataIndex = getMapLength(tilesetMap) + 8;
     write_raw(file,dataIndex);
+    write_raw(file,this->tileSize);
     for (auto [key, s]: tilesetMap) {
         file << key;
         write_raw(file, static_cast<char>(0x00));
@@ -113,7 +113,8 @@ void Level::saveFile(std::string filePath) const {
     file.close();
 }
 
-bool Level::loadFile(std::string filePath) {
+bool Level::loadFile(std::string filePath, gui::Tilegrid *tileGrid) {
+    Level *newLevel;
     std::ifstream in(filePath, std::ios::binary);
     if (!in) return false;
     in.seekg (0, in.end);
@@ -122,7 +123,7 @@ bool Level::loadFile(std::string filePath) {
     uint8_t *buffer = new uint8_t [length];
     in.read(reinterpret_cast<char*>(buffer), length);
 
-    unsigned int i = 3;
+    unsigned int i = 7;
     int index = 1;
     map<char, string> tilesetMap;
     string s = "";
@@ -136,25 +137,32 @@ bool Level::loadFile(std::string filePath) {
             s += buffer[i];
     } while (!(buffer[i] == '\0' && buffer[i+1] == '\0'));
 
-    clearGrids();
     i = read_32(buffer, 0x00)+1;
+    int newTileSize = read_32(buffer, 0x04);
+    bool firstRead = true;
     while (i < length-1) {
         int layer = read_32(buffer, i);
         int gridSizeX = read_32(buffer, i+4);
         int gridSizeY = read_32(buffer, i+8);
+        if (firstRead) {
+            newLevel = new Level(newTileSize, gridSizeX, gridSizeY);
+            firstRead = false;
+        }
         i+=12;
         for (int x = 0; x < gridSizeX; x++) {
             for (int y = 0; y < gridSizeY; y++) {
                 char MapKeyID = read_8(buffer, i);
                 if (MapKeyID != '\0') {
                     IntRect r({static_cast<int>(read_32(buffer,i+1)),static_cast<int>(read_32(buffer,i+5))},{static_cast<int>(read_32(buffer,i+9)),static_cast<int>(read_32(buffer,i+13))});
-                    getGrid(layer)->setTile(x,y,Tile(r,tilesetMap.find(MapKeyID)->second));
+                    newLevel->getGrid(layer)->setTile(x,y,Tile(r,tilesetMap.find(MapKeyID)->second));
                 }
                 i+=17;
             }
         }
     }
 
-
+    Application::getInstance()->newLevel(newLevel);
+    tileGrid->setSize({static_cast<unsigned>(newTileSize),static_cast<unsigned>(newTileSize)});
+    delete this;
     return true;
 }

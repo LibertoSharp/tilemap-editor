@@ -90,6 +90,13 @@ void Editor::saveLevel(std::string filename) const {
 	(**level).saveFile(filename);
 }
 
-void Editor::loadLevel(std::string filename) {
-	(**level).loadFile(filename);
+void Editor::loadLevel(std::string filename, gui::Tilegrid *tileGrid) {
+	try {
+		(**level).loadFile(filename, tileGrid);
+		selectedTile = std::nullopt;
+	} catch (...) {
+		
+	}
+
+
 }

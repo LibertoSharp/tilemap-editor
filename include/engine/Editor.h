@@ -6,6 +6,10 @@
 #include "level/Level.h"
 #include "level/Tile.h"
 
+namespace gui {
+    class Tilegrid;
+}
+
 enum editorState {
     DRAW,
     ERASE,
@@ -23,7 +27,7 @@ public:
     void scroll(float mouse_wheel_delta, Vector2f mousePos, PixelPerfectRenderTarget *renderTarget);
     void hideUnselected(bool active);
     void saveLevel(std::string filename) const;
-    void loadLevel(std::string filename);
+    void loadLevel(std::string filename, gui::Tilegrid *tileGrid);
 
 private:
     std::optional<Tile> selectedTile;

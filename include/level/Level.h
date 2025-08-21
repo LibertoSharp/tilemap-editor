@@ -1,10 +1,13 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 #include <map>
-
 #include "Grid.h"
 #include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/RenderStates.hpp"
+
+namespace gui {
+    class Tilegrid;  // ✅ forward declaration
+}
 
 class BackgroundGrid;
 using namespace sf;
@@ -26,8 +29,7 @@ public:
     void ShowOnly(int layer_index);
     void clearGrids();
     void saveFile(std::string filePath) const;
-    bool loadFile(std::string filePath);
-
+    bool loadFile(std::string filePath, gui::Tilegrid *tileGrid);
     bool f_showOnly = false;
 private:
     std::map<int, Grid*> grids;

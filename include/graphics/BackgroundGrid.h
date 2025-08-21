@@ -1,9 +1,9 @@
 #ifndef BACKGROUNDGRID_H
 #define BACKGROUNDGRID_H
-#include "level/Level.h"
 #include "SFML/Graphics/Drawable.hpp"
-#include "SFML/Graphics/RenderTexture.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
+
+class Level;
 
 class BackgroundGrid : public sf::Drawable {
 public:

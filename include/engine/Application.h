@@ -60,6 +60,10 @@ public:
         level = new Level(tileSize, sizeX, sizeY);
     }
 
+    void newLevel(Level * level) {
+        this->level = level;
+    }
+
  private:
     void render();
     void update();

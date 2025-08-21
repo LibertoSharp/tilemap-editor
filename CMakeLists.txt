@@ -55,6 +55,7 @@ add_executable(makean_rpg src/main.cpp
         src/engine/DialogExplorer.cpp
 )
 target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
+target_link_options(makean_rpg PRIVATE "-mwindows")
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
 
