@@ -12,6 +12,14 @@ FetchContent_Declare(SFML
         SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
+# --- GoogleTest ---
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG release-1.12.1
+)
+FetchContent_MakeAvailable(googletest)
+
 add_executable(makean_rpg src/main.cpp
         src/level/Grid.cpp
         include/level/Grid.h
@@ -58,4 +66,20 @@ target_link_libraries(makean_rpg PRIVATE SFML::Graphics)
 target_link_options(makean_rpg PRIVATE "-mwindows")
 target_include_directories(makean_rpg PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
+enable_testing()
 
+add_executable(
+    test_GuiElement
+    test/test_GuiElement.cpp
+    include/GUI/GuiElement.h
+    src/GUI/GuiElement.cpp
+    src/GUI/GuiLayer.cpp
+    src/GUI/Tilegrid.cpp
+    src/managers/TextureManager.cpp
+    src/GUI/Button.cpp
+)
+target_link_libraries(test_GuiElement PRIVATE gtest_main sfml-graphics sfml-window sfml-system)
+target_include_directories(test_GuiElement PRIVATE ${PROJECT_SOURCE_DIR}/include)
+
+include(GoogleTest)
+add_test(NAME GuiElementTest COMMAND test_GuiElement)
